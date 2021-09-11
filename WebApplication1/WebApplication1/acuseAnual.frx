@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/17/2014 18:21:11" ReportInfo.Modified="12/02/2020 13:11:29" ReportInfo.CreatorVersion="2015.2.0.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+       
+    private void ResultTable_AfterCalcBounds(object sender, EventArgs e)
+    {
+      TableResult resultTable = sender as TableResult;
+      float tableWidth = resultTable.Width;
+      float pageWidth = Engine.PageWidth;
+      
+      if (tableWidth &gt; pageWidth)
+      {
+        // table is wider than page, correct the columns width
+        float ratio = pageWidth / tableWidth;
+        foreach (TableColumn column in resultTable.Columns)
+        {
+          column.AutoSize = false;
+          column.Width *= ratio;
+        }
+        
+        // this will recalculate table rows height
+        resultTable.CalcHeight();
+      }
+    }
+    
+
+    
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionStringExpression="[Parameter]"/>
+    <TableDataSource Name="Products" ReferenceName="NorthWind.Products" DataType="System.Int32" Enabled="true">
+      <Column Name="ProductID" DataType="System.Int32"/>
+      <Column Name="ProductName" DataType="System.String"/>
+      <Column Name="SupplierID" DataType="System.Int32"/>
+      <Column Name="CategoryID" DataType="System.Int32"/>
+      <Column Name="QuantityPerUnit" DataType="System.String"/>
+      <Column Name="UnitPrice" DataType="System.Decimal"/>
+      <Column Name="UnitsInStock" DataType="System.Int16"/>
+      <Column Name="UnitsOnOrder" DataType="System.Int16"/>
+      <Column Name="ReorderLevel" DataType="System.Int16"/>
+      <Column Name="Discontinued" DataType="System.Boolean" BindableControl="CheckBox"/>
+      <Column Name="EAN13" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="Shippers" ReferenceName="NorthWind.Shippers" DataType="System.Int32" Enabled="true">
+      <Column Name="ShipperID" DataType="System.Int32"/>
+      <Column Name="CompanyName" DataType="System.String"/>
+      <Column Name="Phone" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="Suppliers" ReferenceName="NorthWind.Suppliers" DataType="System.Int32" Enabled="true">
+      <Column Name="SupplierID" DataType="System.Int32"/>
+      <Column Name="CompanyName" DataType="System.String"/>
+      <Column Name="ContactName" DataType="System.String"/>
+      <Column Name="ContactTitle" DataType="System.String"/>
+      <Column Name="Address" DataType="System.String"/>
+      <Column Name="City" DataType="System.String"/>
+      <Column Name="Region" DataType="System.String"/>
+      <Column Name="PostalCode" DataType="System.String"/>
+      <Column Name="Country" DataType="System.String"/>
+      <Column Name="Phone" DataType="System.String"/>
+      <Column Name="Fax" DataType="System.String"/>
+      <Column Name="HomePage" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="MatrixDemo" ReferenceName="NorthWind.MatrixDemo" DataType="System.Int32" Enabled="true">
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="Year" DataType="System.Int32"/>
+      <Column Name="Month" DataType="System.Int32"/>
+      <Column Name="ItemsSold" DataType="System.Int32"/>
+      <Column Name="Revenue" DataType="System.Decimal"/>
+    </TableDataSource>
+    <TableDataSource Name="Unicode" ReferenceName="NorthWind.Unicode" DataType="System.Int32" Enabled="true">
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="UnicodeName" DataType="System.String"/>
+      <Column Name="Text" DataType="System.String"/>
+      <Column Name="Rtl" DataType="System.Boolean" BindableControl="CheckBox"/>
+      <Column Name="Active" DataType="System.Boolean" BindableControl="CheckBox"/>
+    </TableDataSource>
+    <BusinessObjectDataSource Name="Categories BusinessObject" ReferenceName="Categories BusinessObject" DataType="null" Enabled="true">
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <BusinessObjectDataSource Name="Products1" Alias="Products" DataType="null" PropName="Products" Enabled="true">
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="UnitPrice" DataType="System.Decimal"/>
+      </BusinessObjectDataSource>
+    </BusinessObjectDataSource>
+    <Relation Name="SuppliersProducts" ReferenceName="NorthWind.SuppliersProducts" ParentDataSource="Suppliers" ChildDataSource="Products" ParentColumns="SupplierID" ChildColumns="SupplierID" Enabled="true"/>
+    <Parameter Name="Parameter" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" RawPaperSize="1" LeftMargin="6.5" TopMargin="6" RightMargin="6.5" BottomMargin="3.7" FirstPageSource="278" OtherPagesSource="278" Guides="378,368.55,368.55,378">
+    <ReportTitleBand Name="ReportTitle1" Width="766.96" Height="1052.73" CanGrow="true" CanShrink="true">
+      <TextObject Name="TextEncab" Top="18.9" Width="765.45" Height="18.9" Text="Acuse Recepción Anual de Depósitos en efectivo" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TableObject Name="Table1" Left="18.9" Top="73.55" Width="718.2" Height="56.7" Border.Lines="All">
+        <TableColumn Name="Column1" MaxWidth="718.2" Width="718.2"/>
+        <TableRow Name="Row1">
+          <TableCell Name="Cell1" Text="Emisor " Font="Arial, 8pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row2">
+          <TableCell Name="emisorRFC" Font="Arial, 8pt"/>
+        </TableRow>
+        <TableRow Name="Row3">
+          <TableCell Name="emisorNom" Font="Arial, 8pt"/>
+        </TableRow>
+      </TableObject>
+      <TableObject Name="Table2" Left="18.9" Top="191.9" Width="718.2" Height="37.8" Border.Lines="All">
+        <TableColumn Name="Column2" Width="85.05"/>
+        <TableColumn Name="Column3" MaxWidth="633.15" Width="633.15"/>
+        <TableRow Name="Row4" AutoSize="true">
+          <TableCell Name="Cell12" Text="Total " Font="Arial, 8pt, style=Bold"/>
+          <TableCell Name="Cell14"/>
+        </TableRow>
+        <TableRow Name="Row5">
+          <TableCell Name="Cell13" Text="Recaudado " Font="Arial, 8pt"/>
+          <TableCell Name="totalRecaudado" Font="Arial, 8pt"/>
+        </TableRow>
+      </TableObject>
+      <PictureObject Name="logo" Left="283.5" Top="897.75" Width="170.1" Height="66.15"/>
+      <TextObject Name="Text1" Top="973.35" Width="765.45" Height="18.9" Text="Tu solución en Declaraciones informativas de Depósitos en efectivo por internet" HorzAlign="Center"/>
+      <TextObject Name="url" Left="141.75" Top="992.25" Width="179.55" Height="18.9" Cursor="Hand" Hyperlink.Value="http://www.declaracioneside.com" Text="www.declaracionesIDE.com" HorzAlign="Center" Font="Tahoma, 10pt, style=Underline" TextFill.Color="Blue"/>
+      <TextObject Name="Text2" Left="302.4" Top="992.25" Width="132.3" Height="18.9" Text="Tel 443 690 3616" HorzAlign="Center"/>
+      <TextObject Name="Text3" Left="425.25" Top="992.25" Width="189" Height="18.9" Hyperlink.Value="mailto:declaracioneside@gmail.com" Text="declaracioneside@gmail.com" HorzAlign="Center" Font="Arial, 10pt, style=Underline" TextFill.Color="Blue"/>
+      <TableObject Name="Table3" Left="18.9" Top="292.95" Width="716.9" Height="37.8" Border.Lines="All">
+        <TableColumn Name="Column4" Width="125.36"/>
+        <TableColumn Name="Column5" Width="134.81"/>
+        <TableColumn Name="Column6" Width="144.26"/>
+        <TableColumn Name="Column7" Width="153.71"/>
+        <TableColumn Name="Column8" Width="158.76"/>
+        <TableRow Name="Row6" AutoSize="true">
+          <TableCell Name="Cell16" Text="Ejercicio " Font="Arial, 8pt"/>
+          <TableCell Name="Cell17" Text="Tipo " Font="Arial, 8pt"/>
+          <TableCell Name="Cell20" Text="Fecha de presentación" Font="Arial, 8pt"/>
+          <TableCell Name="Cell21" Text="Folio de Recepción" Font="Arial, 8pt"/>
+          <TableCell Name="Cell22" Text="Núm. de operación" Font="Arial, 8pt"/>
+        </TableRow>
+        <TableRow Name="Row7">
+          <TableCell Name="ejercicio" Font="Arial, 8pt"/>
+          <TableCell Name="tipo" Font="Arial, 8pt"/>
+          <TableCell Name="fecha" Font="Arial, 8pt"/>
+          <TableCell Name="folio" Font="Arial, 8pt"/>
+          <TableCell Name="numero" Font="Arial, 8pt"/>
+        </TableRow>
+      </TableObject>
+      <TextObject Name="Text5" Left="18.9" Top="576.45" Width="47.25" Height="18.9" Text="SELLO" HorzAlign="Center" Font="Arial, 8pt"/>
+      <TextObject Name="sello" Left="18.9" Top="595.35" Width="718.2" Height="28.35" CanGrow="true" CanShrink="true" Font="Arial, 8pt"/>
+      <TextObject Name="Text7" Left="18.9" Top="680.4" Width="47.25" Height="18.9" Text="Archivo:" HorzAlign="Center" Font="Arial, 8pt"/>
+      <TextObject Name="archivo" Left="75.6" Top="680.4" Width="661.5" Height="18.9" CanGrow="true" CanShrink="true" Font="Arial, 8pt"/>
+      <TextObject Name="estatus" Left="18.9" Top="444.15" Width="718.2" Height="28.35" CanGrow="true" CanShrink="true" HorzAlign="Center" Font="Arial, 8pt, style=Bold" TextFill.Color="Olive"/>
+    </ReportTitleBand>
+  </ReportPage>
+</Report>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<siteMap>
+  <siteMapNode title="Inicio" url="/default.aspx">
+    <siteMapNode title="Planes" url="/planes.aspx">
+      <siteMapNode title="Preguntas" url="/preguntas.aspx"/>
+      <siteMapNode title="Contacto" url="/contact.aspx"/>
+      <siteMapNode title="Testimonios" url="/testim.aspx"/>
+      <siteMapNode title="Distribuidores" url="/distribuidores.aspx"/>
+      <siteMapNode title="Mi cuenta" url="/Account/Login.aspx"/>
+      <siteMapNode title="Registrarse" url="/registro.aspx"/>
+      <siteMapNode title="Iniciar sesión" url="/Account/Login.aspx"/>
+      <siteMapNode title="Políticas de uso" url="/politicas.aspx"/>
+      <siteMapNode title="Aviso de privacidad" url="/privacidad.aspx"/>
+    </siteMapNode>
+    </siteMapNode>
+    </siteMapNode>
+    </siteMapNode>
+    </siteMapNode>
+    </siteMapNode>
+    </siteMapNode>
+    </siteMapNode>
+    </siteMapNode>
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

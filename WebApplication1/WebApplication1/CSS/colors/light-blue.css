@@ -1,0 +1,149 @@
+@-webkit-keyframes preloader {
+  25% {
+    height: 30px;
+    -webkit-transform: translateY(15px);
+    transform: translateY(15px);
+    background: #1468B3;
+  }
+}
+
+@keyframes preloader {
+  25% {
+    height: 30px;
+    -webkit-transform: translateY(15px);
+    transform: translateY(15px);
+    background: #1468B3;
+  }
+}
+
+.btn-main {
+  background: #1468B3;
+  border: 1px solid #1468B3;
+}
+
+.title .border {
+  background-color: #1468B3;
+}
+
+.portfolio-filter button {
+  background: #1468B3;
+}
+
+.navigation .navbar-nav > li.active a {
+  color: #1468B3;
+}
+
+.navigation .navbar-nav > li > a:hover, .navigation .navbar-nav > li > a:active, .navigation .navbar-nav > li > a:focus {
+  color: #1468B3;
+}
+
+.testimonial {
+  background: #1468B3;
+}
+
+.team .member-photo .mask {
+  background: rgba(105, 210, 231, 0.7);
+}
+
+/*=================================================================
+  Our skills
+==================================================================*/
+.team-skills .progress-block .progress .progress-bar {
+  background: #1468B3;
+}
+
+/*=================================================================
+  Step section
+==================================================================*/
+.development-steps .step-2 {
+  background-color: #1468B3;
+}
+
+.development-steps .step-3 {
+  background: #3dc5e0;
+}
+
+.development-steps .step-4 {
+  background: #27bedc;
+}
+
+.services .service-block.color-bg {
+  background: #1468B3;
+}
+
+.services .service-block i {
+  color: #1468B3;
+}
+
+.service-2 .service-item:hover i {
+  color: #1468B3;
+}
+
+.service-2 .service-item i {
+  background: #1468B3 none repeat scroll 0 0;
+}
+
+.pricing-table .price-title .value {
+  color: #1468B3;
+}
+
+.portfolio-filter ul li.active {
+  background: #1468B3;
+}
+
+.portfolio-block .caption .search-icon {
+  background: #1468B3;
+}
+
+.counters-item i {
+  color: #1468B3;
+}
+
+.contact-form input:hover,
+.contact-form textarea:hover,
+.contact-form #contact-submit:hover {
+  border-color: #1468B3;
+}
+
+.contact-form #contact-submit {
+  background: #1468B3;
+}
+
+.social-icon ul li a:hover {
+  background: #1468B3;
+  border: 1px solid #1468B3;
+}
+
+.about .btn-about {
+  background: #1468B3;
+}
+
+.about .feature-list li i {
+  color: #1468B3;
+}
+
+.top-footer li a:hover {
+  color: #1468B3;
+}
+
+.footer-bottom a {
+  color: #1468B3;
+}
+
+.post-meta a {
+  color: #1468B3;
+}
+
+.next-prev a:hover {
+  color: #1468B3;
+}
+
+.social-profile ul li a i:hover {
+  color: #1468B3;
+}
+
+.comment-reply-form input:focus, .comment-reply-form textarea:focus {
+  border: 1px solid #1468B3;
+}
+
+/*# sourceMappingURL=../maps/colors/light-blue.css.map */

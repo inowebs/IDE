@@ -1,0 +1,539 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>
+    </SchemaVersion>
+    <ProjectGuid>{00F54CAC-89E3-4CA9-B62E-D5275CC75AD2}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>WebApplication2</RootNamespace>
+    <AssemblyName>WebApplication2</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MyType>Custom</MyType>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>WebApplication2.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <RegisterForComInterop>true</RegisterForComInterop>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>WebApplication2.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <RegisterForComInterop>true</RegisterForComInterop>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DocumentationFile>WebApplication2.xml</DocumentationFile>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\WebApplication2.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.vb</CodeAnalysisModuleSuppressionsFile>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DocumentationFile>WebApplication2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisLogFile>bin\WebApplication2.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.vb</CodeAnalysisModuleSuppressionsFile>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Intelligencia.UrlRewriter, Version=2.0.0.9, Culture=neutral, PublicKeyToken=0573f3650687980d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Intelligencia.UrlRewriter.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Collections.Specialized" />
+    <Import Include="System.Configuration" />
+    <Import Include="System.Text" />
+    <Import Include="System.Text.RegularExpressions" />
+    <Import Include="System.Web" />
+    <Import Include="System.Web.Caching" />
+    <Import Include="System.Web.SessionState" />
+    <Import Include="System.Web.Security" />
+    <Import Include="System.Web.Profile" />
+    <Import Include="System.Web.UI" />
+    <Import Include="System.Web.UI.WebControls" />
+    <Import Include="System.Web.UI.WebControls.WebParts" />
+    <Import Include="System.Web.UI.HtmlControls" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="admon.aspx" />
+    <Content Include="anual.aspx" />
+    <Content Include="cliente.aspx" />
+    <Content Include="clienteList.aspx" />
+    <Content Include="contact.aspx" />
+    <Content Include="contrato.aspx" />
+    <Content Include="contratoDistribuidores.aspx" />
+    <Content Include="contratos.aspx" />
+    <Content Include="cotizador.aspx" />
+    <Content Include="decla.aspx" />
+    <Content Include="declaAyu.aspx" />
+    <Content Include="Default.aspx" />
+    <Content Include="descripcion.aspx" />
+    <Content Include="distribuidores.aspx" />
+    <Content Include="EmailTemplates\PasswordRecovery.txt" />
+    <Content Include="Global.asax" />
+    <Content Include="Login.aspx" />
+    <Content Include="mensual.aspx" />
+    <Content Include="misContra.aspx" />
+    <Content Include="misDecla.aspx" />
+    <Content Include="newPasswordSent.aspx" />
+    <Content Include="pagoAsesoria.aspx" />
+    <Content Include="pagoInscripcion.aspx" />
+    <Content Include="pagos.aspx" />
+    <Content Include="planes.aspx" />
+    <Content Include="politicas.aspx" />
+    <Content Include="preguntas.aspx" />
+    <Content Include="privacidad.aspx" />
+    <Content Include="RecoverPassword.aspx" />
+    <Content Include="registro.aspx" />
+    <Content Include="Site.Master" />
+    <Content Include="Styles\Site.css" />
+    <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.4.1.js" />
+    <Content Include="Scripts\jquery-1.4.1.min.js" />
+    <Content Include="pdf.aspx" />
+    <Content Include="testim.aspx" />
+    <Content Include="unsuscribe.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="temas.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="admon.aspx.designer.vb">
+      <DependentUpon>admon.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admon.aspx.vb">
+      <DependentUpon>admon.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="anual.aspx.designer.vb">
+      <DependentUpon>anual.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="anual.aspx.vb">
+      <DependentUpon>anual.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="cliente.aspx.designer.vb">
+      <DependentUpon>cliente.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="cliente.aspx.vb">
+      <DependentUpon>cliente.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="clienteList.aspx.designer.vb">
+      <DependentUpon>clienteList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="clienteList.aspx.vb">
+      <DependentUpon>clienteList.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="contact.aspx.designer.vb">
+      <DependentUpon>contact.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="contact.aspx.vb">
+      <DependentUpon>contact.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="contrato.aspx.designer.vb">
+      <DependentUpon>contrato.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="contrato.aspx.vb">
+      <DependentUpon>contrato.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="contratoDistribuidores.aspx.designer.vb">
+      <DependentUpon>contratoDistribuidores.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="contratoDistribuidores.aspx.vb">
+      <DependentUpon>contratoDistribuidores.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="contratos.aspx.designer.vb">
+      <DependentUpon>contratos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="contratos.aspx.vb">
+      <DependentUpon>contratos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="cotizador.aspx.designer.vb">
+      <DependentUpon>cotizador.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="cotizador.aspx.vb">
+      <DependentUpon>cotizador.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="decla.aspx.designer.vb">
+      <DependentUpon>decla.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="decla.aspx.vb">
+      <DependentUpon>decla.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="declaAyu.aspx.designer.vb">
+      <DependentUpon>declaAyu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="declaAyu.aspx.vb">
+      <DependentUpon>declaAyu.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.vb">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="descripcion.aspx.designer.vb">
+      <DependentUpon>descripcion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="descripcion.aspx.vb">
+      <DependentUpon>descripcion.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="distribuidores.aspx.designer.vb">
+      <DependentUpon>distribuidores.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="distribuidores.aspx.vb">
+      <DependentUpon>distribuidores.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Global.asax.vb">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.designer.vb">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.vb">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="mensual.aspx.designer.vb">
+      <DependentUpon>mensual.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="mensual.aspx.vb">
+      <DependentUpon>mensual.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="misContra.aspx.designer.vb">
+      <DependentUpon>misContra.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="misContra.aspx.vb">
+      <DependentUpon>misContra.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="misDecla.aspx.designer.vb">
+      <DependentUpon>misDecla.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="misDecla.aspx.vb">
+      <DependentUpon>misDecla.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Module1.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\MyExtensions\MyWebExtension.vb">
+      <VBMyExtensionTemplateID>Microsoft.VisualBasic.Web.MyExtension</VBMyExtensionTemplateID>
+      <VBMyExtensionTemplateVersion>1.0.0.0</VBMyExtensionTemplateVersion>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="newPasswordSent.aspx.designer.vb">
+      <DependentUpon>newPasswordSent.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="newPasswordSent.aspx.vb">
+      <DependentUpon>newPasswordSent.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="pagoAsesoria.aspx.designer.vb">
+      <DependentUpon>pagoAsesoria.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pagoAsesoria.aspx.vb">
+      <DependentUpon>pagoAsesoria.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="pagoInscripcion.aspx.designer.vb">
+      <DependentUpon>pagoInscripcion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pagoInscripcion.aspx.vb">
+      <DependentUpon>pagoInscripcion.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="pagos.aspx.designer.vb">
+      <DependentUpon>pagos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pagos.aspx.vb">
+      <DependentUpon>pagos.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="planes.aspx.designer.vb">
+      <DependentUpon>planes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="planes.aspx.vb">
+      <DependentUpon>planes.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="politicas.aspx.designer.vb">
+      <DependentUpon>politicas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="politicas.aspx.vb">
+      <DependentUpon>politicas.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="preguntas.aspx.designer.vb">
+      <DependentUpon>preguntas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="preguntas.aspx.vb">
+      <DependentUpon>preguntas.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="privacidad.aspx.designer.vb">
+      <DependentUpon>privacidad.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="privacidad.aspx.vb">
+      <DependentUpon>privacidad.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="RecoverPassword.aspx.designer.vb">
+      <DependentUpon>RecoverPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RecoverPassword.aspx.vb">
+      <DependentUpon>RecoverPassword.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="registro.aspx.designer.vb">
+      <DependentUpon>registro.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="registro.aspx.vb">
+      <DependentUpon>registro.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="RunAs_Impersonator.vb" />
+    <Compile Include="Site.Master.designer.vb">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Site.Master.vb">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pdf.aspx.designer.vb">
+      <DependentUpon>pdf.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pdf.aspx.vb">
+      <DependentUpon>pdf.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="testim.aspx.designer.vb">
+      <DependentUpon>testim.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="testim.aspx.vb">
+      <DependentUpon>testim.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="unsuscribe.aspx.designer.vb">
+      <DependentUpon>unsuscribe.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="unsuscribe.aspx.vb">
+      <DependentUpon>unsuscribe.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="temas.aspx.designer.vb">
+      <DependentUpon>temas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="temas.aspx.vb">
+      <DependentUpon>temas.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Account\Web.config" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="CGZipLibrary">
+      <Guid>{293364AC-43F8-11D3-BC2D-4000000A2806}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Shell32">
+      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>22293</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/WebApplication2</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

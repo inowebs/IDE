@@ -1,0 +1,811 @@
+﻿<%@ Master Language="VB" AutoEventWireup="false" CodeBehind="Site.master.vb" Inherits="WebApplication1.Site"  %>
+
+<!DOCTYPE html PUBLIC "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="INDEX, FOLLOW, NOODP" />
+    <meta name="description" content="Solución web para presentar declaraciones de Depósitos en Efectivo (ISR e IDE). Envía declaraciones mensuales y anuales aquí" />
+    <meta name="keywords" content="depositos en efectivo, depositos en efectivo 2020, depositos en efectivo 2021, impuesto a los depositos en efectivo, impuesto sobre depositos en efectivo, ide 2021, depositos en efectivo sat, impuesto ide 2020, depositos en efectivo impuesto, depositos en efectivo sat, ide mexico, impuesto por depositos en efectivo 2020, impuesto sobre depositos en efectivo 2020, depositos en efectivo 2020 sat, ide 2020 mexico, ide sat, ide depositos en efectivo, ide depositos en efectivo 2020, declarar depositos en efectivo, impuesto a los depósitos en efectivo, declaraciones de depositos en efectivo, declaraciones por depositos en efectivo, declaracion de depositos en efectivo, declaracion por depositos en efectivo, declaracion con ide,  informativa de depositos en efectivo, informativa ide, declaracion informativa de ide, declaracion informativa de ide, informativa de ide, informativas ide, declaracion informativa mensual de ide, declaracion informativa anual de ide, declaraciones de ide, declaraciones informativas ide, declaracion de depositos en efectivo, declaracion ide, declarar ide, declarar el ide, declaracion de ide, ide mensual, ide anual, impuesto IDE, declaracion anual de ide, declaracion mensual de ide, declaraciones mensuales de ide, declaraciones anuales de ide,informativa ide, informativa ide mensual, informativa ide anual, declaracion mensual de depositos en efectivo, declaracion anual de depositos en efectivo, declaracion depositos en efectivo, ide impuesto, ide porcentaje, impuesto ide, tasa de ide, porcentaje de ide, ide-m, ide-a, ide sat, xml ide, ide xsd, clave CASFIM, clave de ide, solucion ide, matriz de conexion segura sat, socket de conexion ide, 76/ISR, Art. 55 Fracc. IV de la Ley del ISR, Regla 3.5.11, Regla 3.5.12, sat ide, impuesto a depositos en efectivo, catalogo casfim, impuesto por depositos en efectivo, depositos en efectivo sat, vigencia ide, vigencia depositos en efectivo, vigencia del ide, fundamento legal ide, fundamento legal depositos en efectivo, impuesto sobre depositos en efectivo, impuesto depositos en efectivo, impuesto a depositos en efectivo, depositos efectivo, deposito efectivo, impuesto ide, deposito en efectivo, depositos en efectivo, impuesto al deposito en efectivo, impuesto del ide, impuesto deposito en efectivo, ide impuesto, ide declaracion, contingencia ide, ide contingencia, contingencia depositos en efectivo, depositos en efectivo contingencia, informativas del ide, informativas de ide, envia ide, enviar ide, presentar el ide, presentar ide, declaracion del ide, causa ide, causan ide, requerimiento del ide, ide con datos, ide en ceros, obligacion del ide, ide ceros, ide datos, contingencia del ide, enviar el ide, ide en xml, ide en formato xml, clave de institucion financiera, casfim, ide extemporaneo, obligacion ide, acuse ide, acuse depositos en efectivo, declaracion informativa ide, anual del ide, mensual del ide, socket ide, socket del ide, matriz de conexion segura, socket de ide, depositos en efectivo sat, sat depositos en efectivo, impuesto sobre depositos, tasa del ide, calcula el ide, impuesto por deposito en efectivo, impuesto de depositos en efectivo, impuesto sobre deposito en efectivo, deposito en efectivo, deposito en efectivo impuesto, impuesto efectivo, información de depósitos en efectivo, informacion de depósitos en efectivo, envío de Declaraciones de Depósitos en Efectivo, envio de Declaraciones de Depósitos en Efectivo, Instituciones del Sistema Financiero, " />
+    <%--<meta name="title" content="Declaraciones IDE, Solución para declaraciones informativas de Depósitos en Efectivo" />--%>
+    <meta name="copyright" content="©2021 declaracioneside.com" />
+    <meta name="author" content="©2021 declaracioneside.com Job Josué Constantino Prado" />
+    <meta name="location" content="Mexico" />
+    <meta http-equiv="Content-Language" content="es-419" />
+    <meta name="google-site-verification" content="Vpc2A_AduojvEJkr1tr1gfPXVTnLlkAEECbLG7cBFFw" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="category" content="Declaraciones fiscales" />
+    <meta itemprop="name" content="Declaraciones IDE | declaracionesIDE.com" />
+    <%--<meta itemprop="description" content="Sistema de Facturación Electrónica CFDI 3.3, factura electrónica gratis. Multiempresa, multiemisor, videotutoriales, solo paga lo que usas, Empieza a facturar en línea tus facturas electrónicas, nomina digital, contabilidad electronica, retenciones CFDI, timbrado y estados de cuenta. Facturacion electronica en morelia michoacan mexico GRATIS. " />--%>
+    <meta itemprop="image" content="https://declaracioneside.com/images/icons/logo1.png" />
+    <script type='application/ld+json'>{"@context":"https:\/\/schema.org","@type":"WebSite","url":"https:\/\/www.declaracioneside.com\/","name":"Declaraciones IDE"}</script>
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@inowebs" />
+    <meta name="twitter:domain" content="https://declaracioneside.com" />
+    <meta name="twitter:title" content="Declaraciones IDE | declaracionesIDE.com" />
+    <meta name="twitter:description" content="Declaraciones IDE, Solución para declaraciones informativas de Depósitos en Efectivo, presentalas y envialas en linea al SAT desde www.declaracioneside.com " />
+    <meta name="twitter:creator" content="@inowebs" />
+    <meta name="twitter:image:src" content="https://declaracioneside.com/images/icons/logo1.png" />
+    <meta name="twitter:url" content="https://declaracioneside.com" />
+    <!-- / Terminan los Twitter Cards -->
+    <!-- Open Graph data -->
+    <meta property="og:title" content="Declaraciones IDE | declaracionesIDE.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://declaracioneside.com" />
+    <meta property="og:image" content="https://declaracioneside.com/images/icons/logo1.png" />
+    <meta property="og:description" content="Declaraciones IDE, Solución para declaraciones informativas de Depósitos en Efectivo, presentalas y envialas en linea al SAT desde www.declaracioneside.com" />
+    <meta property="og:site_name" content="Declaraciones IDE" />
+    <meta property="fb:app_id" content="GMh57aZz+xR" />  <%--  se obtiene ejecutando esto https://graph.facebook.com/depositosenefectivo--%>
+    <!-- / Termina el Open Graph -->
+    <!-- / Termina el HomePage -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+
+    <title>Declaraciones IDE, Solución para declaraciones informativas de Depósitos en Efectivo</title>
+
+        <script type='application/ld+json'> 
+          {
+  "@context": "http://schema.org",
+  "@type": "VideoObject",
+  "name": "Nuestra plataforma Tu solución en declaraciones de depósitos en efectivo",
+  "description": "Nuestra plataforma es Tu solución en declaraciones de depósitos en efectivo e IDE. Prueba el mejor sistema www.declaracioneside.com para enviar tus informativas de IDE y depositos en efectivo al SAT",
+  "thumbnailUrl": [
+    "https://i.ytimg.com/vi/sjLYnmTsVro/hqdefault.jpg"
+   ],
+  "uploadDate": "2012-06-14T00:00:00+00:00",
+  "embedUrl": "https://www.youtube.com/watch?v=sjLYnmTsVro"
+}     
+    </script>
+
+       <script type='application/ld+json'> 
+          {
+  "@context": "http://schema.org",
+  "@type": "VideoObject",
+  "name": "Servicio de declaraciones de depósitos en efectivo y de IDE",
+  "description": "Servicio para presentar y enviar declaraciones de depósitos en efectivo y de IDE. Prueba el mejor sistema www.declaracioneside.com para enviar tus informativas de IDE y depositos en efectivo al SAT",
+  "thumbnailUrl": [
+    "https://i.ytimg.com/vi/98becf3N4mw/hqdefault.jpg"
+   ],
+  "uploadDate": "2015-12-21T00:00:00+00:00",
+  "embedUrl": "https://www.youtube.com/watch?v=98becf3N4mw" 
+}     
+    </script>
+
+    <script type='application/ld+json'> 
+          {
+  "@context": "http://schema.org",
+  "@type": "VideoObject",
+  "name": "Fundamento legal vigente de depositos en efectivo",
+  "description": "Fundamento legal vigente de depositos en efectivo para presentar y enviar declaraciones de depósitos en efectivo y de IDE. Prueba el mejor sistema www.declaracioneside.com para enviar tus informativas de IDE y depositos en efectivo al SAT",
+  "thumbnailUrl": [
+    "https://i.ytimg.com/vi/eppVvWIBcF8/hqdefault.jpg"
+   ],
+  "uploadDate": "2015-12-21T00:00:00+00:00",
+  "embedUrl": "https://www.youtube.com/watch?v=eppVvWIBcF8" 
+}     
+    </script>
+
+
+    <script type='application/ld+json'> 
+{
+  "@context": "http://www.schema.org",
+  "@type": "WebSite",
+  "name": "DECLARACIONES INFORMATIVAS DE DEPOSITOS EN EFECTIVO",
+  "alternateName": "DECLARACIONES IDE",
+  "url": "www.declaracioneside.com"
+}
+    </script>
+
+    <script type='application/ld+json'> 
+{
+  "@context": "http://www.schema.org",
+  "@type": "LocalBusiness",
+  "name": "Declaraciones IDE",
+  "url": "https://declaracioneside.com",
+  "logo": "https://declaracioneside.com/images/icons/logo1.png",
+  "image": "https://declaracioneside.com/images/icons/logo1.png",
+  "description": "El mejor sistema para presentar y enviar declaraciones informativas de depositos en efectivo e IDE al SAT por internet.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "LACAS DE URUAPAN 737",
+    "postOfficeBoxNumber": "58230",
+    "addressLocality": "MORELIA",
+    "addressRegion": "MICHOACAN",
+    "postalCode": "58230",
+    "addressCountry": "MEXICO"
+  },
+  "hasMap": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3756.1903136860487!2d-101.17398368586585!3d19.704520037036993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842d0e7055555555%3A0xe94ba42c7cebb1eb!2sDeclaraciones+IDE%2C+Depositos+en+efectivo!5e0!3m2!1ses!2smx!4v1544680655888",
+  "openingHours": "Mo, Tu, We, Th, Fr 09:00-18:30",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+524436903616",
+    "contactType": "sales"
+  },
+        "telephone": "+524436903616"
+}
+    </script>
+
+
+
+    <%-- <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />--%>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+    <!-- CSS
+  ================================================== -->
+    <!-- Themefisher Icon font -->
+    <link rel="stylesheet" href="plugins/themefisher-font.v-2/style.css" />
+    <!-- bootstrap.min css -->
+    <link rel="stylesheet" href="plugins/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Slick Carousel -->
+    <link rel="stylesheet" href="plugins/slick-carousel/slick/slick.css" />
+    <link rel="stylesheet" href="plugins/slick-carousel/slick/slick-theme.css" />
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/style.css" />
+    <%--fa icons--%>
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" />
+    <style type="text/css">
+        .errores {
+            -webkit-boxshadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            -o-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            background: #FAAB21;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            color: #000000;
+            border: 1px solid gray;
+            border-radius: 5px 6px;
+            display: none;
+            font-size: 0.7em;
+            margin-top: -30px;
+            margin-left: 180px;
+            padding: 5px;
+            position: absolute;
+        }
+
+        .zoom {
+            transition: transform .2s; /* Animation */
+            margin: 0 auto;
+        }
+
+            .zoom:hover {
+                transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+            }
+    </style>
+    <style type="text/css">
+        .scroll {
+            width: 20px;
+            overflow: auto;
+            float: left;
+            margin: 0 10px;
+        }
+
+        .scroll4::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .scroll4::-webkit-scrollbar-thumb {
+            background: #666;
+            border-radius: 20px;
+        }
+
+        .scroll4::-webkit-scrollbar-track {
+            background: #ddd;
+            border-radius: 20px;
+        }
+    </style>
+
+    <link rel="Shortcut Icon" href="icono.ico" type="image/x-icon" />
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/5a01f36c198bd56b8c039cc6/default';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#cerrar').click(function () {
+                $('#float_bottom_left').remove();
+            });
+        });
+        $(function () {
+            $('#cerrar33').click(function () {
+                $('#float_middle_right').remove();
+            });
+        });
+    </script>
+	<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script>
+   
+
+</head>
+
+<body id="body">
+     <%--funciones js para colocar el recaptcha--%>
+    <script>      
+        var login;
+        var registro;
+        var contact;
+        var verifyCallbackContacto = function (response) {
+            /*alert(response);*/
+            $("#<%=respHidden.ClientID%>").val(response);
+        }               
+        var onloadCallback = function () {                     
+           contact = grecaptcha.render('contacto', {
+               'sitekey': '6LcjR4AUAAAAAD5QlcCBcXVU0QZOTlfepnXKdoD-',
+               'callback': verifyCallbackContacto,
+               'theme': 'light'
+           });
+        };
+    </script>
+    <form id="form1" runat="server">
+        <!--
+  Start Preloader
+  ==================================== -->
+        <div id="preloader">
+            <div class="preloader">
+                <div class="sk-circle1 sk-child"></div>
+                <div class="sk-circle2 sk-child"></div>
+                <div class="sk-circle3 sk-child"></div>
+                <div class="sk-circle4 sk-child"></div>
+                <div class="sk-circle5 sk-child"></div>
+                <div class="sk-circle6 sk-child"></div>
+                <div class="sk-circle7 sk-child"></div>
+                <div class="sk-circle8 sk-child"></div>
+                <div class="sk-circle9 sk-child"></div>
+                <div class="sk-circle10 sk-child"></div>
+                <div class="sk-circle11 sk-child"></div>
+                <div class="sk-circle12 sk-child"></div>
+            </div>
+        </div>
+        <!--
+  End Preloader
+  ==================================== -->
+        <%--Main Menu --%>
+        <%--<section class="header  navigation"> --%>
+        <div class="container">
+            <div class="row p-0">
+                <div class="col-sm-2">
+                    <a class="navbar-brand" href="default.aspx">
+                        <img src="images/icons/logo1.png" alt="" style="width: 100%">
+                    </a>
+                    <h3>
+                        <a class="navbar-brand" href="default.aspx">Declaraciones IDE
+                        </a>
+                    </h3>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="list-group pt-3  col-lg-offset-5">
+                                <div class="alert alert-primary" role="alert">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <a data-toggle="modal" data-target="#informacionModal">
+                                        <i class="fa fa-download"></i>
+                                        Descargas
+                                    </a>
+                                    <span>&nbsp;&nbsp;</span>
+                                    <i class="fa fa-phone"></i>
+                                    4436903616, <a href="https://api.whatsapp.com/send?phone=5214432180237&text=Hola%20quisiera%20saber%20el%20costo%20de%20sus%20servicios%20y%20sus%20beneficios&source=&data=" class="linkedin"><i class="fa fa-whatsapp"> 4432180237</i></a>  
+                                    <span>&nbsp;&nbsp;</span>
+                                    <a data-toggle="modal" data-target="#recomiendanosModal">
+                                        <i class="glyphicon glyphicon-link"></i>
+                                        Recomendar </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 pt-3">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <a href="Login.aspx" class="btn btn-info btn-sm">
+                                        <i class="fa fa-hand-o-right"></i>
+                                        Demo
+                                    </a>
+                                </div>
+                                <div class="col-sm-4">
+                                    <a href="registro.aspx" class="btn btn-info btn-sm">
+                                        <i class="glyphicon glyphicon-phone-alt"></i>
+                                        Registrarme
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <nav class="navbar navbar-expand-md p-0">
+                                <div class="row">
+                                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                        <span class="tf-ion-android-menu"></span>
+                                    </button>
+                                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                        <ul class="navbar-nav ml-auto">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="Default.aspx">Inicio</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="promociones.aspx">Servicios</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="videoman.aspx">Videos</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="contacto.aspx">Contacto</a>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="faq.aspx">Preguntas</a>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="temas.aspx">Interesante</a>
+                                            </li>
+
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="Login.aspx" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ingresar
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                    <asp:LoginView ID="LoginView1" runat="server">
+                                                        <AnonymousTemplate>
+                                                            <a class="dropdown-item" href="Login.aspx">Iniciar sesión</a>
+                                                        </AnonymousTemplate>
+                                                    </asp:LoginView>
+                                                    <a class="dropdown-item" href="cliente.aspx">Mi cuenta</a>
+                                                    <a class="dropdown-item" href="admon.aspx?lan=1&v=5" id="admin" runat="server" target="_blank">Administración</a>
+                                                    <a class="dropdown-item" href="Distribuidores.aspx?lan=1" id="distri" runat="server" target="_blank">Distribuidores</a>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <asp:LoginView ID="HeadLoginView" runat="server">
+                                                    <LoggedInTemplate>
+                                                        <strong>
+                                                            <asp:LoginName ID="HeadLoginName" runat="server" ForeColor="blue" />
+                                                        </strong>
+                                                        <asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutText="Cerrar sesión" OnLoggedOut="HeadLoginStatus_LoggedOut" ForeColor="blue" />
+                                                    </LoggedInTemplate>
+                                                </asp:LoginView>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                            </nav>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%--</section>--%>
+        <%--End Main Menu--%>
+
+        <div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+        <!-- Modal especiales-->
+        <div id="especialesMod" class="modal fade" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Ejemplos</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td id="a" style="background-color: #ddd">
+                                                <h6><a style="color: #000000" onclick="cambiar();" href="#">Acuse de declaración en XML</a></h6>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td id="b">
+                                                <h6><a style="color: #000000" onclick="cambiar2();" href="#">Asignación de CASFIM</a></h6>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td id="c">
+                                                <h6><a style="color: #000000" onclick="cambiar3();" href="#">Declaración IDE</a></h6>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td id="d">
+                                                <h6><a style="color: #000000" onclick="cambiar4();" href="#">Declaración anual IDE(EXCEL)</a></h6>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-9" id="contenido">
+                                <h5>Acuse de declaración en XML</h5>
+                                <img class="img-fluid zoom pb-3" src="images/ejemplos/ejemploAcuseAnual.png" alt="Clic para ver ejemplo" />
+                                <a href="registro.aspx" class="btn btn-block btn-main ">Registro</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <script type="text/javascript">
+            /*Funcion para cambiar de imagen en el modal casos */
+            function cambiar() {
+                celda = document.getElementById("a")
+                celda.style.backgroundColor = "#ddd"
+                celda = document.getElementById("b")
+                celda.style.backgroundColor = "#fff"
+                celda = document.getElementById("c")
+                celda.style.backgroundColor = "#fff"
+                celda = document.getElementById("d")
+                celda.style.backgroundColor = "#fff"
+                document.getElementById("contenido").innerHTML = "<h4>Acuse de declaración en XML</h4><img class=\"img-fluid zoom pb-3\" src=\"images/ejemplos/ejemploAcuseAnual.png\" alt=\"Clic para ver ejemplo\"><a href=\"registro.aspx\" class=\"btn btn-block btn-main \">Registro</a>";
+            }
+            function cambiar2() {
+                celda = document.getElementById("b")
+                celda.style.backgroundColor = "#ddd"
+                celda = document.getElementById("a")
+                celda.style.backgroundColor = "#fff"
+                celda = document.getElementById("c")
+                celda.style.backgroundColor = "#fff"
+                celda = document.getElementById("d")
+                celda.style.backgroundColor = "#fff"
+                document.getElementById("contenido").innerHTML = "<h4>Asignación de CASFIM</h4><img class=\"img-fluid zoom pb-3\" src=\"images/ejemplos/ejemploRespuestaCasfim.png\" alt=\"Clic para ver ejemplo\"><a href=\"registro.aspx\" class=\"btn btn-block btn-main \">Registro</a>";
+            }
+            function cambiar3() {
+                celda = document.getElementById("c")
+                celda.style.backgroundColor = "#ddd"
+                celda = document.getElementById("a")
+                celda.style.backgroundColor = "#fff"
+                celda = document.getElementById("b")
+                celda.style.backgroundColor = "#fff"
+                celda = document.getElementById("d")
+                celda.style.backgroundColor = "#fff"
+                document.getElementById("contenido").innerHTML = "<h4>Declaración IDE</h4><img class=\"img-fluid zoom pb-3\" src=\"images/ejemplos/ejemploDeclAnual2.png\" alt=\"Clic para ver ejemplo\"><a href=\"registro.aspx\" class=\"btn btn-block btn-main \">Registro</a>";
+            }
+            function cambiar4() {
+                celda = document.getElementById("d")
+                celda.style.backgroundColor = "#ddd"
+                celda = document.getElementById("c")
+                celda.style.backgroundColor = "#fff"
+                celda = document.getElementById("b")
+                celda.style.backgroundColor = "#fff"
+                celda = document.getElementById("a")
+                celda.style.backgroundColor = "#fff"
+                document.getElementById("contenido").innerHTML = "<h4>Declaración anual IDE(EXCEL)</h4><img class=\"img-fluid zoom pb-3\" src=\"images/ejemplos/ejemploAnual2.png\" alt=\"Clic para ver ejemplo\"><a href=\"registro.aspx\" class=\"btn btn-block btn-main \">Registro</a>";
+            }
+        </script>
+        <%--Modals and scripts to create content--%>
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" id="informacionModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content" style="width: 130% !important">
+                    <div class="modal-header" style="background: #0056B3; color: white">
+                        <h4>Descargas gratis</h4>
+                        <button type="button" class="close float-right" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="style14" align="center">
+                                    <strong style="font-size: 14px">
+                                        <br />
+                                    </strong><strong>
+                                        <span class="auto-style89">Descarga gratis:</span></strong><strong style="font-size: 14px"><span
+                                            class="style11"> </span></strong>
+                                </div>
+                                <ul>
+                                    <li>*Reglas del SAT  
+                        aplicables al <strong>IDE </strong></li>
+                                    <li>*Acceso a 
+                        Preguntas frecuentes desde fuentes oficiales</li>
+                                    <li>*Acceso a 
+                        Preguntas frecuentes desde instituciones bancarias</li>
+                                    <li>*Procedimiento de 
+                        <strong>contingencia</strong> por falla en comunicación en el <strong>envío de Declaraciones de IDE</strong>
+                                    </li>
+                                    <li>*Qué 
+                        información requiere para enviar las declaraciones de IDE
+                                    </li>
+                                    <li>*Cómo 
+                        calcular el IDE</li>
+                                    <li>*Requisitos para <strong>enviar declaraciones del IDE</strong></li>
+                                    <li>*Normatividad <em>actualizada</em> del IDE</li>
+                                    <li>*Ley del IDE</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td width="30">
+                                                <img src="images/box_01.gif" alt="Introduce tus datos"></td>
+                                            <td background="images/box_top.gif"></td>
+                                            <td>
+                                                <img src="images/box_02.gif" alt="Introduce tus datos"></td>
+                                        </tr>
+                                        <tr valign="top">
+                                            <td background="images/box_left.gif"></td>
+                                            <td background="images/box_middle.gif">
+                                                <div>
+                                                    <div align="center" class="style22">
+                                                        <span class="style192">Solo llena estos datos</span><br />
+                                                        <br />
+                                                    </div>
+                                                    <table align="center" border="0" cellpadding="0" cellspacing="0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="style24">
+                                                                    <span class="auto-style56">Nombre:</span></br class="style38">
+	                            <span
+                                    class="style16">
+                                    <span class="style17">
+                                        <asp:TextBox ID="nombre" runat="server" BackColor="lightgray" Width="170px"
+                                            MaxLength="100" CssClass="auto-style90"></asp:TextBox>
+                                    </span>
+                                </span>&nbsp;<strong class="bodytext"><br class="style38">
+                                </strong>
+                                                                    <span class="auto-style56">Correo:</span><br class="style38">
+                                                                    <span
+                                                                        class="style16"><span class="style17">
+                                                                            <asp:TextBox ID="correo" runat="server" BackColor="lightgray" Width="170px"
+                                                                                MaxLength="50" CssClass="style91"></asp:TextBox>
+                                                                        </span>
+                                                                    </span><span
+                                                                        class="style38">
+                                                                        <br />
+                                                                    </span><span class="auto-style56">Teléfono (con Lada):</span><span
+                                                                        class="style38"><br>
+                                                                    </span><span
+                                                                        class="style16"><span class="style17">
+                                                                            <asp:TextBox ID="tel" runat="server" BackColor="lightgray" Width="170px"
+                                                                                MaxLength="21"
+                                                                                ToolTip="solo use números y la coma sin espacios para agregar un segundo teléfono"
+                                                                                CssClass="style91"></asp:TextBox>
+                                                                            <br />
+                                                                        </span>
+                                                                    </span></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    </br>
+                        <table width="80%" align="center" border="0" cellpadding="3" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td style="background-color: #00cccc;" onmouseover="this.style.backgroundColor='#51E5BE'"
+                                        onmouseout="this.style.backgroundColor='#00cccc'" align="center">
+                                        <asp:Button ID="btnOptin" runat="server" Style="font-weight: 700"
+                                            Text="Descargar ahora " Width="213px" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                                                    <div class="style18">
+                                                        <br />
+                                                        Descuida, la privacidad de tus datos no será compartida<br />
+                                                    </div>
+
+                                                </div>
+                                            </td>
+                                            <td background="images/box_right.gif"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="images/box_03.gif" alt="Introduce tus datos"></td>
+                                            <td background="images/box_bottom.gif"></td>
+                                            <td>
+                                                <img src="images/box_04.gif" alt="Introduce tus datos"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="contactanosModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" style="background: #0056B3; color: white">
+                        <div class="row col-12">
+                            <div class="col-sm-8">
+                                <h4 class="modal-title ">Contáctanos</h4>
+                            </div>
+                            <div class="col-sm-4">
+                                <button type="button" class="close float-right" data-dismiss="modal">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <div class="form-group">
+                                <asp:TextBox runat="server" ID="name" Columns="30" CssClass="form-control" placeholder="Nombre:"></asp:TextBox>
+                                <div id="mensaje1" class="errores">Nombre</div>
+                            </div>
+                            <div class="form-group">
+                                <asp:TextBox runat="server" ID="email" Columns="30" MaxLength="50" CssClass="form-control" placeholder="Correo:"></asp:TextBox>
+                                <div id="mensaje2" class="errores">Correo</div>
+                            </div>
+                            <div class="form-group">
+                                <asp:TextBox runat="server" ID="tele" Columns="30" MaxLength="40" CssClass="form-control" placeholder="Teléfonos:"></asp:TextBox>
+                                <div id="mensaje3" class="errores">Teléfono valido</div>
+                            </div>
+                            <div class="form-group">
+                                <asp:DropDownList ID="depto" runat="server" class="form-control input-sm">
+                                    <asp:ListItem Value="Ventas">Ventas</asp:ListItem>
+                                    <asp:ListItem Value="Soporte">Soporte</asp:ListItem>
+                                </asp:DropDownList>
+                            </div>
+                            <div class="form-group">
+                                <asp:TextBox runat="server" ID="message" Columns="30" Rows="10" TextMode="MultiLine" CssClass="form-control" placeholder="Mensaje"></asp:TextBox>
+                                <div id="mensaje4" class="errores">Especfica el mensaje</div>
+                            </div>
+							<div class="form-group">
+                                <div id="contacto" ></div>
+                                <asp:HiddenField ID="respHidden" runat="server" />
+                            </div>
+                            <div class="form-group">
+                                <asp:Button ID="btnSubmit" runat="server" Text="Enviar" ValidationGroup="contacto" CssClass="btn pull-right" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="recomiendanosModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header" style="background: #0056B3; color: white">
+                        <h4 class="modal-title">Recomiendanos, Datos de tu amigo:</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="basic-login">
+                            <div class="form-group">
+                                <asp:TextBox ID="amigoNom" runat="server" placeholder="Nombre:" CssClass="form-control"></asp:TextBox>
+                            </div>
+                            <div class="form-group">
+                                <asp:TextBox ID="amigoCorr" runat="server" CssClass="form-control" placeholder="Correo:"></asp:TextBox>
+                            </div>
+                            <div class="form-group">
+                                <asp:TextBox ID="amigoTel" runat="server" CssClass="form-control" placeholder="Telefono:"></asp:TextBox>
+                            </div>
+                            <div class="form-group">
+                                <div class="g-recaptcha" data-sitekey="<%=ConfigurationManager.AppSettings("CaptchaSiteKey").ToString%>" data-callback="onSubmit" ></div>
+                                <asp:HiddenField ID="HiddenField1" runat="server" />
+                            </div>
+                            <div class="form-group">
+                                <asp:Button ID="recomendar" runat="server" Text="Enviar invitación" ToolTip="Recomienda esta pagina para declarar IDE a tus amigos" CssClass="btn pull-right" />
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+    <footer id="footer" class="bg-one">
+        <div class="top-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <h3>INFORMACIÓN</h3>
+                        <ul>
+                            <li><a href="#">Inicio</a></li>
+                            <li><a href="temas.aspx">Interesante</a></li>
+                            <li><a href="videoman.aspx">Videos</a></li>
+                        </ul>
+                    </div>
+                    <!-- End of .col-sm-3 -->
+
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <h3>Servicios</h3>
+                        <ul>
+                            <li><a href="default.aspx">Declaraciones IDE</a></li>
+                            <li><a href="https://facturaselectronicascfdi.com/" target="_blank">Facturación electronica</a></li>
+                        </ul>
+                    </div>
+                    <!-- End of .col-sm-3 -->
+
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <h3>Contacto</h3>
+                        <ul>
+                            <li><a href="#" data-toggle="modal" data-target="#contactanosModal">Contacto</a></li>
+                            <li><a href="faq.aspx">FAQ’s</a></li>
+                            <li><a href="registro.aspx">Registro</a></li>
+                        </ul>
+                    </div>
+                    <!-- End of .col-sm-3 -->
+
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <h3>Síguenos</h3>
+                        <a href="https://twitter.com/inowebs" target='_blank'>
+                                    <asp:Image ID="Image1" runat="server" ImageUrl="twitter.jpg" ToolTip="Clic aquí, siguenos en twitter" AlternateText="Clic aquí, siguenos en twitter" Height="25px" Width="25px" BorderWidth="0px" Style="border-radius: 3px 3px;" />
+                                </a>
+                                <a href="https://www.youtube.com/user/declaracioneside" target='_blank'>
+                                    <asp:Image
+                                        ID="Image10" runat="server" ImageUrl="iconoyoutube.png" ToolTip="Suscribete a nuestro canal declaraciones de depósitos en efectivo e IDE en youtube" AlternateText="Suscribete a nuestro canal declaraciones de depósitos en efectivo e IDE en youtube"
+                                        Style="border: 0; width: 30px; height: 30px; border-radius: 3px 3px;" />
+                                </a>
+                        <a href="https://www.facebook.com/depositosenefectivo" target='_blank'>
+                                    <asp:Image
+                                        ID="Image2" runat="server" Height="25px" ImageUrl="facebook.jpg"
+                                        Width="25px" ToolTip="Clic aquí para visitarnos en facebook"
+                                        AlternateText="Siguenos en facebook, haz clic aquí" BorderWidth="0px" Style="border-radius: 3px 3px;" />
+                                </a>
+                        <a href="https://www.linkedin.com/in/facturaci%C3%B3n-inowebs-1110125b/" target='_blank'>
+                                    <asp:Image ID="Image3" runat="server" ImageUrl="linkedin.png" ToolTip="Siguenos en linkedin" AlternateText="Siguenos en linkedin" Height="25px" Width="25px" Style="border-radius: 3px 3px;" />
+                                </a>
+                    </div>
+                    <!-- End of .col-sm-3 -->
+
+                </div>
+            </div>
+            <!-- end container -->
+        </div>
+        <div class="footer-bottom">
+            <h5><a href="politicas.aspx">Condiciones del Servicio</a><a href="privacidad.aspx">    &nbsp;&nbsp; Aviso de Privacidad </a></br>
+Matriz | Morelia, Mich. </h5>
+            <h5>Declaraciones IDE 2021. Todos los derechos reservados</h5>
+        </div>
+    </footer>
+    <!-- end footer -->
+    <!-- end Footer Area
+    ========================================== -->
+
+
+    <!-- 
+    Essential Scripts
+    =====================================-->
+
+    <!-- Main jQuery -->
+    <script src="plugins/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.7 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="plugins/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Owl Carousel -->
+    <script src="plugins/slick-carousel/slick/slick.min.js"></script>
+  
+    <!-- Smooth Scroll js -->
+    <script src="plugins/smooth-scroll/dist/js/smooth-scroll.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw"></script>
+
+    <!-- Custom js -->
+    <script src="js/script.js"></script>
+
+     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.0.0.js"></script>  
+</body>
+</html>
+

@@ -1,0 +1,910 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 3 (http://www.altova.com) by SAT (SAT) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:altova="http://www.altova.com/xml-schema-extensions" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="DeclaracionInformativaAnualISR">
+		<xs:annotation>
+			<xs:documentation>Nodo primario para el formato de la declaración informativa anual de Depósitos en Efectivo</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="RepresentanteLegal" type="tRepresentante">
+					<xs:annotation>
+						<xs:documentation>Atributo obligatorio para la expresión del representante legal.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:choice>
+					<xs:element name="Normal" type="tDeclaracionAnual">
+						<xs:annotation>
+							<xs:documentation>Nodo definido para expresar la información básica de la declaración cuando se trata de una declaración normal. </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Complementaria">
+						<xs:annotation>
+							<xs:documentation>Nodo definido para expresar la información básica de la declaración cuando se trata de una declaración complementara.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="tDeclaracionAnual">
+									<xs:attribute name="opAnterior" use="required">
+										<xs:annotation>
+											<xs:documentation>Atributo obligatorio para la expresión del folio o número de referencia asignado a la declaración anterior sujeta a ser complementada mediante la presente declaración.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:minLength value="1"/>
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="fechaPresentacion" use="required">
+										<xs:annotation>
+											<xs:documentation>Atributo obligatorio para la expresión de la fecha de presentación de la declaración anterior sujeta a ser complementada mediante la presente declaración. </xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:date">
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:choice>
+				<xs:choice>
+					<xs:element name="InstitucionDistintaDeCredito">
+						<xs:annotation>
+							<xs:documentation>Nodo definido para la expresión del detalle de depósitos en efectivo realizados en instituciones distintas a las de crédito.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="ReporteDeDepositosEnEfectivo" maxOccurs="12">
+									<xs:annotation>
+										<xs:documentation>Nodo definido para expresar el conjunto de registros de detalle de depósitos en efectivo cuyo monto mensual acumulado exceda de 15,000 pesos.</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="RegistroDeDetalle" minOccurs="0" maxOccurs="unbounded">
+												<xs:annotation>
+													<xs:documentation>Nodo definido para expresar la información de los registros de detalle de depósitos en efectivo cuyo monto mensual acumulado exceda de 15,000 pesos.</xs:documentation>
+												</xs:annotation>
+												<xs:complexType>
+													<xs:sequence>
+														<xs:choice>
+															<xs:element name="PersonaFisica">
+																<xs:annotation>
+																	<xs:documentation>Nodo definido para la expresión de la información de identificación de la persona física.</xs:documentation>
+																</xs:annotation>
+																<xs:complexType>
+																	<xs:complexContent>
+																		<xs:extension base="tPersonaFisica">
+																			<xs:sequence>
+																				<xs:element name="numeroCuenta" maxOccurs="unbounded">
+																					<xs:annotation>
+																						<xs:documentation>Atributo obligatorio para la expresión del número o clave que identifica la cuenta o contrato reportado</xs:documentation>
+																					</xs:annotation>
+																					<xs:simpleType>
+																						<xs:restriction base="xs:string">
+																							<xs:minLength value="1"/>
+																						</xs:restriction>
+																					</xs:simpleType>
+																				</xs:element>
+																			</xs:sequence>
+																		</xs:extension>
+																	</xs:complexContent>
+																</xs:complexType>
+															</xs:element>
+															<xs:element name="PersonaMoral">
+																<xs:annotation>
+																	<xs:documentation>Nodo definido para la expresión de la información de identificación de la persona moral.</xs:documentation>
+																</xs:annotation>
+																<xs:complexType>
+																	<xs:complexContent>
+																		<xs:extension base="tPersonaMoral">
+																			<xs:sequence>
+																				<xs:element name="numeroCuenta" maxOccurs="unbounded">
+																					<xs:annotation>
+																						<xs:documentation>Atributo obligatorio para la expresión del número o clave que identifica la cuenta o contrato reportado</xs:documentation>
+																					</xs:annotation>
+																					<xs:simpleType>
+																						<xs:restriction base="xs:string">
+																							<xs:minLength value="1"/>
+																						</xs:restriction>
+																					</xs:simpleType>
+																				</xs:element>
+																			</xs:sequence>
+																		</xs:extension>
+																	</xs:complexContent>
+																</xs:complexType>
+															</xs:element>
+														</xs:choice>
+														<xs:element name="DepositoEnEfectivo">
+															<xs:annotation>
+																<xs:documentation>Nodo definido para la expresión de la información referente a depósitos en efectivo.</xs:documentation>
+															</xs:annotation>
+															<xs:complexType>
+																<xs:complexContent>
+																	<xs:extension base="tDepositoEfectivo"/>
+																</xs:complexContent>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="Cotitulares" type="tCuentaCotitulares" minOccurs="0" maxOccurs="unbounded"/>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+										<xs:attribute name="Periodo" use="required">
+											<xs:annotation>
+												<xs:documentation>Atributo obligatorio para la expresión del número de mes que se reporta.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:int">
+													<xs:enumeration value="1"/>
+													<xs:enumeration value="2"/>
+													<xs:enumeration value="3"/>
+													<xs:enumeration value="4"/>
+													<xs:enumeration value="5"/>
+													<xs:enumeration value="6"/>
+													<xs:enumeration value="7"/>
+													<xs:enumeration value="8"/>
+													<xs:enumeration value="9"/>
+													<xs:enumeration value="10"/>
+													<xs:enumeration value="11"/>
+													<xs:enumeration value="12"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:attribute>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="Totales" type="tTotales">
+									<xs:annotation>
+										<xs:documentation>Nodo definido para la expresión de totales correspondientes a las operaciones reportadas mediante la declaración.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="InstitucionDeCredito">
+						<xs:annotation>
+							<xs:documentation>Nodo definido para la expresión del detalle de depósitos en efectivo realizados en instituciones de crédito.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="ReporteDeDepositosEnEfectivo" maxOccurs="12">
+									<xs:annotation>
+										<xs:documentation>Nodo definido para expresar el conjunto de registros de detalle de depósitos en efectivo mayores a 15,000</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="RegistroDeDetalle" minOccurs="0" maxOccurs="unbounded">
+												<xs:annotation>
+													<xs:documentation>Nodo definido para expresar la información de los registros de detalle de depósitos en efectivo cuyo monto mensual acumulado exceda de 15,000 pesos.</xs:documentation>
+												</xs:annotation>
+												<xs:complexType>
+													<xs:sequence>
+														<xs:choice>
+															<xs:element name="PersonaFisica">
+																<xs:annotation>
+																	<xs:documentation>Nodo definido para la expresión de la información de identificación de la persona física.</xs:documentation>
+																</xs:annotation>
+																<xs:complexType>
+																	<xs:complexContent>
+																		<xs:extension base="tPersonaFisica">
+																			<xs:sequence>
+																				<xs:element name="numeroCuenta" maxOccurs="unbounded">
+																					<xs:annotation>
+																						<xs:documentation>Atributo obligatorio para la expresión del número o clave que identifica la cuenta o contrato reportado</xs:documentation>
+																					</xs:annotation>
+																					<xs:simpleType>
+																						<xs:restriction base="xs:string">
+																							<xs:minLength value="1"/>
+																						</xs:restriction>
+																					</xs:simpleType>
+																				</xs:element>
+																			</xs:sequence>
+																		</xs:extension>
+																	</xs:complexContent>
+																</xs:complexType>
+															</xs:element>
+															<xs:element name="PersonaMoral">
+																<xs:annotation>
+																	<xs:documentation>Nodo definido para la expresión de la información de identificación de la persona moral.</xs:documentation>
+																</xs:annotation>
+																<xs:complexType>
+																	<xs:complexContent>
+																		<xs:extension base="tPersonaMoral">
+																			<xs:sequence>
+																				<xs:element name="numeroCuenta" maxOccurs="unbounded">
+																					<xs:annotation>
+																						<xs:documentation>Atributo obligatorio para la expresión del número o clave que identifica la cuenta o contrato reportado</xs:documentation>
+																					</xs:annotation>
+																					<xs:simpleType>
+																						<xs:restriction base="xs:string">
+																							<xs:minLength value="1"/>
+																						</xs:restriction>
+																					</xs:simpleType>
+																				</xs:element>
+																			</xs:sequence>
+																		</xs:extension>
+																	</xs:complexContent>
+																</xs:complexType>
+															</xs:element>
+														</xs:choice>
+														<xs:element name="DepositoEnEfectivo">
+															<xs:annotation>
+																<xs:documentation>Nodo definido para la expresión de la información referente a depósitos en efectivo cuyo monto mensual acumulado exceda de 15,000 pesos.</xs:documentation>
+															</xs:annotation>
+															<xs:complexType>
+																<xs:complexContent>
+																	<xs:extension base="tDepositoEfectivo"/>
+																</xs:complexContent>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ChequeDeCaja" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Nodo definido para la expresión de la información referente a la adquisición en efectivo del cheque de caja</xs:documentation>
+															</xs:annotation>
+															<xs:complexType>
+																<xs:attribute name="montoCheque">
+																	<xs:annotation>
+																		<xs:documentation>Atributo opcional para la expresión del valor nominal del cheque de caja adquirido en efectivo</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:long">
+																			<xs:minInclusive value="0"/>
+																			<xs:maxInclusive value="999999999999"/>
+																			<xs:fractionDigits value="0"/>
+																			<xs:whiteSpace value="collapse"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:attribute>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="Cotitulares" type="tCuentaCotitulares" minOccurs="0" maxOccurs="unbounded"/>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+										<xs:attribute name="Periodo" use="required">
+											<xs:annotation>
+												<xs:documentation>Atributo obligatorio para la expresión del número de mes que se reporta.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:int">
+													<xs:enumeration value="1"/>
+													<xs:enumeration value="2"/>
+													<xs:enumeration value="3"/>
+													<xs:enumeration value="4"/>
+													<xs:enumeration value="5"/>
+													<xs:enumeration value="6"/>
+													<xs:enumeration value="7"/>
+													<xs:enumeration value="8"/>
+													<xs:enumeration value="9"/>
+													<xs:enumeration value="10"/>
+													<xs:enumeration value="11"/>
+													<xs:enumeration value="12"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:attribute>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="Totales">
+									<xs:annotation>
+										<xs:documentation>Nodo definido para la expresión de totales correspondientes a las operaciones reportadas mediante la declaración.</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="tTotales">
+												<xs:attribute name="importeCheques" use="required">
+													<xs:annotation>
+														<xs:documentation>Atributo obligatorio para expresar el monto total reportado por concepto de cheques de caja adquiridos en efectivo.</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="xs:long">
+															<xs:minInclusive value="0"/>
+															<xs:maxInclusive value="99999999999999"/>
+															<xs:whiteSpace value="collapse"/>
+															<xs:fractionDigits value="0"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:attribute>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="version" use="required" fixed="3.0">
+				<xs:annotation>
+					<xs:documentation>Atributo requerido para expresar la versión del formato</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="rfcDeclarante" use="required">
+				<xs:annotation>
+					<xs:documentation>Atributo obligatorio para la expresión del RFC de la institución declarante.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="tRFC">
+						<xs:maxLength value="12"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="denominacion" use="required">
+				<xs:annotation>
+					<xs:documentation>Atributo obligatorio para la expresión de la denominación o razón social de la institución declarante.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="tDepositoEfectivo">
+		<xs:annotation>
+			<xs:documentation>Tipo base para la expresión de los montos excedentes de depósitos en efectivo</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="montoExcedenteDeposito">
+			<xs:annotation>
+				<xs:documentation>Atributo opcional para la expresión del monto excedente de depósitos</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:long">
+					<xs:maxInclusive value="999999999999"/>
+					<xs:whiteSpace value="collapse"/>
+					<xs:fractionDigits value="0"/>
+					<xs:minInclusive value="0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="tDeclaracionAnual">
+		<xs:annotation>
+			<xs:documentation>Tipo base para la definición del tipo de declaración anual</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="ejercicio" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para expresar el ejercicio a que corresponde la declaración realizada mediante el presente formato.</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="2014"/>
+					<xs:totalDigits value="4"/>
+					<xs:fractionDigits value="0"/>
+					<xs:whiteSpace value="collapse"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="tPersonaFisica">
+		<xs:annotation>
+			<xs:documentation>Tipo base definido para la expresión de la información de identidad de la persona física.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Nombre">
+				<xs:annotation>
+					<xs:documentation>Nodo obligatorio para la expresión del nombre del contribuyente reportado</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="NombreCompleto">
+							<xs:annotation>
+								<xs:documentation>Nodo para expresar el nombre completo del contribuyente reportado cuando resulta imposible su separación en sus componentes</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="1"/>
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:sequence>
+							<xs:element name="Nombres">
+								<xs:annotation>
+									<xs:documentation>Nodo definido para expresar el o los nombres del contribuyente reportado</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="40"/>
+										<xs:whiteSpace value="collapse"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PrimerApellido">
+								<xs:annotation>
+									<xs:documentation>Nodo definido para expresar el primer apellido del contribuyente reportado</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="40"/>
+										<xs:whiteSpace value="collapse"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SegundoApellido" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Nodo definido para expresar el segundo apellido del contribuyente reportado </xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="40"/>
+										<xs:whiteSpace value="collapse"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Domicilio" type="tDireccion">
+				<xs:annotation>
+					<xs:documentation>Nodo obligatorio para la expresión del domicilio del contribuyente reportado.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="rfc" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión del RFC del contribuyente reportado</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="tRFC">
+					<xs:minLength value="10"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="curp" type="tCURP" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión de la CURP del contribuyente reportado</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="NumeroCliente">
+			<xs:annotation>
+				<xs:documentation>Atributo opcional para la expresión del número o clave de identificador único del cliente reportado</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="50"/>
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="correoElectronico" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión de la cuenta de correo electrónico</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="telefono1" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión del teléfono 1</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:length value="15"/>
+					<xs:pattern value="[A-Za-z0-9]{15}"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="telefono2" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión del teléfono2</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:length value="15"/>
+					<xs:pattern value="[A-Za-z0-9]{15}"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="tPersonaMoral">
+		<xs:annotation>
+			<xs:documentation>Tipo base definido para la expresión de la información de identidad de la persona moral.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Denominacion">
+				<xs:annotation>
+					<xs:documentation>Nodo obligatorio para la expresión de la denominación o razón social del contribuyente reportado</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Domicilio" type="tDireccion">
+				<xs:annotation>
+					<xs:documentation>Nodo obligatorio para la expresión del domicilio del contribuyente reportado.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="rfc" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión del RFC del contribuyente reportado</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="tRFC">
+					<xs:maxLength value="12"/>
+					<xs:minLength value="9"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="NumeroCliente">
+			<xs:annotation>
+				<xs:documentation>Atributo opcional para la expresión del número o clave de identificador único del cliente reportado</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="50"/>
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="correoElectronico" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión de la cuenta de correo electrónico</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="telefono1" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión del teléfono 1</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:length value="15"/>
+					<xs:pattern value="[A-Za-z0-9]{15}"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="telefono2" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión del teléfono 2</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:length value="15"/>
+					<xs:pattern value="[A-Za-z0-9]{15}"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="tTotales">
+		<xs:annotation>
+			<xs:documentation>Tipo base definido para la expresión de totales de la declaración anual</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="operacionesRelacionadas" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión del total de operaciones de contribuyentes reportados relacionadas en el ejercicio</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:long">
+					<xs:minInclusive value="0"/>
+					<xs:maxInclusive value="9999999"/>
+					<xs:fractionDigits value="0"/>
+					<xs:whiteSpace value="collapse"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="importeExcedenteDepositos" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para expresar la información del importe excedente de depósitos en efectivo.</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:long">
+					<xs:minInclusive value="0"/>
+					<xs:maxInclusive value="99999999999999"/>
+					<xs:fractionDigits value="0"/>
+					<xs:whiteSpace value="collapse"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="tDireccion">
+		<xs:annotation>
+			<xs:documentation>Tipo base definido para la expresión de direcciones o domicilios</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="DomicilioCompleto">
+				<xs:annotation>
+					<xs:documentation>Nodo definido para la expresión de un domicilio o dirección cuando resulte imposible subdividirla en sus componentes</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1"/>
+						<xs:whiteSpace value="collapse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:sequence>
+				<xs:element name="Calle">
+					<xs:annotation>
+						<xs:documentation>Nodo definido para la expresión del fragmento calle de la dirección.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:whiteSpace value="collapse"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="NoExterior" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Nodo definido para la expresión del fragmento del número exterior de la dirección.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:whiteSpace value="collapse"/>
+							<xs:minLength value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="NoInterior" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Nodo definido para la expresión del fragmento del número interior de la dirección.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:whiteSpace value="collapse"/>
+							<xs:minLength value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Colonia">
+					<xs:annotation>
+						<xs:documentation>Nodo definido para la expresión del fragmento de la colonia o municipio de la dirección.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:whiteSpace value="collapse"/>
+							<xs:minLength value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="CodigoPostal">
+					<xs:annotation>
+						<xs:documentation>Nodo definido para la expresión del fragmento código postal de la dirección.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:whiteSpace value="collapse"/>
+							<xs:length value="5"/>
+							<xs:pattern value="[0-9]{5,6}"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="tRepresentante">
+		<xs:annotation>
+			<xs:documentation>Tipo base definido para la expresión de los datos de identidad del representante legal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Nombre">
+				<xs:annotation>
+					<xs:documentation>Nodo obligatorio para la expresión del nombre del representante legal</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="NombreCompleto">
+							<xs:annotation>
+								<xs:documentation>Nodo para expresar el nombre completo del representante legal cuando resulta imposible su separación en sus componentes</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="1"/>
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:sequence>
+							<xs:element name="Nombres">
+								<xs:annotation>
+									<xs:documentation>Nodo definido para expresar el o los nombres del representante legal</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="40"/>
+										<xs:whiteSpace value="collapse"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PrimerApellido">
+								<xs:annotation>
+									<xs:documentation>Nodo definido para expresar el primer apellido del representante legal</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="40"/>
+										<xs:whiteSpace value="collapse"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SegundoApellido" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Nodo definido para expresar el segundo apellido del representante legal</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="40"/>
+										<xs:whiteSpace value="collapse"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="rfc" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión del RFC del representante legal</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="tRFC">
+					<xs:minLength value="13"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="curp" type="tCURP" use="optional">
+			<xs:annotation>
+				<xs:documentation>Atributo opcional para la expresión de la CURP del representante legal.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="tCotitular">
+		<xs:annotation>
+			<xs:documentation>Tipo base definido para la expresión de los datos de identidad de los cotitulares</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Nombre">
+				<xs:annotation>
+					<xs:documentation>Nodo obligatorio para la expresión del nombre del cotitular</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="NombreCompleto">
+							<xs:annotation>
+								<xs:documentation>Nodo para expresar el nombre completo del cotitular cuando resulta imposible su separación en sus componentes</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="1"/>
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:sequence>
+							<xs:element name="Nombres">
+								<xs:annotation>
+									<xs:documentation>Nodo definido para expresar el o los nombres del cotitular</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="40"/>
+										<xs:whiteSpace value="collapse"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="PrimerApellido">
+								<xs:annotation>
+									<xs:documentation>Nodo definido para expresar el primer apellido del cotitular</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="40"/>
+										<xs:whiteSpace value="collapse"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SegundoApellido" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Nodo definido para expresar el segundo apellido del cotitular </xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+										<xs:maxLength value="40"/>
+										<xs:whiteSpace value="collapse"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="RFC" type="tRFC" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión del RFC del cotitular</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="curp" type="tCURP" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión de la CURP del Cotitular</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Proporcion" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio definido para la expresión de la proporcion de la cuenta que corresponde al cotitular.</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:decimal">
+					<xs:minInclusive value="0"/>
+					<xs:maxInclusive value="100"/>
+					<xs:fractionDigits value="4"/>
+					<xs:whiteSpace value="collapse"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="tCuentaCotitulares">
+		<xs:annotation>
+			<xs:documentation>Tipo base definido para la expresión de los datos de la cuenta y sus cotitulares</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="tCotitular" type="tCotitular" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numeroCuenta" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para la expresión del número o clave que identifica la cuenta o contrato reportado, pudiendo reportar una o más cuentas. </xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+					<xs:whiteSpace value="collapse"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="numeroCotitulares" use="required">
+			<xs:annotation>
+				<xs:documentation>Atributo obligatorio para expresar el número de cotitulares que el titular de la cuenta indique. Se trata de un número entero positivo.</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:integer">
+					<xs:minInclusive value="0"/>
+					<xs:fractionDigits value="0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="tRFC">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para la expresión de RFC's de contribuyentes. Cabe hacer la mención que debido a las reglas definidas por el estándar XML en el caso de que un RFC dado incluya un caracter ampersand, dicho caracter deberá ser expresado mediante la secuencia de escape especificado como parte del estándar. En la definición del tipo se expresa una longitud mínima y máxima, sin embargo la longitud puede ser redefinida como una extensión según se determina el uso particular</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="9"/>
+			<xs:maxLength value="13"/>
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="[A-Z,Ñ,&amp;]{3,4}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tCURP">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para la expresión de una CURP. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:length value="18"/>
+			<xs:pattern value="[A-Z][A,E,I,O,U,X][A-Z]{2}[0-9]{2}[0-1][0-9][0-3][0-9][M,H][A-Z]{2}[B,C,D,F,G,H,J,K,L,M,N,Ñ,P,Q,R,S,T,V,W,X,Y,Z]{3}[0-9,A-Z][0-9]"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
