@@ -266,6 +266,141 @@ Partial Public Class WebForm4
     Protected WithEvents numSociosClientes As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
+    '''Control formaPresentacion.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents formaPresentacion As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control FileUploadFiel.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents FileUploadFiel As Global.System.Web.UI.WebControls.FileUpload
+
+    '''<summary>
+    '''Control fielUp.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents fielUp As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
+    '''Control subirFiel.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents subirFiel As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''Control fielBajar.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents fielBajar As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''Control lblConexion.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblConexion As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control remoto.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents remoto As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''Control lblIdNum.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblIdNum As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control idNumRemoto.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents idNumRemoto As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control lblContra.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblContra As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control passRemoto.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents passRemoto As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control lblRuta.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblRuta As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control rutaFiel.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents rutaFiel As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''Control LabelW.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LabelW As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control whats.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents whats As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
     '''Control idDistribuidor.
     '''</summary>
     '''<remarks>
@@ -786,6 +921,15 @@ Partial Public Class WebForm4
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents mostrarSol As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''Control ayuda22.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents ayuda22 As Global.System.Web.UI.WebControls.LinkButton
 
     '''<summary>
     '''Control ayuda2.

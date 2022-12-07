@@ -28,54 +28,44 @@ Public Class WebForm32
     Private Sub cuentaRegistros()
         Dim q
         q = "SELECT COUNT(*) as cuenta FROM iva"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        ivaNregs.Text = FormatNumber(dr("cuenta").ToString, 0) + " Registros"
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        ivaNregs.Text = FormatNumber(v.ToString, 0) + " Registros"
         GridView1.SelectedIndex = -1
     End Sub
     Private Sub cuentaRegistrosIde()
         Dim q
         q = "SELECT COUNT(*) as cuenta FROM ideConf"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        ideNregs.Text = FormatNumber(dr("cuenta").ToString, 0) + " Registros"
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        ideNregs.Text = FormatNumber(v.ToString, 0) + " Registros"
         GridView2.SelectedIndex = -1
     End Sub
 
     Private Sub cuentaRegistrosDescto()
         Dim q
         q = "SELECT COUNT(*) as cuenta FROM desctos"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        desctoNregs.Text = FormatNumber(dr("cuenta").ToString, 0) + " Registros"
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        desctoNregs.Text = FormatNumber(v.ToString, 0) + " Registros"
         GridView4.SelectedIndex = -1
     End Sub
     Private Sub cuentaRegistrosPros()
         Dim q
         q = "SELECT COUNT(*) as cuenta FROM prospectos"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        prosNregs.Text = FormatNumber(dr("cuenta").ToString, 0) + " Registros"
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        prosNregs.Text = FormatNumber(v.ToString, 0) + " Registros"
         GridView5.SelectedIndex = -1
     End Sub
 
     Protected Sub ingresar_Click(sender As Object, e As EventArgs) Handles ingresar.Click
-        myCommand = New SqlCommand("SELECT id FROM admin WHERE nombre='" + pass.Text.Trim + "'", myConnection)
-        dr = myCommand.ExecuteReader()
-        If Not dr.HasRows Then
-            dr.Close()
+        myCommand = New SqlCommand("SELECT id FROM admin WHERE nombre='" + pass.Text.Trim + "'")
+        Dim v = ExecuteScalarFunction(myCommand)
+        If IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Contraseña incorrecta');</script>")
             btnOculto_Click(sender, e)
         Else
-            dr.Close()
             Session("admonIn") = "1"
             'UpdatePanel3.Update()
             panel1_ModalPopupExtender.Hide()
@@ -115,10 +105,8 @@ Public Class WebForm32
             End If
         End If
 
-        myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';MultipleActiveResultSets=True;")
-        myConnection.Open()
-        myCommand = New SqlCommand("set dateformat ymd", myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand("set dateformat ymd")
+        ExecuteNonQueryFunction(myCommand)
 
         'If Session("runAsAdmin") = "1" Then
         '    Dim item As MenuItem = MenuTabs1.FindItem("IVA")
@@ -147,26 +135,23 @@ Public Class WebForm32
 
         Dim q As String
         q = "SELECT ivaPorcen FROM actuales"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
-            actualIva.Text = dr(0).ToString()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
+            actualIva.Text = v.ToString()
         End If
-        dr.Close()
         cuentaRegistros()
 
         q = "SELECT ideLim, idePorcen FROM actuales"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
-            q = "SELECT id FROM ideConf where limite='" + dr("ideLim").ToString + "' and porcen='" + dr("idePorcen").ToString + "'"
-            dr.Close()
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            actualIde.Text = dr("id").ToString()
-        End If
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            If dr.Read() Then
+                q = "SELECT id FROM ideConf where limite='" + dr("ideLim").ToString + "' and porcen='" + dr("idePorcen").ToString + "'"
+                myCommand = New SqlCommand(q)
+                v = ExecuteScalarFunction(myCommand)
+                actualIde.Text = v.ToString()
+            End If
+        End Using
         cuentaRegistrosIde()
 
         GridView3.SelectedIndex = -1
@@ -260,9 +245,8 @@ Public Class WebForm32
         End If
         Dim q As String
         q = "INSERT INTO iva(porcen) VALUES(" + Trim(porcen.Text) + ")"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
 
         'refrescar grid
         id.Text = "ID"
@@ -283,9 +267,9 @@ Public Class WebForm32
         End If
         Dim q As String
         q = "INSERT INTO ideConf(limite,porcen) VALUES('" + Trim(limite.Text) + "','" + Trim(idePorcen.Text) + "')"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
+
 
         'refrescar grid
         idIde.Text = "ID"
@@ -307,15 +291,14 @@ Public Class WebForm32
 
         Dim q As String
         q = "select * from iva where porcen in (select ivaPorcen from actuales)"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            dr.Read()
+            q = "INSERT INTO planes(fecha,elplan,precioBaseMes,idIva,iva,inscrip) VALUES('" + Format(Now(), "yyyy-MM-dd") + "','" + Trim(elPlan.Text.ToUpper) + "','" + precioBaseMes.Text.Trim + "'," + dr("id").ToString + ",'" + dr("porcen").ToString + "','" + inscrip.Text.Trim + "')"
+            myCommand = New SqlCommand(q)
+            ExecuteNonQueryFunction(myCommand)
+        End Using
 
-        q = "INSERT INTO planes(fecha,elplan,precioBaseMes,idIva,iva,inscrip) VALUES('" + Format(Now(), "yyyy-MM-dd") + "','" + Trim(elPlan.Text.ToUpper) + "','" + precioBaseMes.Text.Trim + "'," + dr("id").ToString + ",'" + dr("porcen").ToString + "','" + inscrip.Text.Trim + "')"
-        dr.Close()
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
 
         'refrescar grid
         idPlan.Text = "ID"
@@ -378,9 +361,8 @@ Public Class WebForm32
             q = "INSERT INTO desctos(cod,caduca,porcen,tipo,elPlan,inscripGratis,regularizacion,anticipadas,nDeclContratadas,duracionMeses,idPreRequisito,inscripMonto) VALUES('" + cod.Text.Trim.ToUpper + "'," + caducaV + ",'" + Trim(desctoPorcen.Text) + "','" + tipo.Text.Trim + "','" + plan.Text + "'," + inscripGratisV + "," + regularizacionV + "," + anticipadasV + "," + nDeclContratadas.Text.Trim + "," + duracionMeses.Text.Trim + "," + idPreRequisitoV + "," + Replace(Trim(inscripMontoV), ",", "") + ")"
         End If
 
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
 
         'refrescar grid
         idDescto.Text = "ID"
@@ -477,14 +459,12 @@ Public Class WebForm32
         If idPreRequisito.Text.Trim <> "" Then
             Dim q
             q = "SELECT id FROM desctos WHERE id=" + Trim(idPreRequisito.Text.Trim)
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            If Not dr.Read() Then
-                dr.Close()
+            myCommand = New SqlCommand(q)
+            Dim v = ExecuteScalarFunction(myCommand)
+            If Not IsNothing(v) Then
                 Response.Write("<script language='javascript'>alert('No se encontro id pre requisito en descuentos');</script>")
                 Return 0
             End If
-            dr.Close()
         End If
         If tipo.Text = "PROMOCION" And inscripGratis.Checked = True And elPlan.Text <> "PREMIUM" Then
             Response.Write("<script language='javascript'>alert('Inscripcion gratis solo para planes premium');</script>")
@@ -496,39 +476,36 @@ Public Class WebForm32
     Private Function validaDupl() As Integer
         Dim q
         q = "SELECT id FROM iva WHERE porcen='" + Trim(porcen.Text) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Ese porcentaje de iva ya existe');</script>")
             Return 0
         End If
-        dr.Close()
 
         Return 1
     End Function
     Private Function validaDuplPlan() As Integer
         Dim q
         q = "SELECT id FROM planes WHERE elplan='" + Trim(elPlan.Text.ToUpper) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Ese plan ya existe');</script>")
             Return 0
         End If
-        dr.Close()
 
         Return 1
     End Function
     Private Function validaDuplIde() As Integer
         Dim q
-        q = "SELECT limite,porcen FROM ideConf WHERE limite='" + Trim(limite.Text) + "' and porcen='" + Trim(idePorcen.Text) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        q = "SELECT limite FROM ideConf WHERE limite='" + Trim(limite.Text) + "' and porcen='" + Trim(idePorcen.Text) + "'"
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Esa especificacion de Ide ya existe');</script>")
             Return 0
         End If
-        dr.Close()
 
         Return 1
     End Function
@@ -539,14 +516,12 @@ Public Class WebForm32
         Else
             q = "SELECT id FROM desctos WHERE cod='" + Trim(cod.Text) + "'"
         End If
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
-            dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Ese codigo de descuento ya existe');</script>")
             Return 0
         End If
-        dr.Close()
 
         'q = "SELECT id FROM desctos WHERE tipo='PROMO' AND convert(datetime,convert(int,GETDATE())) <= fechaCaducidad"
         'myCommand = New SqlCommand(q, myConnection)
@@ -566,21 +541,17 @@ Public Class WebForm32
     Private Function validaDuplMod() As Integer
         Dim q
         q = "SELECT porcen FROM iva WHERE ID='" + Trim(id.Text) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        pkPorcen = dr(0).ToString()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        pkPorcen = v.ToString()
 
-        q = "SELECT * FROM iva WHERE porcen='" + Trim(porcen.Text) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() And (pkPorcen <> Trim(porcen.Text)) Then   'if dr.Read() and (pkPorcen <> trim(porcen.text) or pk2 <>trim(campo2)) then
+        q = "SELECT id FROM iva WHERE porcen='" + Trim(porcen.Text) + "'"
+        myCommand = New SqlCommand(q)
+        v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) And (pkPorcen <> Trim(porcen.Text)) Then   'if dr.Read() and (pkPorcen <> trim(porcen.text) or pk2 <>trim(campo2)) then
             Response.Write("<script language='javascript'>alert('Porcentaje ya está en uso');</script>")
-            dr.Close()
             Return 0
         End If
-        dr.Close()
 
         Return 1
     End Function
@@ -588,22 +559,20 @@ Public Class WebForm32
     Private Function validaDuplModIde() As Integer
         Dim q
         q = "SELECT limite,porcen FROM ideConf WHERE ID='" + Trim(idIde.Text) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        idePkLimite = dr("limite").ToString()
-        idePkPorcen = dr("porcen").ToString()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            dr.Read()
+            idePkLimite = dr("limite").ToString()
+            idePkPorcen = dr("porcen").ToString()
+        End Using
 
-        q = "SELECT * FROM ideConf WHERE limite='" + Trim(limite.Text) + "' and porcen='" + Trim(idePorcen.Text) + "'" 'and->1 col puede repet en otro reg
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() And (idePkPorcen <> Trim(idePorcen.Text) Or idePkLimite <> Trim(limite.Text)) Then
+        q = "SELECT id FROM ideConf WHERE limite='" + Trim(limite.Text) + "' and porcen='" + Trim(idePorcen.Text) + "'" 'and->1 col puede repet en otro reg
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) And (idePkPorcen <> Trim(idePorcen.Text) Or idePkLimite <> Trim(limite.Text)) Then
             Response.Write("<script language='javascript'>alert('Esa especificacion de IDe ya está en uso');</script>")
-            dr.Close()
             Return 0
         End If
-        dr.Close()
 
         Return 1
     End Function
@@ -611,56 +580,49 @@ Public Class WebForm32
     Private Function validaDuplModPlan() As Integer
         Dim q
         q = "SELECT elplan FROM planes WHERE ID='" + Trim(idPlan.Text) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        PKplanElplan = dr("elplan").ToString()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        PKplanElplan = v.ToString()
 
-        q = "SELECT * FROM planes WHERE elplan='" + Trim(elPlan.Text.ToUpper) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() And (PKplanElplan <> Trim(elPlan.Text.ToUpper)) Then
+        q = "SELECT id FROM planes WHERE elplan='" + Trim(elPlan.Text.ToUpper) + "'"
+        myCommand = New SqlCommand(q)
+        v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) And (PKplanElplan <> Trim(elPlan.Text.ToUpper)) Then
             Response.Write("<script language='javascript'>alert('Esa plan ya está en uso');</script>")
-            dr.Close()
             Return 0
         End If
-        dr.Close()
 
         Return 1
     End Function
     Private Function validaDuplModDescto() As Integer
         Dim q
         q = "SELECT cod,porcen FROM desctos WHERE ID='" + Trim(idDescto.Text) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        pkDesctoPorcen = dr("porcen").ToString()
-        pkDesctoCod = dr("cod").ToString()
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            dr.Read()
 
-        dr.Close()
+            pkDesctoPorcen = dr("porcen").ToString()
+            pkDesctoCod = dr("cod").ToString()
+        End Using
 
         If tipo.Text = "REG" Then
-            q = "SELECT * FROM desctos WHERE cod='" + Trim(cod.Text.Trim.ToUpper) + "' AND porcen='" + desctoPorcen.Text.Trim + "'"
+            q = "SELECT id FROM desctos WHERE cod='" + Trim(cod.Text.Trim.ToUpper) + "' AND porcen='" + desctoPorcen.Text.Trim + "'"
         Else
-            q = "SELECT * FROM desctos WHERE cod='" + Trim(cod.Text) + "'"
+            q = "SELECT id FROM desctos WHERE cod='" + Trim(cod.Text) + "'"
         End If
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
         If tipo.Text = "REG" Then
-            If dr.Read() And (pkDesctoPorcen <> Trim(desctoPorcen.Text) And pkDesctoCod <> Trim(cod.Text)) Then   'if dr.Read() and (pkPorcen <> trim(porcen.text) or pk2 <>trim(campo2)) then
+            If Not IsNothing(v) And (pkDesctoPorcen <> Trim(desctoPorcen.Text) And pkDesctoCod <> Trim(cod.Text)) Then   'if dr.Read() and (pkPorcen <> trim(porcen.text) or pk2 <>trim(campo2)) then
                 Response.Write("<script language='javascript'>alert('Codigo ya está en uso');</script>")
-                dr.Close()
                 Return 0
             End If
         Else
             If dr.Read() And (pkDesctoCod <> Trim(cod.Text)) Then   'if dr.Read() and (pkPorcen <> trim(porcen.text) or pk2 <>trim(campo2)) then
                 Response.Write("<script language='javascript'>alert('Codigo ya está en uso');</script>")
-                dr.Close()
                 Return 0
             End If
         End If
-        dr.Close()
 
         'q = "SELECT id FROM desctos WHERE id<>" + id.Text + " and tipo='PROMO' AND convert(datetime,convert(int,GETDATE())) <= fechaCaducidad"
         'myCommand = New SqlCommand(q, myConnection)
@@ -683,9 +645,8 @@ Public Class WebForm32
         End If
         Dim q
         q = "UPDATE actuales SET ivaPorcen=" + Trim(porcen.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
         Response.Write("<script language='javascript'>alert('Actualizado correctamente');</script>")
         actualIva.Text = Trim(porcen.Text)
         pkPorcen = Trim(porcen.Text)
@@ -698,9 +659,8 @@ Public Class WebForm32
         End If
         Dim q
         q = "UPDATE actuales SET ideLim='" + Trim(limite.Text) + "', idePorcen='" + Trim(idePorcen.Text) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
         Response.Write("<script language='javascript'>alert('Actualizado correctamente');</script>")
         actualIde.Text = Trim(idIde.Text)
         idePkLimite = Trim(limite.Text)
@@ -721,15 +681,13 @@ Public Class WebForm32
         End If
         Dim q As String
         q = "UPDATE iva SET porcen=" + Trim(porcen.Text) + " WHERE id=" + id.Text
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
 
         If actualIva.Text = pkPorcen Then       'if actualIva.text = pkPorcen and act2=pk2 then
             q = "UPDATE actuales SET IvaPorcen=" + Trim(porcen.Text)
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            ExecuteNonQueryFunction(myCommand)
             actualIva.Text = Trim(porcen.Text)
             pkPorcen = Trim(porcen.Text)
         End If
@@ -755,15 +713,14 @@ Public Class WebForm32
         End If
         Dim q As String
         q = "UPDATE ideConf SET limite='" + Trim(limite.Text) + "',porcen='" + Trim(idePorcen.Text) + "' WHERE id=" + idIde.Text
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
+
 
         If actualIde.Text = idIde.Text Then
             q = "UPDATE actuales SET ideLimite='" + Trim(limite.Text) + "',idePorcen='" + Trim(idePorcen.Text) + "'"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            ExecuteNonQueryFunction(myCommand)
             idePkLimite = Trim(limite.Text)
             idePkPorcen = Trim(idePorcen.Text)
         End If
@@ -791,15 +748,13 @@ Public Class WebForm32
 
         Dim q As String
         q = "select * from iva where porcen in (select ivaPorcen from actuales)"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-
-        q = "UPDATE planes SET fecha='" + Format(Now(), "yyyy-MM-dd") + "',elplan='" + Trim(elPlan.Text.ToUpper) + "',precioBaseMes='" + precioBaseMes.Text.Trim.ToUpper + "',idIva=" + dr("id").ToString + ",iva='" + ivaPlan.Text.Trim.ToString + "',inscrip='" + inscrip.Text.ToString + "' WHERE id=" + idPlan.Text
-        dr.Close()
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            dr.Read()
+            q = "UPDATE planes SET fecha='" + Format(Now(), "yyyy-MM-dd") + "',elplan='" + Trim(elPlan.Text.ToUpper) + "',precioBaseMes='" + precioBaseMes.Text.Trim.ToUpper + "',idIva=" + dr("id").ToString + ",iva='" + ivaPlan.Text.Trim.ToString + "',inscrip='" + inscrip.Text.ToString + "' WHERE id=" + idPlan.Text
+            myCommand = New SqlCommand(q)
+            ExecuteNonQueryFunction(myCommand)
+        End Using
 
         'refrescar grid
         idPlan.Text = "ID"
@@ -865,8 +820,8 @@ Public Class WebForm32
         End If
 
         q = "UPDATE desctos SET cod='" + cod.Text.Trim.ToUpper + "',caduca=" + caducaV + fechaCaducidadV + ",porcen='" + Trim(desctoPorcen.Text) + "', tipo='" + tipo.Text.Trim + "', elPlan='" + plan.Text.Trim + "', inscripGratis=" + inscripGratisV + ", regularizacion=" + regularizacionV + ", anticipadas=" + anticipadasV + ", nDeclContratadas=" + nDeclContratadas.Text.Trim + ", duracionMeses=" + duracionMeses.Text.Trim + ", idPreRequisito=" + idPreRequisitoV + ", inscripMonto=" + inscripMontoV + " WHERE id=" + idDescto.Text
-        myCommand = New SqlCommand(q, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
 
         'refrescar grid
         idDescto.Text = "ID"
@@ -896,13 +851,12 @@ Public Class WebForm32
         'validar si esta siendo usado x FKs
         Dim q As String
         q = "SELECT idIva FROM planes WHERE idIva=" + Trim(id.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('No se puede eliminar este registro pues lo esta usando un plan');</script>")
             Exit Sub
         End If
-        dr.Close()
 
         'del cascadas
         If Trim(porcen.Text) = actualIva.Text Then 'borrando la actual
@@ -911,9 +865,8 @@ Public Class WebForm32
         End If
 
         q = "DELETE FROM iva WHERE id=" + Trim(id.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
         id.Text = "ID"
         porcen.Text = ""
         cuentaRegistros()
@@ -931,21 +884,19 @@ Public Class WebForm32
         'validar si esta siendo usado x FKs
         Dim q As String
         q = "SELECT idIdeConf FROM ideMens WHERE idIdeConf=" + Trim(idIde.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('No se puede eliminar este registro pues esta siendo usado en una declaracion mensual');</script>")
             Exit Sub
         End If
-        dr.Close()
         q = "SELECT idIdeConf FROM ideAnual WHERE idIdeConf=" + Trim(idIde.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        myCommand = New SqlCommand(q)
+        v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('No se puede eliminar este registro pues esta siendo usado en una declaracion anual');</script>")
             Exit Sub
         End If
-        dr.Close()
 
         'del cascadas
         If Trim(idIde.Text) = actualIde.Text Then 'borrando la actual
@@ -954,9 +905,8 @@ Public Class WebForm32
         End If
 
         q = "DELETE FROM ideConf WHERE id=" + Trim(idIde.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
         idIde.Text = "ID"
         limite.Text = ""
         idePorcen.Text = ""
@@ -974,20 +924,18 @@ Public Class WebForm32
         'validar si esta siendo usado x FKs
         Dim q As String
         q = "SELECT idPlan FROM contratos WHERE idPlan=" + Trim(idPlan.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('No se puede eliminar este registro pues esta siendo usado en un contrato');</script>")
             Exit Sub
         End If
-        dr.Close()
 
         'del cascadas
 
         q = "DELETE FROM planes WHERE id=" + Trim(idPlan.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
         idPlan.Text = "ID"
         ivaPlan.Text = "ID"
         fecha.Text = ""
@@ -1007,20 +955,19 @@ Public Class WebForm32
         'validar si esta siendo usado x FKs
         Dim q As String
         q = "SELECT * FROM desctosContra WHERE idDescto=" + Trim(idDescto.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
-            Response.Write("<script language='javascript'>alert('No se puede eliminar este registro pues lo esta usando el contrato " + dr("idContra").ToString + "');</script>")
-            Exit Sub
-        End If
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            If dr.Read() Then
+                Response.Write("<script language='javascript'>alert('No se puede eliminar este registro pues lo esta usando el contrato " + dr("idContra").ToString + "');</script>")
+                Exit Sub
+            End If
+        End Using
 
         'del cascadas
 
         q = "DELETE FROM desctos WHERE id=" + Trim(idDescto.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
         idDescto.Text = "ID"
         cod.Text = ""
         Caduca.Checked = False
@@ -1047,37 +994,37 @@ Public Class WebForm32
 
         Dim q As String
         q = "SELECT nombre, correo FROM prospectos WHERE estatus IS NULL OR estatus='VA'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-
-        Dim elcorreo2 As New System.Net.Mail.MailMessage
-        Using elcorreo2
-            elcorreo2.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
-            While dr.Read()
-                elcorreo2.Bcc.Add(dr("correo"))
-                myCommand = New SqlCommand("UPDATE prospectos SET estatus='NO' WHERE correo='" + dr("correo") + "'", myConnection)
-                myCommand.ExecuteNonQuery()
-            End While
-            dr.Close()
-            elcorreo2.Subject = "Deseamos servirte y hacer equipo juntos para tus envios de declaraciones de IDE (ver propuesta)"
-            elcorreo2.Body = "<html><body>" + prosTextoNotificar.Text + "<br><br>Atentamente,<br><br><a href='declaracioneside.com' target='_blank'>Declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet</body></html>"
-            elcorreo2.IsBodyHtml = True
-            elcorreo2.Priority = System.Net.Mail.MailPriority.Normal
-            Dim smpt As New System.Net.Mail.SmtpClient
-            smpt.Host = "smtp.gmail.com"
-            smpt.Port = "587"
-            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
-            smpt.EnableSsl = True 'req p server gmail
-            Try
-                smpt.Send(elcorreo2)
-                elcorreo2.Dispose()
-            Catch ex As Exception
-                Response.Write("<script language='javascript'>alert('Error: " & ex.Message + "');</script>")
-                Exit Sub
-            Finally
-                Response.Write("<script language='javascript'>alert('Mensaje enviado');</script>")
-            End Try
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            Dim elcorreo2 As New System.Net.Mail.MailMessage
+            Using elcorreo2
+                elcorreo2.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
+                While dr.Read()
+                    elcorreo2.Bcc.Add(dr("correo"))
+                    myCommand = New SqlCommand("UPDATE prospectos SET estatus='NO' WHERE correo='" + dr("correo") + "'", myConnection)
+                    myCommand.ExecuteNonQuery()
+                End While
+                elcorreo2.Subject = "Deseamos servirte y hacer equipo juntos para tus envios de declaraciones de IDE (ver propuesta)"
+                elcorreo2.Body = "<html><body>" + prosTextoNotificar.Text + "<br><br>Atentamente,<br><br><a href='declaracioneside.com' target='_blank'>Declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet</body></html>"
+                elcorreo2.IsBodyHtml = True
+                elcorreo2.Priority = System.Net.Mail.MailPriority.Normal
+                Dim smpt As New System.Net.Mail.SmtpClient
+                smpt.Host = "smtp.gmail.com"
+                smpt.Port = "587"
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
+                smpt.EnableSsl = True 'req p server gmail
+                Try
+                    smpt.Send(elcorreo2)
+                    elcorreo2.Dispose()
+                Catch ex As Exception
+                    Response.Write("<script language='javascript'>alert('Error: " & ex.Message + "');</script>")
+                    Exit Sub
+                Finally
+                    Response.Write("<script language='javascript'>alert('Mensaje enviado');</script>")
+                End Try
+            End Using
         End Using
+
 
         GridView5.DataBind()
     End Sub
@@ -1102,8 +1049,8 @@ Public Class WebForm32
             factTxVal = "1"
         End If
 
-        myCommand = New SqlCommand("UPDATE prospectos SET estatus='" + prosEstatus.Text + "', factTx=" + factTxVal + " WHERE id=" + prosId.Text, myConnection)
-        dr = myCommand.ExecuteReader()
+        myCommand = New SqlCommand("UPDATE prospectos SET estatus='" + prosEstatus.Text + "', factTx=" + factTxVal + " WHERE id=" + prosId.Text)
+        ExecuteNonQueryFunction(myCommand)
         GridView5.DataBind()
         Response.Write("<script language='javascript'>alert('Modificación exitosa');</script>")
 
@@ -1126,12 +1073,12 @@ Public Class WebForm32
         Dim smpt As New System.Net.Mail.SmtpClient
         smpt.Host = "smtp.gmail.com"
         smpt.Port = "587"
-        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
         smpt.EnableSsl = True 'req p server gmail
         Try
             smpt.Send(elcorreo)
-            myCommand = New SqlCommand("UPDATE prospectos SET edoAsesoria='EN' WHERE correo='" + correo.Text.Trim.ToUpper + "'", myConnection)
-            myCommand.ExecuteNonQuery()
+            myCommand = New SqlCommand("UPDATE prospectos SET edoAsesoria='EN' WHERE correo='" + correo.Text.Trim.ToUpper + "'")
+            ExecuteNonQueryFunction(myCommand)
             GridView5.DataBind()
             Response.Write("<script language='javascript'>alert('Asesoría enviada');</script>")
         Catch ex As Exception
@@ -1146,32 +1093,29 @@ Public Class WebForm32
             Response.Write("<script language='javascript'>alert('Campos incompletos');</script>")
             Exit Sub
         End If
-        If uuid.Text = "" Then
-            Response.Write("<script language='javascript'>alert('Campos incompletos');</script>")
-            Exit Sub
-        End If
 
         Dim q
         q = "SELECT id FROM contratos WHERE id=" + uuidNumContrato.Text
         myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.HasRows Then
-            dr.Close()
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
         Else
-            dr.Close()
             uuidNumContrato.Focus()
             Response.Write("<script language='javascript'>alert('Contrato no localizado');</script>")
             Exit Sub
         End If
 
-        Dim expresion = "[a-f0-9A-F]{8}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{12}"
-        If Not Regex.IsMatch(uuid.Text, expresion) Then
-            Response.Write("<script language='javascript'>alert('formato uuid incorrecto');</script>")
-            uuid.Focus()
-            Exit Sub
+        If uuid.Text <> "" Then
+            Dim expresion = "[a-f0-9A-F]{8}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{12}"
+            If Not Regex.IsMatch(uuid.Text, expresion) Then
+                Response.Write("<script language='javascript'>alert('formato uuid incorrecto');</script>")
+                uuid.Focus()
+                Exit Sub
+            End If
         End If
-        myCommand = New SqlCommand("UPDATE contratos SET uuid='" + uuid.Text + "' WHERE id=" + uuidNumContrato.Text, myConnection)
-        myCommand.ExecuteNonQuery()
+
+        myCommand = New SqlCommand("UPDATE contratos SET uuid='" + uuid.Text + "' WHERE id=" + uuidNumContrato.Text)
+        ExecuteNonQueryFunction(myCommand)
         Response.Write("<script language='javascript'>alert('Cambios guardados');</script>")
     End Sub
 
@@ -1302,9 +1246,12 @@ Public Class WebForm32
 
             If array IsNot Nothing Then
                 Dim rens As Integer = nRensPre 'array.GetUpperBound(0)
-                Dim fecha, correo, institucion, num, atn, tel, pu, cant, subt, iva, tot, ultEjer, pends, correoLogin
+                Dim fecha, correo, institucion, num, atn, tel, pu, cant, subt, iva, tot, ultEjer, pends, correoLogin, fechaCorta
                 Dim q
                 fecha = Now.ToString("dd-MM-yyyy_HH-mm-ss")
+                fechaCorta = Left(fecha, 10)
+                'num = "IDE JC " + DatePart(DateInterval.Year, Now).ToString + "_" + DatePart(DateInterval.Month, Now).ToString + "_" + DatePart(DateInterval.Day, Now).ToString + "_1"
+
                 Dim dirDestino = "C:\SAT\AUTOCOT\" + fecha
                 cant = "1"
                 Dim oDir As New System.IO.DirectoryInfo(Server.MapPath("~"))
@@ -1320,6 +1267,52 @@ Public Class WebForm32
                     Else
                         Continue For
                     End If
+                    If Not array(ren, 2) Is Nothing Then
+                        institucion = array(ren, 2).ToString.ToUpper.Trim.Replace("'", "''")
+                    Else
+                        institucion = ""
+                    End If
+                    If Not array(ren, 3) Is Nothing Then
+                        tel = array(ren, 3).ToString.ToUpper.Trim.Replace("'", "''")
+                    Else
+                        tel = ""
+                    End If
+                    If Not array(ren, 4) Is Nothing Then
+                        atn = array(ren, 4).ToString.ToUpper.Trim.Replace("'", "''")
+                    Else
+                        atn = ""
+                    End If
+
+                    num = "IDE " + fecha + " " + (ren - 1).ToString
+
+                    Dim destino As String = dirDestino + "\" + correoLogin + " " + num + ".pdf"
+                    If File.Exists(destino) Then
+                        File.Delete(destino)
+                    End If
+
+                    Dim pdfDoc As PdfDocument = New PdfDocument(New PdfReader(origen), New PdfWriter(destino))
+                    Dim Form As PdfAcroForm = PdfAcroForm.GetAcroForm(pdfDoc, True)
+                    Form.SetGenerateAppearance(True)
+                    Dim font As PdfFont = PdfFontFactory.CreateFont(Server.MapPath("~/Calibri.ttf"), PdfEncodings.WINANSI)
+                    Dim fontBold As PdfFont = PdfFontFactory.CreateFont(Server.MapPath("~/CalibriBold.ttf"), PdfEncodings.WINANSI)
+                    Form.GetField("correo").SetValue(correo, font, 9.0F)
+                    If institucion <> "" Then
+                        Form.GetField("institucion").SetValue(institucion, fontBold, 9.0F)
+                    End If
+                    If tel <> "" Then
+                        Form.GetField("tel").SetValue(tel, fontBold, 9.0F)
+                    End If
+                    If atn <> "" Then
+                        Form.GetField("atn").SetValue(atn, fontBold, 9.0F)
+                    Else
+                        Form.GetField("atn").SetValue("A quien corresponda", fontBold, 9.0F)
+                    End If
+
+                    Form.GetField("fecha").SetValue(Left(fecha, 10), font, 9.0F)
+                    Form.GetField("num").SetValue(num, font, 9.0F)
+                    Form.FlattenFields()
+                    pdfDoc.Close()
+
                     oDir.Attributes = oDir.Attributes And IO.FileAttributes.ReadOnly
 
                     'enviar correo
@@ -1476,7 +1469,7 @@ Public Class WebForm32
                                 <table cellspacing='0' cellpadding='0' border='0' align='center' bgcolor='#ffffff' width='600' class='email-container'>
 
                     			<tr>
-                                    <td style='padding:  5px 0; text-align: center'><a href='https://www.declaracioneside.com'><img src='https://www.facturaselectronicascfdi.com/logo1.png' width='200' height='70' alt='DeclaracionesIDE.com' border='0'></a></td>
+                                    <td style='padding:  5px 0; text-align: center'><a href='https://www.declaracioneside.com'><img src='https://www.declaracioneside.com/images/icons/logo1.png' width='200' height='70' alt='DeclaracionesIDE.com' border='0'></a></td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -1491,7 +1484,7 @@ Public Class WebForm32
                                 <!-- 1 Column Text : BEGIN -->
                                 <tr>
                                     <td style='padding: 2px; text-align: center; font-family: sans-serif; font-size:  15px; mso-height-rule: exactly; line-height: 1px; color: #555555;'>
-                                      <h2 style='font-family:Calibri; color:#306BBC'>A quien corresponda: </h2>
+                                      <h2 style='font-family:Calibri; color:#306BBC'>" + IIf(institucion = "", "A quien corresponda", institucion) + ": </h2>
                     				  <table border='0' cellpadding='2px'>
                     					  <tbody>
                     						<tr>
@@ -1520,26 +1513,14 @@ Public Class WebForm32
                                   <tr>
                                     <td align='center' valign='top' style='border-spacing:  5px;padding: 5px;'><table cellspacing='2' cellpadding='0' border='0' width='100%'>
                                       <tr >                    
-                                        <td width='58.66%' style='background-color:#306BBC; color:#FFFFFF;'><table cellspacing='0' cellpadding='0' border='0'>
+                                        <td width='90%' style='background-color:#306BBC; color:#FFFFFF;'><table cellspacing='0' cellpadding='0' border='0'>
                                           <tr >
-                                            <td style='padding: 5px; text-align: center;'>Concepto</td>
+                                            <td style='padding: 5px; text-align: center;'>Declaraciones de depósitos en efectivo del 2022 en adelante</td>
                                           </tr>
-                                        </table></td>
-                                        <td width='8%' style='background-color:#306BBC; color:#FFFFFF;'><table cellspacing='0' cellpadding='0' border='0'>
+                                        </table></td>                                        
+                    					  <td width='10%' style='background-color: #306BBC; color:#FFFFFF;'><table cellspacing='0' cellpadding='0' border='0'>
                                           <tr >
-                                            <td style='padding: 5px; text-align: center'>Cant.</td>
-                                          </tr>
-
-                                        </table></td>
-                    					  <td width='16.66%' style='background-color: #306BBC; color:#FFFFFF;'><table cellspacing='0' cellpadding='0' border='0'>
-                                          <tr>
-                                            <td style='padding: 5px; text-align: center'>Subtotal</td>
-                                          </tr>
-
-                                        </table></td>
-                    					  <td width='16.66%' style='background-color: #306BBC; color:#FFFFFF;'><table cellspacing='0' cellpadding='0' border='0'>
-                                          <tr >
-                                            <td style='padding: 5px; text-align: center'>Total</td>
+                                            <td style='padding: 5px; text-align: center'>IVA incluido</td>
                                           </tr>
 
                                         </table></td>
@@ -1551,26 +1532,125 @@ Public Class WebForm32
                     			<tr style='font-size:  10pt; font-family:Calibri'>
                                     <td align='center' valign='top' style='padding: 0px;'><table cellspacing='0' cellpadding='0' border='0' width='100%'>
                                       <tr>                   
-                                        <td width='58.66%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+                                        <td width='90%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
                                           <tr >
-                                            <td style='padding: 5px; text-align: center;'><em><strong>Declaraciones de depósitos en efectivo por año: anual o mensuales</strong></em></td>
+                                            <td style='padding: 5px; text-align: center;'><em><strong>Plataforma para Creación de mensuales CON DATOS por ejercicio(año) a declarar</strong></em></td>
                                           </tr>
                                         </table></td>
-                                        <td width='8%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+                    					  <td width='10%' class='stack-column-center'>
+                                            <table cellspacing='0' cellpadding='0' border='0'>
+                                              <tr >
+                                                <td style='padding:  5px; text-align: center; '>$ 4,500</td>
+                                              </tr>
+                                            </table>
+                                           </td>
+                                      </tr>
+                                      </table></td>
+                                  </tr>
+<tr style='font-size:  10pt; font-family:Calibri'>
+                                    <td align='center' valign='top' style='padding: 0px;'><table cellspacing='0' cellpadding='0' border='0' width='100%'>
+                                      <tr>                   
+                                        <td width='90%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
                                           <tr >
-                                            <td style='padding: 5px; text-align: center'>1</td>
+                                            <td style='padding: 5px; text-align: center;'><em><strong>Envío de mensuales CON DATOS por ejercicio(año) a declarar</strong></em></td>
                                           </tr>
+                                        </table></td>
+                    					  <td width='10%' class='stack-column-center'>
+                                            <table cellspacing='0' cellpadding='0' border='0'>
+                                              <tr >
+                                                <td style='padding:  5px; text-align: center; '>$ 2,400</td>
+                                              </tr>
+                                            </table>
+                                           </td>
+                                      </tr>
+                                      </table></td>
+                                  </tr>
+<tr style='font-size:  10pt; font-family:Calibri'>
+                                    <td align='center' valign='top' style='padding: 0px;'><table cellspacing='0' cellpadding='0' border='0' width='100%'>
+                                      <tr>                   
+                                        <td width='90%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+                                          <tr >
+                                            <td style='padding: 5px; text-align: center;'><em><strong>Creación y envío de mensuales EN CEROS por ejercicio(año) a declarar</strong></em></td>
+                                          </tr>
+                                        </table></td>
+                    					  <td width='10%' class='stack-column-center'>
+                                            <table cellspacing='0' cellpadding='0' border='0'>
+                                              <tr >
+                                                <td style='padding:  5px; text-align: center; '>$ 4,000</td>
+                                              </tr>
+                                            </table>
+                                           </td>
+                                      </tr>
+                                      </table></td>
+                                  </tr>
+<tr style='font-size:  10pt; font-family:Calibri'>
+                                    <td align='center' valign='top' style='padding: 0px;'><table cellspacing='0' cellpadding='0' border='0' width='100%'>
+                                      <tr>                   
+                                        <td width='90%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+                                          <tr >
+                                            <td style='padding: 5px; text-align: center;'><em><strong>Plataforma para Creación de mensuales CON DATOS por MES a declarar</strong></em></td>
+                                          </tr>
+                                        </table></td>
+                    					  <td width='10%' class='stack-column-center'>
+                                            <table cellspacing='0' cellpadding='0' border='0'>
+                                              <tr >
+                                                <td style='padding:  5px; text-align: center; '>$ 375</td>
+                                              </tr>
+                                            </table>
+                                           </td>
+                                      </tr>
+                                      </table></td>
+                                  </tr>
+<tr style='font-size:  10pt; font-family:Calibri'>
+                                    <td align='center' valign='top' style='padding: 0px;'><table cellspacing='0' cellpadding='0' border='0' width='100%'>
+                                      <tr>                   
+                                        <td width='90%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+                                          <tr >
+                                            <td style='padding: 5px; text-align: center;'><em><strong>Envío de mensuales CON DATOS por MES a declarar</strong></em></td>
+                                          </tr>
+                                        </table></td>
+                    					  <td width='10%' class='stack-column-center'>
+                                            <table cellspacing='0' cellpadding='0' border='0'>
+                                              <tr >
+                                                <td style='padding:  5px; text-align: center; '>$ 200</td>
+                                              </tr>
+                                            </table>
+                                           </td>
+                                      </tr>
+                                      </table></td>
+                                  </tr>
+<tr style='font-size:  10pt; font-family:Calibri'>
+                                    <td align='center' valign='top' style='padding: 0px;'><table cellspacing='0' cellpadding='0' border='0' width='100%'>
+                                      <tr>                   
+                                        <td width='90%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+                                          <tr >
+                                            <td style='padding: 5px; text-align: center;'><em><strong>Creación y envío de mensuales EN CEROS por MES a declarar</strong></em></td>
+                                          </tr>
+                                        </table></td>
+                    					  <td width='10%' class='stack-column-center'>
+                                            <table cellspacing='0' cellpadding='0' border='0'>
+                                              <tr >
+                                                <td style='padding:  5px; text-align: center; '>$ 334</td>
+                                              </tr>
+                                            </table>
+                                           </td>
+                                      </tr>
+                                      </table></td>
+                                  </tr>
 
-                                        </table></td>
-                    					  <td width='16.66%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
-                                          <tr >
-                                            <td style='padding:  5px; text-align: center'>$2,412.93</td>
-                                          </tr>
 
-                                        </table></td>
-                    					  <td width='16.66%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+
+<tr>
+                                    <td align='center' valign='top' style='border-spacing:  5px;padding: 5px;'><table cellspacing='2' cellpadding='0' border='0' width='100%'>
+                                      <tr >                    
+                                        <td width='90%' style='background-color:#306BBC; color:#FFFFFF;'><table cellspacing='0' cellpadding='0' border='0'>
                                           <tr >
-                                            <td style='padding:  5px; text-align: center; color: yellow; background-color: black;'>$2,799.00</td>
+                                            <td style='padding: 5px; text-align: center;'>Declaraciones de depósitos en efectivo previas al 2022</td>
+                                          </tr>
+                                        </table></td>                                        
+                    					  <td width='10%' style='background-color: #306BBC; color:#FFFFFF;'><table cellspacing='0' cellpadding='0' border='0'>
+                                          <tr >
+                                            <td style='padding: 5px; text-align: center'>IVA incluido</td>
                                           </tr>
 
                                         </table></td>
@@ -1579,17 +1659,36 @@ Public Class WebForm32
                                       </table></td>
                                   </tr>
 
-                                    <tr style='font-size:  10pt; font-family:Calibri'>
-                                        <td>o bien:</td>
-                                    </tr>
+                    			<tr style='font-size:  10pt; font-family:Calibri'>
+                                    <td align='center' valign='top' style='padding: 0px;'><table cellspacing='0' cellpadding='0' border='0' width='100%'>
+                                      <tr>                   
+                                        <td width='90%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+                                          <tr >
+                                            <td style='padding: 5px; text-align: center;'><em><strong>Plataforma para Creación y envío por ejercicio(año) a declarar desde plataforma</strong></em></td>
+                                          </tr>
+                                        </table></td>
+                    					  <td width='10%' class='stack-column-center'>
+                                            <table cellspacing='0' cellpadding='0' border='0'>
+                                              <tr >
+                                                <td style='padding:  5px; text-align: center; '>$ 3,300</td>
+                                              </tr>
+                                            </table>
+                                           </td>
+                                      </tr>
+                                      </table></td>
+                                  </tr>
+
+
+
+
+
 
                                     <tr style='font-size:  10pt; font-family:Calibri'>
                                     <td align='center' valign='top' style='padding: 0px;'><table cellspacing='0' cellpadding='0' border='0' width='100%'>
                                       <tr>                   
-                                        <td colspan='4' class='stack-column-center' style='padding: 5px;'><table cellspacing='0' cellpadding='0' border='0'>
+                                        <td colspan=4 style='background-color:#99FF99; color:black;'><table cellspacing='0' cellpadding='0' border='0'>
                                           <tr >
-                                            <td style='padding: 5px; text-align: center;color: yellow; background-color: black;'>10% MENOS</td>
-                                            <td style='padding: 5px; text-align: center'>de lo que pagas o tengas cotizado para declarar IDE</td>
+                                            <td style='padding: 5px; text-align: center'>o bien 15% MENOS de lo que pagas o tengas cotizado</td>
                                           </tr>
                                         </table></td>                                        
                                       </tr>
@@ -1618,7 +1717,7 @@ Public Class WebForm32
                                         </table></td>
                     					  <td width='25%' style='background-color: #306BBC; color:#FFFFFF;'><table cellspacing='0' cellpadding='0' border='0'>
                                           <tr>
-                                            <td style='padding: 5px; text-align: center'>Oxxo,7Eleven</td>
+                                            <td style='padding: 5px; text-align: center'>FarmaciaGuadalajara,7Eleven</td>
                                           </tr>
 
                                         </table></td>
@@ -1668,17 +1767,21 @@ Public Class WebForm32
                     					</td>
                     				</tr>
                     				<tr style='font-family: calibri;'>
-                    					<td align='justify' valign='top' style='border-spacing: 0px;padding: 5px;font-size: 9pt; font-family:Calibri;'>✓ Adjuntamos cotización en PDF<br>
+                    					<td align='justify' valign='top' style='border-spacing: 0px;padding: 5px;font-size: 9pt; font-family:Calibri;'>✓ <strong>Declaraciones MENSUALES IDE OBLIGATORIAS en 2022 y 2023</strong>, fundamento legal Ley del Impuesto sobre la Renta para 2022: Artículo 55. fracción IV , y Resolución Miscelánea Fiscal para 2022: Reglas 3.5.19., 3.5.21., Artículo TRIGÉSIMO SEGUNDO transitorio y Artículo CUARTO transitorio de la Novena Resolución de Modificaciones a la Resolución Miscelánea Fiscal para 2022. <br>
+✓ Adjuntamos cotización en PDF<br>
+✓ Contrata nuestro servicio de Declaracion Anual de INTERESES <a href='https://www.intereses.facturaselectronicascfdi.com/' target='_blank'>aqui </a> y el timbrado de los CFDI de retenciones correspondientes<br>
                     					  ✓ Contáctanos para hacerte contrato electrónico con estos precios<br>
                     ✓ Envía comprobante de pago al correo declaracioneside@gmail.com para activarte el contrato, indicando datos de facturación: RFC, razon social, forma y metodo de
                     pago, uso del comprobante; solicita tu factura en máximo 3 días una vez hecho el pago<br>
                     ✓ Precios en pesos mexicanos. Cotizacion vigente por 30 dias, te mejoramos cualquier cotizacion. Soporte sin costo L-V de 10am-5pm<br>
                     ✓ Al pagar especifica como referencia el número de esta cotización <br>
                     ✓Para pagos en línea con tarjeta de crédito, de debito o paypal, en el menu: Cuenta➝mis contratos➝seleccione el contrato a pagar➝pagar con tarjeta (si el pago es en linea agregar 3.95% + $4 + iva)<br>
-                    ✓ Contrata la cantidad de declaraciones que requieras en ceros o con datos para las anuales o mensuales, retrasadas o futuras<br>
-                    ✓Para declaraciones con datos, puedes reimportar&nbsp;desde excel o xml la declaración&nbsp;cuantas veces necesites para cualquier corrección&nbsp;sin costo adicional&nbsp;antes de enviarla. El formato para declarar con datos puedes solicitarlo via correo o por telefono al contratar nuestros servicios<br>
-                    ✓ Envía tu declaración o solicita que lo hagamos por ti enviándonos los archivos de las declaraciones sin costo adicional (las mensuales debes enviarlas tú)<br>
-                    ✓ Descarga y recibe acuses a tu correo en max. 24 hrs hábiles, si no te llega en ese lapso contáctanos para gestionarlo ante el SAT o para reenviar sin costo adicional la declaración<br>
+                    ✓ Contrata la cantidad de declaraciones que requieras en ceros o con datos<br>
+                    ✓Para declaraciones con datos, puedes reimportar&nbsp;desde excel la declaración&nbsp;cuantas veces necesites para cualquier corrección&nbsp;sin costo adicional&nbsp;antes de enviarla. El formato para declarar con datos puedes solicitarlo via correo o por telefono al contratar nuestros servicios<br>
+                    ✓ Presentamos tu declaración contratando el servicio correspondiente, sube los archivos de las declaraciones puntualmente para nosotros enviar tus declaraciones, Puedes subir la FIEL, o nos conectamos cada mes a un equipo donde la tengas <br>
+                    ✓ Los acuses se generan en un periodo de 2-24 hrs hábiles<br>
+                    ✓ Formato 2022 en  ✓ <a href='https://www.declaracioneside.com/ejemploMensual22.xlsx'> https://www.declaracioneside.com/ejemploMensual22.xlsx </a><br>
+                    ✓ El plazo para presentar Enero a Noviembre es Diciembre 2022 del dia 1 al último <br>
                     ✓ <a href='https://www.declaracioneside.com/videoman.aspx'>Video tutoriales</a> <br><br>
 
                     					<table cellspacing='0' cellpadding='0' border='0' align='center' style='margin: auto'>
@@ -1713,11 +1816,11 @@ Public Class WebForm32
                     "
                     elcorreo.IsBodyHtml = True
                     elcorreo.Priority = System.Net.Mail.MailPriority.High
-                    elcorreo.Attachments.Add(New System.Net.Mail.Attachment(origen))
+                    elcorreo.Attachments.Add(New System.Net.Mail.Attachment(destino))
                     Dim smpt As New System.Net.Mail.SmtpClient
                     smpt.Host = "smtp.gmail.com"
                     smpt.Port = "587"
-                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                     smpt.EnableSsl = True 'req p server gmail
                     Try
                         smpt.Send(elcorreo)
@@ -1783,11 +1886,12 @@ Public Class WebForm32
 
             If array IsNot Nothing Then
                 Dim rens As Integer = nRensPre 'array.GetUpperBound(0)
-                Dim fecha, correo, institucion, num, atn, tel, pu, cant, subt, iva, tot, ultEjer, pends, correoLogin
+                Dim fecha, correo, institucion, num, atn, tel, pu, cant, subt, iva, tot, ultEjer, pends, correoLogin, pu2, cant2, subt2, iva2, tot2
                 Dim q
                 fecha = Now.ToString("dd-MM-yyyy_HH-mm-ss")
                 Dim dirDestino = "C:\SAT\AUTOCOT\" + fecha
                 cant = "1"
+                cant2 = "1"
                 Dim oDir As New System.IO.DirectoryInfo(Server.MapPath("~"))
                 oDir.Attributes = oDir.Attributes And Not IO.FileAttributes.ReadOnly
                 Dim origen As String = Server.MapPath("~/COTfmto2020.pdf")
@@ -1832,6 +1936,12 @@ Public Class WebForm32
                     If Not array(ren, 19) Is Nothing Then
                         pends = array(ren, 19).ToString.ToUpper.Trim.Replace("'", "''")
                     End If
+                    If Not array(ren, 22) Is Nothing Then
+                        pu2 = array(ren, 22).ToString.ToUpper.Trim.Replace("'", "''")
+                        subt2 = CDbl(pu2) * CDbl(cant2)
+                        iva2 = subt2 * 0.16
+                        tot2 = subt2 + iva2
+                    End If
                     num = "IDE " + fecha + " " + (ren - 1).ToString
 
                     'crear copia pdf
@@ -1858,6 +1968,17 @@ Public Class WebForm32
                     Form.GetField("iva").SetValue(FormatCurrency(iva, 2), font, 10.0F)
                     Form.GetField("ultEjerc").SetValue(ultEjer, fontBold, 11.0F)
                     Form.GetField("pends").SetValue(pends, fontBold, 11.0F)
+                    Dim adicionalDatos = ""
+                    If Val(tot2) = 0 Then
+                        adicionalDatos = "El envío en $0, corresponde a declaraciones sin datos a reportar. Si su declaración es con datos, sumar envío de $2400 por año, y un adicional en la creación de declaraciones, contáctanos."
+                    End If
+                    Form.GetField("adicionalDatos").SetValue(adicionalDatos, font, 9.0F)
+                    Form.GetField("pu2").SetValue(FormatCurrency(pu2, 2), font, 10.0F)
+                    Form.GetField("cant2").SetValue(cant2, font, 10.0F)
+                    Form.GetField("sub2").SetValue(FormatCurrency(subt2, 2), font, 10.0F)
+                    Form.GetField("tot2").SetValue(FormatCurrency(tot2, 2), font, 10.0F)
+                    Form.GetField("iva2").SetValue(FormatCurrency(iva2, 2), font, 10.0F)
+
                     Form.FlattenFields()
                     pdfDoc.Close()
                     'abrimos el pdf
@@ -1871,7 +1992,7 @@ Public Class WebForm32
                     elcorreo.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
                     'elcorreo.To.Add(correo)
                     elcorreo.Bcc.Add(correo)
-                    elcorreo.Subject = "Cotización de Declaración de Depósitos en Efectivo"
+                    elcorreo.Subject = "Cotización de Declaración de Depósitos en Efectivo >= 2022"
                     elcorreo.Body = "
                     <html>
                         <head>
@@ -2020,7 +2141,7 @@ Public Class WebForm32
                                 <table cellspacing='0' cellpadding='0' border='0' align='center' bgcolor='#ffffff' width='600' class='email-container'>
 
                     			<tr>
-                                    <td style='padding:  5px 0; text-align: center'><a href='https://www.declaracioneside.com'><img src='https://www.facturaselectronicascfdi.com/logo1.png' width='200' height='70' alt='alt_text' border='0'></a></td>
+                                    <td style='padding:  5px 0; text-align: center'><a href='https://www.declaracioneside.com'><img src='https://www.declaracioneside.com/images/icons/logo1.png' width='200' height='70' alt='alt_text' border='0'></a></td>
                                 </tr>
 
                                 <!-- Hero Image, Flush : BEGIN -->
@@ -2092,7 +2213,7 @@ Public Class WebForm32
                                       <tr>                   
                                         <td width='58.66%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
                                           <tr >
-                                            <td style='padding: 5px; text-align: center;'><em><strong>Declaraciones de depósitos en efectivo por año: anual o mensuales</strong></em></td>
+                                            <td style='padding: 5px; text-align: center;'><em><strong>Creación de 12 Declaraciones Mensuales de depósitos en efectivo</strong></em></td>
                                           </tr>
                                         </table></td>
                                         <td width='8%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
@@ -2117,6 +2238,40 @@ Public Class WebForm32
                                       </tr>
                                       </table></td>
                                   </tr>
+
+
+                                    <tr style='font-size:  10pt; font-family:Calibri'>
+                                    <td align='center' valign='top' style='padding: 0px;'><table cellspacing='0' cellpadding='0' border='0' width='100%'>
+                                      <tr>                   
+                                        <td width='58.66%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+                                          <tr >
+                                            <td style='padding: 5px; text-align: center;'><em><strong>Envío de 12 Declaraciones Mensuales de depósitos en efectivo</strong></em></td>
+                                          </tr>
+                                        </table></td>
+                                        <td width='8%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+                                          <tr >
+                                            <td style='padding: 5px; text-align: center'>" + cant2.ToString + "</td>
+                                          </tr>
+
+                                        </table></td>
+                    					  <td width='16.66%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+                                          <tr >
+                                            <td style='padding:  5px; text-align: center'>" + FormatCurrency(subt2, 2) + "</td>
+                                          </tr>
+
+                                        </table></td>
+                    					  <td width='16.66%' class='stack-column-center'><table cellspacing='0' cellpadding='0' border='0'>
+                                          <tr >
+                                            <td style='padding:  5px; text-align: center'>" + FormatCurrency(tot2, 2) + "</td>
+                                          </tr>
+
+                                        </table></td>
+
+                                      </tr>
+                                      </table></td>
+                                  </tr>
+
+
                                   <!-- Three Even Columns : END --> 
 
                     				<tr style='background-color: darkblue; color: white; font-family: calibri;'>
@@ -2139,7 +2294,7 @@ Public Class WebForm32
                                         </table></td>
                     					  <td width='25%' style='background-color: #306BBC; color:#FFFFFF;'><table cellspacing='0' cellpadding='0' border='0'>
                                           <tr>
-                                            <td style='padding: 5px; text-align: center'>Oxxo,7Eleven</td>
+                                            <td style='padding: 5px; text-align: center'>FarmaciasGuadalajara,7Eleven</td>
                                           </tr>
 
                                         </table></td>
@@ -2189,17 +2344,22 @@ Public Class WebForm32
                     					</td>
                     				</tr>
                     				<tr style='font-family: calibri;'>
-                    					<td align='justify' valign='top' style='border-spacing: 0px;padding: 5px;font-size: 9pt; font-family:Calibri;'>✓ Adjuntamos cotización en PDF<br>
+                    					<td align='justify' valign='top' style='border-spacing: 0px;padding: 5px;font-size: 9pt; font-family:Calibri;'>✓  Fundamento legal: ISR Art. 55 Fracc IV, declaraciones <strong>MENSUALES de depositos en efectivo 2022 OBLIGATORIAS</strong>. El formato para las mensules esta <a href='https://www.declaracioneside.com/ejemploMensual22.xlsx' target='_blank'> aqui </a> El <strong>plazo para presentar Enero a Noviembre 2022 es en Diciembre 2022</strong> del dia 1 al ultimo de Diciembre 2022. Las anuales del 2022 se derogaron<br>
+                                            ✓ Adjuntamos cotización en PDF<br>
+                                            " + adicionalDatos + "<br>
+                                            ✓ Contrata nuestro servicio de Declaracion Anual de INTERESES <a href='https://www.intereses.facturaselectronicascfdi.com/' target='_blank'>aqui </a> y el timbrado de los CFDI de retenciones correspondientes<br>
+                                            ✓ Contrata nuestro servicio de timbrado de ESTADOS DE CUENTA <a href='https://facturaselectronicascfdi.com/' target='_blank'>aqui </a><br>
                     					  ✓ Contáctanos para hacerte contrato electrónico con estos precios<br>
                     ✓ Envía comprobante de pago al correo declaracioneside@gmail.com para activarte el contrato, indicando datos de facturación: RFC, razon social, forma y metodo de
                     pago, uso del comprobante; solicita tu factura en máximo 3 días una vez hecho el pago<br>
-                    ✓ Precios en pesos mexicanos. Cotizacion vigente por 30 dias, te mejoramos cualquier cotizacion. Soporte sin costo L-V de 10am-5pm<br>
+                    ✓ Precios en pesos mexicanos. Cotizacion vigente por 30 dias, te mejoramos cualquier cotizacion. Soporte sin costo L-V de 10am-3pm<br>
                     ✓ Al pagar especifica como referencia el número de esta cotización <br>
                     ✓Para pagos en línea con tarjeta de crédito, de debito o paypal, en el menu: Cuenta➝mis contratos➝seleccione el contrato a pagar➝pagar con tarjeta (si el pago es en linea agregar 3.95% + $4 + iva)<br>
-                    ✓ Contrata la cantidad de declaraciones que requieras en ceros o con datos para las anuales o mensuales, retrasadas o futuras<br>
+                    ✓ Contrata la cantidad de declaraciones que requieras en ceros o con datos para las mensuales<br>
                     ✓Para declaraciones con datos, puedes reimportar&nbsp;desde excel o xml la declaración&nbsp;cuantas veces necesites para cualquier corrección&nbsp;sin costo adicional&nbsp;antes de enviarla. El formato para declarar con datos puedes solicitarlo via correo o por telefono al contratar nuestros servicios<br>
-                    ✓ Envía tu declaración o solicita que lo hagamos por ti enviándonos los archivos de las declaraciones sin costo adicional (las mensuales debes enviarlas tú)<br>
-                    ✓ Descarga y recibe acuses a tu correo en max. 24 hrs hábiles, si no te llega en ese lapso contáctanos para gestionarlo ante el SAT o para reenviar sin costo adicional la declaración<br>
+                    ✓ Envía tu declaración o solicita que lo hagamos por ti contratando el servicio correspondiente, sube los archivos de las declaraciones puntualmente<br>
+                    ✓ Para nosotros enviar tus declaraciones, Puedes subir la FIEL, o nos conectamos cada mes a un equipo donde la tengas <br>
+                    ✓ Los acuses se generan en un periodo de 2-24 hrs hábiles<br>
                     ✓ <a href='https://www.declaracioneside.com/videoman.aspx'>Video tutoriales</a> <br><br>
 
                     					<table cellspacing='0' cellpadding='0' border='0' align='center' style='margin: auto'>
@@ -2239,7 +2399,7 @@ Public Class WebForm32
                     Dim smpt As New System.Net.Mail.SmtpClient
                     smpt.Host = "smtp.gmail.com"
                     smpt.Port = "587"
-                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                     smpt.EnableSsl = True 'req p server gmail
                     Try
                         smpt.Send(elcorreo)
@@ -2334,4 +2494,6 @@ Public Class WebForm32
 
         'DoTheWork()
     End Sub
+
+
 End Class

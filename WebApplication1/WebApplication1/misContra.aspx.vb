@@ -40,10 +40,8 @@ Public Class WebForm10
             Exit Sub
         End If
 
-        myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';")
-        myConnection.Open()
-        myCommand = New SqlCommand("set dateformat ymd", myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand("set dateformat ymd")
+        ExecuteNonQueryFunction(myCommand)
 
 
 
@@ -67,7 +65,7 @@ Public Class WebForm10
     End Sub
 
     Private Sub WebForm10_Unload(sender As Object, e As System.EventArgs) Handles Me.Unload
-        myConnection.Close()
+
     End Sub
 
     Protected Sub NavigationMenu_MenuItemClick(sender As Object, e As System.Web.UI.WebControls.MenuEventArgs) Handles NavigationMenu.MenuItemClick

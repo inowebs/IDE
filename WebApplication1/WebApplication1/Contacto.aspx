@@ -21,7 +21,7 @@
                         <div class="row">
                             <div class="col-md-12 text-center">
                                 <p>
-                                    <strong>Tel. 4436903616, 4432180237 </strong>
+                                    <strong>Tel. 4436903616, Whatsapp 4432180237 </strong>
                                 </p>
                                  <p>
                                     <strong>declaracioneside@gmail.com ó 
@@ -34,7 +34,7 @@ ventas@inowebs.com </strong>
                                     Lunes a Viernes 9:00 am - 6:00 pm
                                 </p>
                                 <p>
-                                    Sábados 9:00 am - 2:00 pm 
+                                    Sábados 9:00 am - 2:00 pm (via telefonica)
                                 </p>
                             </div>
                         </div>

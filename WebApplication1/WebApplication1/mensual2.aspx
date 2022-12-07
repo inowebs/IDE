@@ -529,6 +529,8 @@
                     <asp:Button ID="btnEnviarDeclaracion" runat="server"
                         Text="Enviar Declaración"
                         ToolTip="Tras enviar, espere a que cambie el estatus" CssClass="btn btn-sm btn-info" />
+                    <br />
+                            <asp:CheckBox ID="chkSinCorreo" runat="server" Text="sin enviar correo cliente" />
                 </div>
                 <div class="col-sm-6">
                     <div class="alert alert-warning">

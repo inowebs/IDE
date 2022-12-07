@@ -28,10 +28,8 @@ Public Class WebForm8
             Exit Sub
         End If
 
-        myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';MultipleActiveResultSets=True")
-        myConnection.Open()
-        myCommand = New SqlCommand("set dateformat ymd", myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand("set dateformat ymd")
+        ExecuteNonQueryFunction(myCommand)
 
         If Not (Left(Request.ServerVariables("REMOTE_ADDR"), 10) = "192.168.0." Or Left(Request.ServerVariables("REMOTE_ADDR"), 10) = "127.0.0.1") Or Session("runAsAdmin") = "1" Then
             If IsNothing(Session("curCorreo")) = True Then
@@ -62,6 +60,14 @@ Public Class WebForm8
                 sinCorr.Visible = True
                 fechaPago.Visible = True
                 cotizar.Visible = True
+                calc.Visible = True
+                redondear.Visible = True
+                yFac.Visible = True
+                chkSubtotal.Visible = True
+                soloFac.Visible = True
+                deCortesia.Visible = True
+                vencido.Visible = True
+                panelAdm.Visible = True
             Else
                 comisionPagada.Visible = False
                 factTx.Visible = False
@@ -77,6 +83,14 @@ Public Class WebForm8
                 sinCorr.Visible = False
                 fechaPago.Visible = False
                 cotizar.Visible = False
+                calc.Visible = False
+                redondear.Visible = False
+                yFac.Visible = False
+                chkSubtotal.Visible = False
+                soloFac.Visible = False
+                deCortesia.Visible = False
+                vencido.Visible = False
+                panelAdm.Visible = False
             End If
 
             cambios = 0
@@ -111,11 +125,9 @@ Public Class WebForm8
             idCliente.Text = Session("GidCliente")
             Dim q2
             q2 = "SELECT razonSoc FROM clientes WHERE id=" + Session("GidCliente").ToString
-            myCommand = New SqlCommand(q2, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            cliente.Text = dr("razonSoc")
-            dr.Close()
+            myCommand = New SqlCommand(q2)
+            Dim v = ExecuteScalarFunction(myCommand)
+            cliente.Text = v
             If Session("runAsAdmin") = "0" Then 'via cliente
                 acepto.Enabled = True
                 selCliente.Enabled = False
@@ -178,135 +190,130 @@ Public Class WebForm8
     Private Sub cargaDatos()
         Dim q
         q = "SELECT co.*,cli.razonSoc, pla.elplan FROM contratos co, clientes cli, planes pla  where co.id='" + id.Text + "' and co.idPlan=pla.id and co.idCliente=cli.id"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        idCliente.Text = dr("idcliente")
-        cliente.Text = dr("razonSoc")
-        If Not DBNull.Value.Equals(dr("fechapago")) Then
-            fechaPago.Text = dr("fechapago")
-        Else
-            fechaPago.Text = ""
-        End If
-        If dr("esRegularizacion").Equals(False) Then
-            esRegularizacion.Checked = False
-        Else
-            esRegularizacion.Checked = True
-        End If
-        fecha = Left(dr("fecha").ToString, 10)
-        'Me.actPago.OnClientClick = "document.getElementById('form1').target = '_self'; return confirm('¿ Pasaron 3o+ dias hábiles desde la fecha del contrato " + fecha + " y Ya cotizó hoy sin diferencias con el monto pre-contratado ?');"
-        acepto.Checked = True
-        periodoInicial.Text = dr("periodoinicial")
-        idPlan.Text = dr("idplan")
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            dr.Read()
+            idCliente.Text = dr("idcliente")
+            cliente.Text = dr("razonSoc")
+            If Not DBNull.Value.Equals(dr("fechapago")) Then
+                fechaPago.Text = dr("fechapago")
+            Else
+                fechaPago.Text = ""
+            End If
+            If dr("esRegularizacion").Equals(False) Then
+                esRegularizacion.Checked = False
+            Else
+                esRegularizacion.Checked = True
+            End If
+            fecha = Left(dr("fecha").ToString, 10)
+            'Me.actPago.OnClientClick = "document.getElementById('form1').target = '_self'; return confirm('¿ Pasaron 3o+ dias hábiles desde la fecha del contrato " + fecha + " y Ya cotizó hoy sin diferencias con el monto pre-contratado ?');"
+            acepto.Checked = True
+            periodoInicial.Text = dr("periodoinicial")
+            idPlan.Text = dr("idplan")
 
-        elPlan.DataBind() 'combo enlazado a campo
-        elPlan.Items.FindByValue(dr("elplan")).Selected = True
+            elPlan.DataBind() 'combo enlazado a campo
+            elPlan.Items.FindByValue(dr("elplan")).Selected = True
 
-        If elPlan.Text = "PREMIUM" Then
-            duracionMeses.Text = dr("duracionmeses")
-            mesesRegularizacion.Value = dr("mesesRegularizacion")
-            mesesAnticipados.Value = dr("mesesAnticipados")
-            fechaFinal.Text = dr("fechafinal")
+            If elPlan.Text = "PREMIUM" Then
+                duracionMeses.Text = dr("duracionmeses")
+                mesesRegularizacion.Value = dr("mesesRegularizacion")
+                mesesAnticipados.Value = dr("mesesAnticipados")
+                fechaFinal.Text = dr("fechafinal")
 
-            duracionMeses.Visible = True 'para premium
-            fechaFinal.Visible = True
-            nDeclContratadas.Visible = False
-            nDeclHechas.Visible = False
-        Else
-            nDeclContratadas.Text = dr("ndeclcontratadas")
-            nDeclHechas.Text = dr("ndeclhechas")
+                duracionMeses.Visible = True 'para premium
+                fechaFinal.Visible = True
+                nDeclContratadas.Visible = False
+                nDeclHechas.Visible = False
+            Else
+                nDeclContratadas.Text = dr("ndeclcontratadas")
+                nDeclHechas.Text = dr("ndeclhechas")
 
-            duracionMeses.Visible = False 'para basicos/ceros
-            fechaFinal.Visible = False
-            nDeclContratadas.Visible = True
-            nDeclHechas.Visible = True
+                duracionMeses.Visible = False 'para basicos/ceros
+                fechaFinal.Visible = False
+                nDeclContratadas.Visible = True
+                nDeclHechas.Visible = True
 
-        End If
+            End If
 
-        Dim dr3 As SqlDataReader
-        Dim q3
-        q3 = "SELECT * FROM desctos WHERE id IN (SELECT idDescto FROM desctosContra WHERE idContra=" + id.Text + ")"
-        myCommand = New SqlCommand(q3, myConnection)
-        dr3 = myCommand.ExecuteReader()
-        desglose.Text = ""
-        Dim sumaDesctos = 0
-        While dr3.Read()
-            sumaDesctos = sumaDesctos + dr3("porcen")
-            desglose.Text = desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + vbCrLf
-        End While
-        dr3.Close()
-        'descto.Text = sumaDesctos.ToString
+            Dim q3
+            q3 = "SELECT * FROM desctos WHERE id IN (SELECT idDescto FROM desctosContra WHERE idContra=" + id.Text + ")"
+            myCommand = New SqlCommand(q3)
+            Using dr3 = ExecuteReaderFunction(myCommand)
+                desglose.Text = ""
+                Dim sumaDesctos = 0
+                While dr3.Read()
+                    sumaDesctos = sumaDesctos + dr3("porcen")
+                    desglose.Text = desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + vbCrLf
+                End While
+            End Using
 
-        precioNetoContrato.Text = FormatCurrency(dr("precionetocontrato"))
-        If Not DBNull.Value.Equals(dr("nvoPrecNeto")) Then
-            nvoPrecNeto.Text = FormatCurrency(dr("nvoPrecNeto"))
-        End If
+            precioNetoContrato.Text = FormatCurrency(dr("precionetocontrato"))
+            If Not DBNull.Value.Equals(dr("nvoPrecNeto")) Then
+                nvoPrecNeto.Text = FormatCurrency(dr("nvoPrecNeto"))
+            End If
 
-        If dr("esEl1o") = True Then
-            session("esEl1oVal") = "1"
-        Else
-            session("esEl1oVal") = "0"
-        End If
+            If dr("esEl1o") = True Then
+                Session("esEl1oVal") = "1"
+            Else
+                Session("esEl1oVal") = "0"
+            End If
 
-        If dr("comisionPagada").Equals(False) Then
-            comisionPagada.Checked = False
-        Else
-            comisionPagada.Checked = True
-        End If
+            If dr("comisionPagada").Equals(False) Then
+                comisionPagada.Checked = False
+            Else
+                comisionPagada.Checked = True
+            End If
 
-        If dr("factTx").Equals(False) Then
-            enviada.Checked = False
-        Else
-            enviada.Checked = True
-        End If
+            If dr("factTx").Equals(False) Then
+                enviada.Checked = False
+            Else
+                enviada.Checked = True
+            End If
 
-        If dr("deCortesia").Equals(False) Then
-            deCortesia.Checked = False
-        Else
-            deCortesia.Checked = True
-        End If
+            If dr("deCortesia").Equals(False) Then
+                deCortesia.Checked = False
+            Else
+                deCortesia.Checked = True
+            End If
 
-        If (dr("postpago").Equals(True)) Then '
-            chkPostpago.Checked = True
-        Else
-            chkPostpago.Checked = False
-        End If
+            If (dr("postpago").Equals(True)) Then '
+                chkPostpago.Checked = True
+            Else
+                chkPostpago.Checked = False
+            End If
 
-        If dr("parcialidades").Equals(False) Then
-            parcialidades.Checked = False
-        Else
-            parcialidades.Checked = True
-        End If
+            If dr("parcialidades").Equals(False) Then
+                parcialidades.Checked = False
+            Else
+                parcialidades.Checked = True
+            End If
 
-        If dr("vencido").Equals(False) Then
-            vencido.Checked = False
-        Else
-            vencido.Checked = True
-        End If
+            If dr("vencido").Equals(False) Then
+                vencido.Checked = False
+            Else
+                vencido.Checked = True
+            End If
 
-        nAdeudos.Text = dr("nAdeudos")
-        montoAdeudos.Text = FormatCurrency(dr("montoAdeudos"))
+            nAdeudos.Text = dr("nAdeudos")
+            montoAdeudos.Text = FormatCurrency(dr("montoAdeudos"))
 
-        If Not DBNull.Value.Equals(dr("pagoRealizado")) Then
-            pagoRealizado.SelectedValue = dr("pagoRealizado")
-        Else
-            pagoRealizado.SelectedValue = "03"
-        End If
+            If Not DBNull.Value.Equals(dr("pagoRealizado")) Then
+                pagoRealizado.SelectedValue = dr("pagoRealizado")
+            Else
+                pagoRealizado.SelectedValue = "03"
+            End If
 
-        If Not DBNull.Value.Equals(dr("uuid")) Then
-            uuid.Text = dr("uuid")
-        End If
-
-        dr.Close()
-
+            If Not DBNull.Value.Equals(dr("uuid")) Then
+                uuid.Text = dr("uuid")
+            End If
+        End Using
 
         q = "SELECT cod from desctos where tipo='REF' and id in (select idDescto from desctosContra where idContra=" + id.Text + ")"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
-            codCliente.Text = dr("cod")
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
+            codCliente.Text = v
         End If
-        dr.Close()
     End Sub
 
     Private Sub WebForm8_Unload(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Unload
@@ -338,70 +345,53 @@ Public Class WebForm8
     End Function
 
     Private Function requisitado(ByVal idPrerequisito) As Integer
-        Dim dr4 As SqlDataReader
         Dim q4
         q4 = "SELECT * FROM desctos WHERE id=" + idPrerequisito.ToString + " AND (tipo='PROMO' or tipo='REF') AND convert(datetime,convert(int,GETDATE())) <= fechaCaducidad" 'el parent promo y vigente
-        myCommand = New SqlCommand(q4, myConnection)
-        dr4 = myCommand.ExecuteReader()
-        If dr4.Read() Then
-            If dr4("regularizacion").Equals(False) And dr4("anticipadas").Equals(False) And dr4("duracionMeses") = 0 Then 'PREMIUM
-                Dim dr5 As SqlDataReader
-                Dim q5
-                q5 = "SELECT id FROM contratos WHERE idPlan IN (SELECT id FROM planes WHERE elplan='PREMIUM') AND idCliente=" + idCliente.Text + " AND fechaPago IS NOT NULL"
-                myCommand = New SqlCommand(q5, myConnection)
-                dr5 = myCommand.ExecuteReader()
-                If Not dr5.Read() Then
-                    dr4.Close()
-                    dr5.Close()
-                    Return 0
+        myCommand = New SqlCommand(q4)
+        Using dr4 = ExecuteReaderFunction(myCommand)
+            If dr4.Read() Then
+                If dr4("regularizacion").Equals(False) And dr4("anticipadas").Equals(False) And dr4("duracionMeses") = 0 Then 'PREMIUM
+                    Dim dr5 As SqlDataReader
+                    Dim q5
+                    q5 = "SELECT id FROM contratos WHERE idPlan IN (SELECT id FROM planes WHERE elplan='PREMIUM') AND idCliente=" + idCliente.Text + " AND fechaPago IS NOT NULL"
+                    myCommand = New SqlCommand(q5)
+                    Dim v = ExecuteScalarFunction(myCommand)
+                    If IsNothing(v) Then
+                        Return 0
+                    End If
+                ElseIf dr4("regularizacion").Equals(False) And dr4("anticipadas").Equals(False) And dr4("duracionMeses") <> 0 Then 'PREMIUM y duracionMeses
+                    Dim dr5 As SqlDataReader
+                    Dim q5
+                    q5 = "SELECT id FROM contratos WHERE idPlan IN (SELECT id FROM planes WHERE elplan='PREMIUM') AND idCliente=" + idCliente.Text + " AND fechaPago IS NOT NULL AND duracionMeses=" + dr4("duracionMeses").ToString
+                    myCommand = New SqlCommand(q5)
+                    Dim v = ExecuteScalarFunction(myCommand)
+                    If IsNothing(v) Then
+                        Return 0
+                    End If
+                ElseIf dr4("regularizacion").Equals(False) And dr4("anticipadas").Equals(True) And dr4("duracionMeses") <> 0 Then 'PREMIUM, duracionMeses, Anticipadas
+                    Dim dr5 As SqlDataReader
+                    Dim q5
+                    q5 = "SELECT id FROM contratos WHERE idPlan IN (SELECT id FROM planes WHERE elplan='PREMIUM') AND idCliente=" + idCliente.Text + " AND fechaPago IS NOT NULL AND mesesAnticipados=" + dr4("duracionMeses").ToString
+                    myCommand = New SqlCommand(q5)
+                    Dim v = ExecuteScalarFunction(myCommand)
+                    If IsNothing(v) Then
+                        Return 0
+                    End If
+                ElseIf dr4("regularizacion").Equals(True) And dr4("anticipadas").Equals(False) And dr4("duracionMeses") <> 0 Then 'PREMIUM, duracionMeses, Regularizadas
+                    Dim dr5 As SqlDataReader
+                    Dim q5
+                    q5 = "SELECT id FROM contratos WHERE idPlan IN (SELECT id FROM planes WHERE elplan='PREMIUM') AND idCliente=" + idCliente.Text + " AND fechaPago IS NOT NULL AND mesesRegularizacion=" + dr4("duracionMeses").ToString
+                    myCommand = New SqlCommand(q5)
+                    Dim v = ExecuteScalarFunction(myCommand)
+                    If IsNothing(v) Then
+                        Return 0
+                    End If
                 End If
-                dr4.Close()
-                dr5.Close()
-            ElseIf dr4("regularizacion").Equals(False) And dr4("anticipadas").Equals(False) And dr4("duracionMeses") <> 0 Then 'PREMIUM y duracionMeses
-                Dim dr5 As SqlDataReader
-                Dim q5
-                q5 = "SELECT id FROM contratos WHERE idPlan IN (SELECT id FROM planes WHERE elplan='PREMIUM') AND idCliente=" + idCliente.Text + " AND fechaPago IS NOT NULL AND duracionMeses=" + dr4("duracionMeses").ToString
-                myCommand = New SqlCommand(q5, myConnection)
-                dr5 = myCommand.ExecuteReader()
-                If Not dr5.Read() Then
-                    dr4.Close()
-                    dr5.Close()
-                    Return 0
-                End If
-                dr4.Close()
-                dr5.Close()
-            ElseIf dr4("regularizacion").Equals(False) And dr4("anticipadas").Equals(True) And dr4("duracionMeses") <> 0 Then 'PREMIUM, duracionMeses, Anticipadas
-                Dim dr5 As SqlDataReader
-                Dim q5
-                q5 = "SELECT id FROM contratos WHERE idPlan IN (SELECT id FROM planes WHERE elplan='PREMIUM') AND idCliente=" + idCliente.Text + " AND fechaPago IS NOT NULL AND mesesAnticipados=" + dr4("duracionMeses").ToString
-                myCommand = New SqlCommand(q5, myConnection)
-                dr5 = myCommand.ExecuteReader()
-                If Not dr5.Read() Then
-                    dr4.Close()
-                    dr5.Close()
-                    Return 0
-                End If
-                dr4.Close()
-                dr5.Close()
-            ElseIf dr4("regularizacion").Equals(True) And dr4("anticipadas").Equals(False) And dr4("duracionMeses") <> 0 Then 'PREMIUM, duracionMeses, Regularizadas
-                Dim dr5 As SqlDataReader
-                Dim q5
-                q5 = "SELECT id FROM contratos WHERE idPlan IN (SELECT id FROM planes WHERE elplan='PREMIUM') AND idCliente=" + idCliente.Text + " AND fechaPago IS NOT NULL AND mesesRegularizacion=" + dr4("duracionMeses").ToString
-                myCommand = New SqlCommand(q5, myConnection)
-                dr5 = myCommand.ExecuteReader()
-                If Not dr5.Read() Then
-                    dr4.Close()
-                    dr5.Close()
-                    Return 0
-                End If
-                dr4.Close()
-                dr5.Close()
+            Else
+                Return 0
             End If
-        Else
-            dr4.Close()
-            Return 0
-        End If
-        dr4.Close()
+        End Using
+
 
         Return 1
     End Function
@@ -426,15 +416,16 @@ Public Class WebForm8
         End If
 
         q = "SELECT * FROM planes where elplan='" + elPlan.Text + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        idPlan.Text = dr("id")
-        planPrecioBaseMes = dr("PrecioBaseMes")
-        planIva = dr("iva")
-        planInscrip = dr("Inscrip")
-        Session("precioNetoInscripcion") = planInscrip * (1 + planIva / 100) 'p descontarla en comisiones
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            dr.Read()
+            idPlan.Text = dr("id")
+            planPrecioBaseMes = dr("PrecioBaseMes")
+            planIva = dr("iva")
+            planInscrip = dr("Inscrip")
+            Session("precioNetoInscripcion") = planInscrip * (1 + planIva / 100) 'p descontarla en comisiones
+        End Using
+
 
         Dim sumaDesctos As Double
         sumaDesctos = 0.0
@@ -447,214 +438,210 @@ Public Class WebForm8
 
 
         If esRegularizacion.Checked = True And elPlan.Text <> "PREMIUM" Then
-            Dim dr2 As SqlDataReader
             q = "SELECT TOP 1 * FROM desctos WHERE tipo='REG' AND convert(datetime,convert(int,GETDATE())) <= fechaCaducidad ORDER BY id DESC"
-            myCommand = New SqlCommand(q, myConnection)
-            dr2 = myCommand.ExecuteReader()
-            If dr2.Read() Then
-                sumaDesctos = sumaDesctos + dr2("porcen")
-                desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr2("porcen").ToString + "% " + dr2("cod") + "</br>"
-            End If
-            dr2.Close()
+            myCommand = New SqlCommand(q)
+            Using dr2 = ExecuteReaderFunction(myCommand)
+                If dr2.Read() Then
+                    sumaDesctos = sumaDesctos + dr2("porcen")
+                    desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr2("porcen").ToString + "% " + dr2("cod") + "</br>"
+                End If
+            End Using
+
         End If
 
         If codCliente.Text.Trim <> "" Then
-            Dim dr2 As SqlDataReader
             q = "SELECT * FROM desctos WHERE tipo='REF' and cod='" + codCliente.Text.ToUpper.Trim + "'"
-            myCommand = New SqlCommand(q, myConnection)
-            dr2 = myCommand.ExecuteReader()
-            If Not dr2.Read() Then
-                Response.Write("<script language='javascript'>alert('Código no existe, favor de verificarlo o quitarlo');</script>")
-                codCliente.Focus()
-                Exit Sub
-            Else
-                If dr2("caduca").Equals(True) Then
-                    If CDate(Format(Now(), "yyyy-MM-dd")) > CDate(Format(dr2("fechaCaducidad"), "yyyy-MM-dd")) Then
-                        Response.Write("<script language='javascript'>alert('Código caducado, favor de verificarlo o quitarlo');</script>")
+            myCommand = New SqlCommand(q)
+            Using dr2 = ExecuteReaderFunction(myCommand)
+                If Not dr2.Read() Then
+                    Response.Write("<script language='javascript'>alert('Código no existe, favor de verificarlo o quitarlo');</script>")
+                    codCliente.Focus()
+                    Exit Sub
+                Else
+                    If dr2("caduca").Equals(True) Then
+                        If CDate(Format(Now(), "yyyy-MM-dd")) > CDate(Format(dr2("fechaCaducidad"), "yyyy-MM-dd")) Then
+                            Response.Write("<script language='javascript'>alert('Código caducado, favor de verificarlo o quitarlo');</script>")
+                            codCliente.Focus()
+                            Exit Sub
+                        End If
+                    End If
+                End If
+
+                If dr2("elplan") <> "VACIO" Then 'p solo inscrip el plan en vacio
+                    If dr2("elplan") <> elPlan.Text Then 'el plan de la REF <> del contratando
+                        Response.Write("<script language='javascript'>alert('El Código pertenece a un plan distinto al que está especificando en este contrato, verificar o quitar el código, o elegir el plan adecuado');</script>")
                         codCliente.Focus()
                         Exit Sub
                     End If
                 End If
-            End If
-
-            If dr2("elplan") <> "VACIO" Then 'p solo inscrip el plan en vacio
-                If dr2("elplan") <> elPlan.Text Then 'el plan de la REF <> del contratando
-                    Response.Write("<script language='javascript'>alert('El Código pertenece a un plan distinto al que está especificando en este contrato, verificar o quitar el código, o elegir el plan adecuado');</script>")
-                    codCliente.Focus()
-                    Exit Sub
+                sumaDesctos = sumaDesctos + dr2("porcen")
+                desglose.Text = desglose.Text + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + dr2("porcen").ToString + "% " + dr2("cod") + "</br>"
+                If dr2("inscripGratis").Equals(True) Then
+                    Session("inscripGratis") = 1
                 End If
-            End If
-            sumaDesctos = sumaDesctos + dr2("porcen")
-            desglose.Text = desglose.Text + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + dr2("porcen").ToString + "% " + dr2("cod") + "</br>"
-            If dr2("inscripGratis").Equals(True) Then
-                Session("inscripGratis") = 1
-            End If
-            If Not DBNull.Value.Equals(dr2("inscripMonto")) Then
-                'desglose.Text = desglose.Text + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inscripción autorizada " + dr2("inscripMonto").ToString + "</br>"
-                Session("inscripMonto") = dr2("inscripMonto")
-                Session("precioNetoInscripcion") = dr2("inscripMonto") * (1 + planIva / 100) 'p descontarla en comisiones
-            End If
-            If dr2("regularizacion").Equals(True) Then
-                dr2.Close()
-                GoTo CodigoRegBrindaPromos
-            End If
-            dr2.Close()
-
+                If Not DBNull.Value.Equals(dr2("inscripMonto")) Then
+                    'desglose.Text = desglose.Text + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inscripción autorizada " + dr2("inscripMonto").ToString + "</br>"
+                    Session("inscripMonto") = dr2("inscripMonto")
+                    Session("precioNetoInscripcion") = dr2("inscripMonto") * (1 + planIva / 100) 'p descontarla en comisiones
+                End If
+                If dr2("regularizacion").Equals(True) Then
+                    GoTo CodigoRegBrindaPromos
+                End If
+            End Using
         End If
 
-        Dim dr3 As SqlDataReader
         Dim q3
         q3 = "SELECT * FROM desctos WHERE tipo='PROMO' AND convert(datetime,convert(int,GETDATE())) <= fechaCaducidad"
-        myCommand = New SqlCommand(q3, myConnection)
-        dr3 = myCommand.ExecuteReader()
-        While dr3.Read()
-            If dr3("elplan") <> "PREMIUM" And Not DBNull.Value.Equals(dr3("inscripMonto")) Then
-                'desglose.Text = desglose.Text + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inscripción autorizada " + dr2("inscripMonto").ToString + "</br>"
-                Session("inscripMonto") = dr3("inscripMonto")
-                Session("precioNetoInscripcion") = dr3("inscripMonto") * (1 + planIva / 100) 'p descontarla en comisiones
-            End If
-            If dr3("elplan") = "PREMIUM" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("duracionMeses") = 0 Then 'PREMIUM
-                If elPlan.Text = "PREMIUM" Then
-                    sumaDesctos = sumaDesctos + dr3("porcen")
-                    desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                    Session("entroPremium") = dr3("id")
-                    Session("idAplicaPromo") = dr3("id")
-                    If dr3("inscripGratis").Equals(True) Then
-                        Session("inscripGratis") = 1
-                    End If
-                    'If Not DBNull.Value.Equals(dr3("inscripMonto")) Then
-                    '    Session("inscripMonto") = dr3("inscripMonto")
-                    'End If
+        myCommand = New SqlCommand(q3)
+        Using dr3 = ExecuteReaderFunction(myCommand)
+            While dr3.Read()
+                If dr3("elplan") <> "PREMIUM" And Not DBNull.Value.Equals(dr3("inscripMonto")) Then
+                    'desglose.Text = desglose.Text + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inscripción autorizada " + dr2("inscripMonto").ToString + "</br>"
+                    Session("inscripMonto") = dr3("inscripMonto")
+                    Session("precioNetoInscripcion") = dr3("inscripMonto") * (1 + planIva / 100) 'p descontarla en comisiones
                 End If
-            ElseIf dr3("elplan") = "PREMIUM" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("duracionMeses") <> 0 Then 'PREMIUM y duracionMeses
-                If elPlan.Text = "PREMIUM" And CDbl(duracionMeses.Text.Trim) = dr3("duracionMeses") Then
-                    sumaDesctos = sumaDesctos + dr3("porcen")
-                    desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                    Session("entroPremium") = dr3("id")
-                    Session("idAplicaPromo") = dr3("id")
-                    If dr3("inscripGratis").Equals(True) Then
-                        Session("inscripGratis") = 1
+                If dr3("elplan") = "PREMIUM" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("duracionMeses") = 0 Then 'PREMIUM
+                    If elPlan.Text = "PREMIUM" Then
+                        sumaDesctos = sumaDesctos + dr3("porcen")
+                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                        Session("entroPremium") = dr3("id")
+                        Session("idAplicaPromo") = dr3("id")
+                        If dr3("inscripGratis").Equals(True) Then
+                            Session("inscripGratis") = 1
+                        End If
+                        'If Not DBNull.Value.Equals(dr3("inscripMonto")) Then
+                        '    Session("inscripMonto") = dr3("inscripMonto")
+                        'End If
                     End If
-                    'If Not DBNull.Value.Equals(dr3("inscripMonto")) Then
-                    '    Session("inscripMonto") = dr3("inscripMonto")
-                    'End If
-                End If
-            ElseIf dr3("elplan") = "PREMIUM" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(True) And dr3("duracionMeses") <> 0 Then 'PREMIUM, duracionMeses, Anticipadas                
-                If elPlan.Text = "PREMIUM" And CDbl(mesesAnticipados.Value) = dr3("duracionMeses") Then
-                    sumaDesctos = sumaDesctos + dr3("porcen")
-                    desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                    Session("entroPremium") = dr3("id")
-                    Session("idAplicaPromo") = dr3("id")
-                    If dr3("inscripGratis").Equals(True) Then
-                        Session("inscripGratis") = 1
+                ElseIf dr3("elplan") = "PREMIUM" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("duracionMeses") <> 0 Then 'PREMIUM y duracionMeses
+                    If elPlan.Text = "PREMIUM" And CDbl(duracionMeses.Text.Trim) = dr3("duracionMeses") Then
+                        sumaDesctos = sumaDesctos + dr3("porcen")
+                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                        Session("entroPremium") = dr3("id")
+                        Session("idAplicaPromo") = dr3("id")
+                        If dr3("inscripGratis").Equals(True) Then
+                            Session("inscripGratis") = 1
+                        End If
+                        'If Not DBNull.Value.Equals(dr3("inscripMonto")) Then
+                        '    Session("inscripMonto") = dr3("inscripMonto")
+                        'End If
                     End If
-                    'If Not DBNull.Value.Equals(dr3("inscripMonto")) Then
-                    '    Session("inscripMonto") = dr3("inscripMonto")
-                    'End If
-                End If
-            ElseIf dr3("elplan") = "PREMIUM" And dr3("regularizacion").Equals(True) And dr3("anticipadas").Equals(False) And dr3("duracionMeses") <> 0 Then 'PREMIUM, duracionMeses, Regularizadas
-                If elPlan.Text = "PREMIUM" And CDbl(mesesRegularizacion.Value) = dr3("duracionMeses") Then
-                    sumaDesctos = sumaDesctos + dr3("porcen")
-                    desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                    Session("entroPremium") = dr3("id")
-                    Session("idAplicaPromo") = dr3("id")
-                    If dr3("inscripGratis").Equals(True) Then
-                        Session("inscripGratis") = 1
+                ElseIf dr3("elplan") = "PREMIUM" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(True) And dr3("duracionMeses") <> 0 Then 'PREMIUM, duracionMeses, Anticipadas                
+                    If elPlan.Text = "PREMIUM" And CDbl(mesesAnticipados.Value) = dr3("duracionMeses") Then
+                        sumaDesctos = sumaDesctos + dr3("porcen")
+                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                        Session("entroPremium") = dr3("id")
+                        Session("idAplicaPromo") = dr3("id")
+                        If dr3("inscripGratis").Equals(True) Then
+                            Session("inscripGratis") = 1
+                        End If
+                        'If Not DBNull.Value.Equals(dr3("inscripMonto")) Then
+                        '    Session("inscripMonto") = dr3("inscripMonto")
+                        'End If
                     End If
-                    'If Not DBNull.Value.Equals(dr3("inscripMonto")) Then
-                    '    Session("inscripMonto") = dr3("inscripMonto")
-                    'End If
-                End If
-            ElseIf dr3("elplan") <> "PREMIUM" Then 'basico o ceros
-                If Not DBNull.Value.Equals(dr3("idPreRequisito")) Then
-                    If requisitado(dr3("idPreRequisito")) = 1 Then
-                        GoTo basicoCeros
-                    Else
-                        GoTo sigueCiclo
+                ElseIf dr3("elplan") = "PREMIUM" And dr3("regularizacion").Equals(True) And dr3("anticipadas").Equals(False) And dr3("duracionMeses") <> 0 Then 'PREMIUM, duracionMeses, Regularizadas
+                    If elPlan.Text = "PREMIUM" And CDbl(mesesRegularizacion.Value) = dr3("duracionMeses") Then
+                        sumaDesctos = sumaDesctos + dr3("porcen")
+                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                        Session("entroPremium") = dr3("id")
+                        Session("idAplicaPromo") = dr3("id")
+                        If dr3("inscripGratis").Equals(True) Then
+                            Session("inscripGratis") = 1
+                        End If
+                        'If Not DBNull.Value.Equals(dr3("inscripMonto")) Then
+                        '    Session("inscripMonto") = dr3("inscripMonto")
+                        'End If
                     End If
-                End If
+                ElseIf dr3("elplan") <> "PREMIUM" Then 'basico o ceros
+                    If Not DBNull.Value.Equals(dr3("idPreRequisito")) Then
+                        If requisitado(dr3("idPreRequisito")) = 1 Then
+                            GoTo basicoCeros
+                        Else
+                            GoTo sigueCiclo
+                        End If
+                    End If
 basicoCeros:
-                If dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") = 0 Then 'basico
-                    If elPlan.Text = "BASICO" Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
+                    If dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") = 0 Then 'basico
+                        If elPlan.Text = "BASICO" Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
+                    ElseIf dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") <> 0 Then 'basico, nDeclContratadas
+                        If elPlan.Text = "BASICO" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
+                    ElseIf dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(True) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") <> 0 Then 'basico, nDeclContratadas, regularizacion
+                        If elPlan.Text = "BASICO" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") And esRegularizacion.Checked = True Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
+                    ElseIf dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(True) And dr3("nDeclContratadas") <> 0 Then 'basico, nDeclContratadas, anticipadas
+                        If elPlan.Text = "BASICO" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") And esRegularizacion.Checked = False Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
+                    ElseIf dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(True) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") = 0 Then 'basico, regularizacion
+                        If elPlan.Text = "BASICO" And esRegularizacion.Checked = True Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
+                    ElseIf dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(True) And dr3("nDeclContratadas") = 0 Then 'basico, anticipadas
+                        If elPlan.Text = "BASICO" And esRegularizacion.Checked = False Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
                     End If
-                ElseIf dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") <> 0 Then 'basico, nDeclContratadas
-                    If elPlan.Text = "BASICO" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
-                    End If
-                ElseIf dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(True) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") <> 0 Then 'basico, nDeclContratadas, regularizacion
-                    If elPlan.Text = "BASICO" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") And esRegularizacion.Checked = True Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
-                    End If
-                ElseIf dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(True) And dr3("nDeclContratadas") <> 0 Then 'basico, nDeclContratadas, anticipadas
-                    If elPlan.Text = "BASICO" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") And esRegularizacion.Checked = False Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
-                    End If
-                ElseIf dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(True) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") = 0 Then 'basico, regularizacion
-                    If elPlan.Text = "BASICO" And esRegularizacion.Checked = True Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
-                    End If
-                ElseIf dr3("elplan") = "BASICO" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(True) And dr3("nDeclContratadas") = 0 Then 'basico, anticipadas
-                    If elPlan.Text = "BASICO" And esRegularizacion.Checked = False Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
-                    End If
-                End If
 
-                If dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") = 0 Then 'CEROS
-                    If elPlan.Text = "CEROS" Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
+                    If dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") = 0 Then 'CEROS
+                        If elPlan.Text = "CEROS" Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
+                    ElseIf dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") <> 0 Then 'CEROS, nDeclContratadas
+                        If elPlan.Text = "CEROS" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
+                    ElseIf dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(True) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") <> 0 Then 'CEROS, nDeclContratadas, regularizacion
+                        If elPlan.Text = "CEROS" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") And esRegularizacion.Checked = True Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
+                    ElseIf dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(True) And dr3("nDeclContratadas") <> 0 Then 'CEROS, nDeclContratadas, anticipadas
+                        If elPlan.Text = "CEROS" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") And esRegularizacion.Checked = False Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
+                    ElseIf dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(True) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") = 0 Then 'CEROS, regularizacion
+                        If elPlan.Text = "CEROS" And esRegularizacion.Checked = True Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
+                    ElseIf dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(True) And dr3("nDeclContratadas") = 0 Then 'CEROS, anticipadas
+                        If elPlan.Text = "CEROS" And esRegularizacion.Checked = False Then
+                            sumaDesctos = sumaDesctos + dr3("porcen")
+                            desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
+                            Session("idAplicaPromo") = dr3("id")
+                        End If
                     End If
-                ElseIf dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") <> 0 Then 'CEROS, nDeclContratadas
-                    If elPlan.Text = "CEROS" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
-                    End If
-                ElseIf dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(True) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") <> 0 Then 'CEROS, nDeclContratadas, regularizacion
-                    If elPlan.Text = "CEROS" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") And esRegularizacion.Checked = True Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
-                    End If
-                ElseIf dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(True) And dr3("nDeclContratadas") <> 0 Then 'CEROS, nDeclContratadas, anticipadas
-                    If elPlan.Text = "CEROS" And CDbl(nDeclContratadas.Text.Trim) >= dr3("nDeclContratadas") And esRegularizacion.Checked = False Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
-                    End If
-                ElseIf dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(True) And dr3("anticipadas").Equals(False) And dr3("nDeclContratadas") = 0 Then 'CEROS, regularizacion
-                    If elPlan.Text = "CEROS" And esRegularizacion.Checked = True Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
-                    End If
-                ElseIf dr3("elplan") = "CEROS" And dr3("regularizacion").Equals(False) And dr3("anticipadas").Equals(True) And dr3("nDeclContratadas") = 0 Then 'CEROS, anticipadas
-                    If elPlan.Text = "CEROS" And esRegularizacion.Checked = False Then
-                        sumaDesctos = sumaDesctos + dr3("porcen")
-                        desglose.Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + desglose.Text + dr3("porcen").ToString + "% " + dr3("cod") + "</br>"
-                        Session("idAplicaPromo") = dr3("id")
-                    End If
-                End If
 
-            End If
+                End If
 sigueCiclo:
-        End While
+            End While
+        End Using
 
-        dr3.Close()
         'descto.Text = sumaDesctos.ToString
 
 CodigoRegBrindaPromos:
@@ -675,9 +662,9 @@ CodigoRegBrindaPromos:
             'End If
 
             Dim pagaInscrip, cantInscrip, desctoInscrip
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            If dr.Read() Then   'solo paga mensualidad                
+            myCommand = New SqlCommand(q)
+            Dim v = ExecuteScalarFunction(myCommand)
+            If Not IsNothing(v) Then   'solo paga mensualidad                
                 Session("esEl1oVal") = "0"
                 pagaInscrip = 0
                 desctoInscrip = 0
@@ -688,7 +675,6 @@ CodigoRegBrindaPromos:
                 desctoInscrip = 0
                 'Session("precioNetoInscripcion")  ya calculada
             End If
-            dr.Close()
             If Session("inscripGratis") = 1 Then
                 Session("esEl1oVal") = "0"
                 pagaInscrip = 0
@@ -734,16 +720,16 @@ CodigoRegBrindaPromos:
                 End If
                 'End If
                 desctoPesos.Text = FormatCurrency(((planPrecioBaseMes * sumaDesctos / 100) * duracionMeses.Text * (1 + planIva / 100)) + desctoInscrip * (1 + planIva / 100), 2)
-                    duracionMeses.Visible = True 'para basicos/ceros
-                    lblDurMes.Visible = True
-                    lblFF.Visible = True
-                    fechaFinal.Visible = True
-                    lblDeclContra.Visible = False
-                    nDeclContratadas.Visible = False
-                    nDeclHechas.Visible = False
-                    lblDeclHech.Visible = False
+                duracionMeses.Visible = True 'para basicos/ceros
+                lblDurMes.Visible = True
+                lblFF.Visible = True
+                fechaFinal.Visible = True
+                lblDeclContra.Visible = False
+                nDeclContratadas.Visible = False
+                nDeclHechas.Visible = False
+                lblDeclHech.Visible = False
 
-                Else
+            Else
                 'If session("esEl1oVal") = "1" Then
                 '    precioNetoContrato.Text = FormatCurrency((planInscrip + (planPrecioBaseMes * nDeclContratadas.Text)) + (planInscrip + (planPrecioBaseMes * nDeclContratadas.Text)) * planIva / 100, 2)
                 'Else
@@ -754,15 +740,15 @@ CodigoRegBrindaPromos:
                 'End If
                 desctoPesos.Text = FormatCurrency(((planPrecioBaseMes * sumaDesctos / 100) * nDeclContratadas.Text * (1 + planIva / 100)) + desctoInscrip * (1 + planIva / 100), 2)
                 lblDurMes.Visible = False
-                    duracionMeses.Visible = False 'para basicos/ceros
-                    lblFF.Visible = False
-                    fechaFinal.Visible = False
-                    lblDeclContra.Visible = True
-                    nDeclContratadas.Visible = True
-                    lblDeclHech.Visible = True
-                    nDeclHechas.Visible = True
-                End If
-                If nvoPrecNeto.Text <> "" Then
+                duracionMeses.Visible = False 'para basicos/ceros
+                lblFF.Visible = False
+                fechaFinal.Visible = False
+                lblDeclContra.Visible = True
+                nDeclContratadas.Visible = True
+                lblDeclHech.Visible = True
+                nDeclHechas.Visible = True
+            End If
+            If nvoPrecNeto.Text <> "" Then
                 precioNetoContrato.Text = FormatCurrency(nvoPrecNeto.Text)
             End If
         Else
@@ -928,7 +914,7 @@ CodigoRegBrindaPromos:
         '            Dim smpt As New System.Net.Mail.SmtpClient
         '            smpt.Host = "smtp.gmail.com"
         '            smpt.Port = "587"
-        '            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+        '            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
         '            smpt.EnableSsl = True 'req p server gmail
         '            Try
         '                smpt.Send(elcorreo)
@@ -951,25 +937,21 @@ CodigoRegBrindaPromos:
     Private Function validaDuplMod() As Integer
         Dim q
         q = "SELECT id FROM contratos WHERE id<>" + id.Text + " and (idcliente='" + Trim(idCliente.Text) + "' and periodoInicial='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' and idPlan=" + idPlan.Text + ")"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Ya tiene un contrato con ese periodo inicial y plan, para las declaraciones complementarias el periodo inicial comienza con un dia posterior cada una, por ejemplo dia 02 para la 1er complementaria, dia 03 para la 2a, etc.');</script>")
-            dr.Close()
             Return 0
         End If
-        dr.Close()
 
         If elPlan.Text = "PREMIUM" Then
             q = "SELECT id FROM contratos WHERE id<>" + id.Text + " and idcliente='" + Trim(idCliente.Text) + "' and ((periodoInicial<='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' and fechaFinal>='" + Format(Convert.ToDateTime(Trim(fechaFinal.Text)), "yyyy-MM-dd") + "') or (periodoInicial>='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' and fechaFinal<='" + Format(Convert.ToDateTime(Trim(fechaFinal.Text)), "yyyy-MM-dd") + "') or (periodoInicial>='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' and fechaFinal>='" + Format(Convert.ToDateTime(Trim(fechaFinal.Text)), "yyyy-MM-dd") + "' and periodoInicial<='" + Format(Convert.ToDateTime(Trim(fechaFinal.Text)), "yyyy-MM-dd") + "') or (periodoInicial<='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' and fechaFinal<='" + Format(Convert.ToDateTime(Trim(fechaFinal.Text)), "yyyy-MM-dd") + "' and fechaFinal>='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "') )"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            If dr.Read() Then
+            myCommand = New SqlCommand(q)
+            v = ExecuteScalarFunction(myCommand)
+            If Not IsNothing(v) Then
                 Response.Write("<script language='javascript'>alert('Existe traslape con el periodo del contrato " + dr("id").ToString + "');</script>")
-                dr.Close()
                 Return 0
             End If
-            dr.Close()
         End If
 
         Return 1
@@ -977,28 +959,22 @@ CodigoRegBrindaPromos:
 
     Private Function validaDupl() As Integer
         Dim q
-        q = "SELECT idcliente,periodoInicial FROM contratos WHERE idcliente='" + Trim(idCliente.Text) + "' and periodoInicial='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' and idPlan=" + idPlan.Text
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
-            'dr(0).ToString()
-            'grid1.datasource=dr
-            'grid1.DataBind()
+        q = "SELECT idcliente FROM contratos WHERE idcliente='" + Trim(idCliente.Text) + "' and periodoInicial='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' and idPlan=" + idPlan.Text
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Ya existe un contrato registrado con ese periodo inicial y plan, para las declaraciones complementarias el periodo inicial comienza con un dia posterior cada una, por ejemplo dia 02 para la 1er complementaria, dia 03 para la 2a, etc.');</script>")
             Return 0
         End If
-        dr.Close()
 
         If elPlan.Text = "PREMIUM" Then
             q = "SELECT id FROM contratos WHERE idcliente='" + Trim(idCliente.Text) + "' and ((periodoInicial<='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' and fechaFinal>='" + Format(Convert.ToDateTime(Trim(fechaFinal.Text)), "yyyy-MM-dd") + "') or (periodoInicial>='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' and fechaFinal<='" + Format(Convert.ToDateTime(Trim(fechaFinal.Text)), "yyyy-MM-dd") + "') or (periodoInicial>='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' and fechaFinal>='" + Format(Convert.ToDateTime(Trim(fechaFinal.Text)), "yyyy-MM-dd") + "' and periodoInicial<='" + Format(Convert.ToDateTime(Trim(fechaFinal.Text)), "yyyy-MM-dd") + "') or (periodoInicial<='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' and fechaFinal<='" + Format(Convert.ToDateTime(Trim(fechaFinal.Text)), "yyyy-MM-dd") + "' and fechaFinal>='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "') )"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            If dr.Read() Then
-                Response.Write("<script language='javascript'>alert('Existe traslape con el periodo del contrato " + dr("id").ToString + "');</script>")
-                dr.Close()
+            myCommand = New SqlCommand(q)
+            v = ExecuteScalarFunction(myCommand)
+            If Not IsNothing(v) Then
+                Response.Write("<script language='javascript'>alert('Existe traslape con el periodo del contrato " + v.ToString + "');</script>")
                 Return 0
             End If
-            dr.Close()
         End If
 
         Return 1
@@ -1022,7 +998,7 @@ CodigoRegBrindaPromos:
             Dim smpt As New System.Net.Mail.SmtpClient
             smpt.Host = "smtp.gmail.com"
             smpt.Port = "587"
-            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
             smpt.EnableSsl = True 'req p server gmail
             Try
                 smpt.Send(elcorreo)
@@ -1124,22 +1100,20 @@ CodigoRegBrindaPromos:
 
             Dim q, bkComisionPagada, bkPrecioNetoContrato
             q = "SELECT comisionPagada,precioNetoContrato FROM contratos WHERE id=" + id.Text
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            bkComisionPagada = dr("comisionPagada")
-            bkPrecioNetoContrato = dr("precioNetoContrato")
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            Using dr = ExecuteReaderFunction(myCommand)
+                dr.Read()
+                bkComisionPagada = dr("comisionPagada")
+                bkPrecioNetoContrato = dr("precioNetoContrato")
+            End Using
 
             q = "SELECT id FROM contratos WHERE id<>" + id.Text + " AND idcliente='" + Trim(idCliente.Text) + "' AND periodoinicial='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "' AND idplan='" + Trim(idPlan.Text) + "'"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            If dr.Read() Then
-                dr.Close()
+            myCommand = New SqlCommand(q)
+            Dim v = ExecuteScalarFunction(myCommand)
+            If Not IsNothing(v) Then
                 Response.Write("<script language='javascript'>alert('Ya existe un contrato con ese periodo inicial y plan, verifique o elimine alguno');</script>")
                 Exit Sub
             End If
-            dr.Close()
 
             If elPlan.Text = "PREMIUM" Then
                 Dim anualEnPremiumV
@@ -1154,48 +1128,47 @@ CodigoRegBrindaPromos:
             Else
                 q = "UPDATE contratos SET idcliente='" + Trim(idCliente.Text) + "',periodoinicial='" + Format(Convert.ToDateTime(Trim(periodoInicial.Text)), "yyyy-MM-dd") + "', idplan='" + Trim(idPlan.Text) + "', precionetocontrato='" + Trim(Replace(precioNetoContrato.Text, ",", "")) + "', nDeclContratadas='" + Trim(Replace(nDeclContratadas.Text, ",", "")) + "', ndeclHechas='" + Trim(Replace(nDeclHechas.Text, ",", "")) + "', esEl1o=" + Session("esEl1oVal") + ", esRegularizacion=" + Session("esRegularizacionVal") + ", comisionPagada=" + comisionPagadaVal + ", factTx=" + factTxVal + ", postpago=" + postpagoVal + ", parcialidades=" + parcialidadesVal + ", vencido=" + vencidoVal + ", nAdeudos=" + nAdeudos.Text + ", montoAdeudos='" + Trim(Replace(montoAdeudos.Text, ",", "")) + "', deCortesia=" + deCortesiaVal + elNuevoPrecio + " WHERE id=" + id.Text
             End If
-            myCommand = New SqlCommand(q, myConnection)
-            myCommand.ExecuteNonQuery()
+            myCommand = New SqlCommand(q)
+            ExecuteNonQueryFunction(myCommand)
 
-            myCommand = New SqlCommand("DELETE FROM desctosContra WHERE idContra=" + id.Text, myConnection)
-            myCommand.ExecuteNonQuery()
+            myCommand = New SqlCommand("DELETE FROM desctosContra WHERE idContra=" + id.Text)
+            ExecuteNonQueryFunction(myCommand)
 
             'desctos vigentes
             If Session("idAplicaPromo") <> 0 Then
-                myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + Session("idAplicaPromo").ToString + "," + id.Text + ")", myConnection)
-                myCommand.ExecuteNonQuery()
+                myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + Session("idAplicaPromo").ToString + "," + id.Text + ")")
+                ExecuteNonQueryFunction(myCommand)
             End If
 
             If esRegularizacion.Checked = True And elPlan.Text <> "PREMIUM" Then
                 Dim idDesctoV
                 q = "SELECT TOP 1 id FROM desctos WHERE tipo='REG' AND convert(datetime,convert(int,GETDATE())) <= fechaCaducidad ORDER BY id DESC"
-                myCommand = New SqlCommand(q, myConnection)
-                dr = myCommand.ExecuteReader()
-                If dr.Read() Then
-                    idDesctoV = dr("id")
-                    myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + idDesctoV.ToString + "," + id.Text + ")", myConnection)
-                    myCommand.ExecuteNonQuery()
+                myCommand = New SqlCommand(q)
+                v = ExecuteScalarFunction(myCommand)
+                If Not IsNothing(v) Then
+                    idDesctoV = v
+                    myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + idDesctoV.ToString + "," + id.Text + ")")
+                    ExecuteNonQueryFunction(myCommand)
                 End If
-                dr.Close()
             End If
 
             If codCliente.Text.Trim <> "" Then
                 Dim idDesctoV
                 q = "SELECT top 1 id FROM desctos WHERE tipo='REF' and cod='" + codCliente.Text.Trim + "' AND convert(datetime,convert(int,GETDATE())) <= fechaCaducidad order by id desc"
-                myCommand = New SqlCommand(q, myConnection)
-                dr = myCommand.ExecuteReader()
-                If dr.Read() Then
-                    idDesctoV = dr("id")
-                    myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + idDesctoV.ToString + "," + id.Text + ")", myConnection)
-                    myCommand.ExecuteNonQuery()
+                myCommand = New SqlCommand(q)
+                v = ExecuteScalarFunction(myCommand)
+                If Not IsNothing(v) Then
+                    idDesctoV = v
+                    myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + idDesctoV.ToString + "," + id.Text + ")")
+                    ExecuteNonQueryFunction(myCommand)
                 End If
-                dr.Close()
+
             End If
 
             If FormatCurrency(bkPrecioNetoContrato.ToString) <> FormatCurrency(precioNetoContrato.Text.Trim) Then
                 q = "UPDATE contratos SET fecha='" + Format(Now(), "yyyy-MM-dd") + "' WHERE id=" + id.Text
-                myCommand = New SqlCommand(q, myConnection)
-                myCommand.ExecuteNonQuery()
+                myCommand = New SqlCommand(q)
+                ExecuteNonQueryFunction(myCommand)
 
                 instruccionesDePago("Edición de")
             End If
@@ -1235,49 +1208,46 @@ CodigoRegBrindaPromos:
                     End If
 
                 End If
-                myCommand = New SqlCommand(q, myConnection)
-                myCommand.ExecuteNonQuery()
+                myCommand = New SqlCommand(q)
+                ExecuteNonQueryFunction(myCommand)
 
                 q = "SELECT id FROM contratos WHERE idCliente=" + Session("GidCliente").ToString + " and periodoInicial='" + Format(Convert.ToDateTime(periodoInicial.Text.Trim), "yyyy-MM-dd") + "' and idplan=" + idPlan.Text
-                myCommand = New SqlCommand(q, myConnection)
-                dr = myCommand.ExecuteReader()
-                dr.Read()
-                id.Text = dr("id")
+                myCommand = New SqlCommand(q)
+                Dim v = ExecuteScalarFunction(myCommand)
+                id.Text = v
                 Session("GidContrato") = id.Text
 
                 If Session("GidCliente") = "" Or Session("GidCliente") = Nothing Then
                     del.Visible = True
                     actPago.Visible = True
                 End If
-                dr.Close()
 
                 'desctos vigentes
                 If Session("idAplicaPromo") <> 0 Then
-                    myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + Session("idAplicaPromo").ToString + "," + id.Text + ")", myConnection)
-                    myCommand.ExecuteNonQuery()
+                    myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + Session("idAplicaPromo").ToString + "," + id.Text + ")")
+                    ExecuteNonQueryFunction(myCommand)
                 End If
 
                 If esRegularizacion.Checked = True And elPlan.Text <> "PREMIUM" Then
                     q = "SELECT TOP 1 id FROM desctos WHERE tipo='REG' AND convert(datetime,convert(int,GETDATE())) <= fechaCaducidad ORDER BY id DESC"
-                    myCommand = New SqlCommand(q, myConnection)
-                    dr = myCommand.ExecuteReader()
-                    If dr.Read() Then
-                        Dim idDesctoV = dr("id")
-                        myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + idDesctoV.ToString + "," + id.Text + ")", myConnection)
-                        myCommand.ExecuteNonQuery()
+                    myCommand = New SqlCommand(q)
+                    v = ExecuteScalarFunction(myCommand)
+                    If Not IsNothing(v) Then
+                        Dim idDesctoV = v
+                        myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + idDesctoV.ToString + "," + id.Text + ")")
+                        ExecuteNonQueryFunction(myCommand)
                     End If
-                    dr.Close()
                 End If
 
                 If codCliente.Text.Trim <> "" Then
                     q = "SELECT TOP 1 id FROM desctos WHERE tipo='REF' and cod='" + codCliente.Text.Trim + "' order by id desc" ' la caducidad se validó en preciosFechas
                     'q = "SELECT TOP 1 id FROM desctos WHERE tipo='REF' and cod='" + codCliente.Text.Trim + "' AND convert(datetime,convert(int,GETDATE())) <= fechaCaducidad order by id desc"
-                    myCommand = New SqlCommand(q, myConnection)
-                    dr = myCommand.ExecuteReader()
-                    If dr.Read() Then
-                        Dim idDesctoV = dr("id")
-                        myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + idDesctoV.ToString + "," + id.Text + ")", myConnection)
-                        myCommand.ExecuteNonQuery()
+                    myCommand = New SqlCommand(q)
+                    v = ExecuteScalarFunction(myCommand)
+                    If Not IsNothing(v) Then
+                        Dim idDesctoV = v
+                        myCommand = New SqlCommand("INSERT INTO desctosContra(idDescto,idContra) VALUES(" + idDesctoV.ToString + "," + id.Text + ")")
+                        ExecuteNonQueryFunction(myCommand)
                     End If
                     dr.Close()
                 End If
@@ -1302,33 +1272,38 @@ CodigoRegBrindaPromos:
     Private Sub notificaPagoDistribuidor()
         Dim q, numDistribuidor
         q = "SELECT idDistribuidor FROM clientes WHERE id=" + idCliente.Text
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        numDistribuidor = dr("idDistribuidor")
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        numDistribuidor = v
 
         q = "select * from distribuidores where id=" + numDistribuidor.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        Dim nombreFiscal = dr("nombreFiscal")
-        Dim correo = dr("correo")
+        myCommand = New SqlCommand(q)
         Dim comisPorcen
-        If dr("clisForzosos").Equals(True) Then
-            comisPorcen = 15
-        Else
-            comisPorcen = dr("comisPorcen")
-        End If
-        dr.Close()
+        Dim nombreFiscal
+        Dim correo
+        Using dr = ExecuteReaderFunction(myCommand)
+            dr.Read()
+            nombreFiscal = dr("nombreFiscal")
+            correo = dr("correo")
+
+            If dr("clisForzosos").Equals(True) Then
+                comisPorcen = 15
+            Else
+                comisPorcen = dr("comisPorcen")
+            End If
+        End Using
+
 
         q = "select * from iva where porcen in (select ivaPorcen from actuales)"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        Dim precioBaseContrato = precioNetoContrato.Text / (1 + dr("porcen") / 100)
-        Dim comision = FormatCurrency(precioBaseContrato * comisPorcen / 100, 0) 'sobre precioBase Nivel 1 de distribuidor
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim precioBaseContrato
+        Dim comision
+        Using dr = ExecuteReaderFunction(myCommand)
+            dr.Read()
+            precioBaseContrato = precioNetoContrato.Text / (1 + dr("porcen") / 100)
+            comision = FormatCurrency(precioBaseContrato * comisPorcen / 100, 0) 'sobre precioBase Nivel 1 de distribuidor
+        End Using
+
 
         Dim elcorreo As New System.Net.Mail.MailMessage
         Using elcorreo
@@ -1341,7 +1316,7 @@ CodigoRegBrindaPromos:
             Dim smpt As New System.Net.Mail.SmtpClient
             smpt.Host = "smtp.gmail.com"
             smpt.Port = "587"
-            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
             smpt.EnableSsl = True 'req p server gmail
             Try
                 smpt.Send(elcorreo)
@@ -1363,12 +1338,12 @@ CodigoRegBrindaPromos:
         Dim q
 
         'borro cascadas
-        myCommand = New SqlCommand("DELETE FROM desctosContra WHERE idContra=" + id.Text, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand("DELETE FROM desctosContra WHERE idContra=" + id.Text)
+        ExecuteNonQueryFunction(myCommand)
 
         q = "DELETE FROM contratos WHERE id=" + Trim(id.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
 
         Response.Write("<script language='javascript'>alert('Se ha eliminado');</script>")
         Response.Write("<script>location.href = 'miscontra.aspx';</script>")
@@ -1390,8 +1365,12 @@ CodigoRegBrindaPromos:
 
     Private Sub timbrarFactura()
         If uuid.Text <> "" Then
-            Dim MSG = "<script language='javascript'>callConfirm('1');</script>"
+            Dim MSG = "<script language='javascript'>alert('ya se facturo con el uud " + uuid.Text + ", limpia el uuid, reFactura y cancela esta anotando el uuid en txt');</script>"
             ScriptManager.RegisterStartupScript(Me, Me.GetType(), "clientScript", MSG, False)
+            'Dim MSG = "<script language='javascript'>pregunta('" + uuid.Text + "','" + id.Text + "');</script>"
+            'ScriptManager.RegisterStartupScript(Me, Me.GetType(), "clientScript", MSG, False)
+            'Dim MSG = "<script language='javascript'>callConfirm('1');</script>"
+            'ScriptManager.RegisterStartupScript(Me, Me.GetType(), "clientScript", MSG, False)
             Exit Sub
         Else
             Timbrar()
@@ -1405,38 +1384,107 @@ CodigoRegBrindaPromos:
         Dim facTerceroVal, facRfcVal, facRazonVal, facUsoVal, facFPVal, facCorreosVal, facRetensVal
         facCorreosVal = ""
         Dim q = "select facTercero, facRfc, facRazon, facUso, facFP, razonSoc, rfcDeclarante, facCorreos, facRetens from clientes where correo='" + Session("curCorreo") + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        facTerceroVal = 0
-        facRfcVal = SecurityElement.Escape(dr("rfcDeclarante"))
-        facRazonVal = SecurityElement.Escape(dr("razonSoc"))
-        facUsoVal = "G03"
-        facFPVal = pagoRealizado.SelectedValue
-        If Not DBNull.Value.Equals(dr("facCorreos")) Then
-            facCorreosVal = "," + dr("facCorreos")
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            dr.Read()
+            facTerceroVal = 0
+            facRfcVal = SecurityElement.Escape(dr("rfcDeclarante"))
+            facRazonVal = SecurityElement.Escape(dr("razonSoc"))
+            facUsoVal = "G03"
+            facFPVal = pagoRealizado.SelectedValue
+            If Not DBNull.Value.Equals(dr("facCorreos")) Then
+                facCorreosVal = "," + dr("facCorreos")
+            Else
+                facCorreosVal = ""
+            End If
+            facRetensVal = dr("facRetens")
+            If Not DBNull.Value.Equals(dr("facTercero")) Then
+                If dr("facTercero").Equals(True) Then
+                    facTerceroVal = 1
+                    facRfcVal = SecurityElement.Escape(dr("facRfc"))
+                    facRazonVal = SecurityElement.Escape(dr("facRazon"))
+                    facUsoVal = dr("facUso")
+                End If
+            End If
+        End Using
+
+        Dim fecha = Date.Now.ToString("yyyy/MM/dd HH:mm:ss")
+        Dim total = CDbl(precioNetoContrato.Text)
+        Dim subtotal
+        Dim ivaF
+        Dim ivaR
+        Dim isrR
+        Dim totR
+        Dim totIVA
+
+        If chkSubtotal.Checked.Equals(False) Then
+            If redondear.Checked.Equals(False) Then
+                subtotal = TruncateDecimal(total / 1.16, 2)
+                ivaF = TruncateDecimal(subtotal * 0.16, 2)
+                ivaR = TruncateDecimal(subtotal * 0.11, 2)
+                isrR = TruncateDecimal(subtotal * 0.1, 2)
+                totR = CDbl(TruncateDecimal(CDbl(isrR) + CDbl(ivaR), 2)).ToString("###############0.00")
+                If facRetensVal.Equals(True) Then
+                    total = TruncateDecimal(subtotal + ivaF - ivaR - isrR, 2)
+                Else
+                    total = TruncateDecimal(subtotal + ivaF, 2)
+                End If
+                totIVA = TruncateDecimal(ivaF + ivaR, 2).ToString("###############0.00")
+            Else ' redondear            
+                subtotal = FormatNumber(CDbl(total / 1.16), 2)
+                ivaF = FormatNumber(CDbl(subtotal * 0.16), 2)
+                ivaR = FormatNumber(CDbl(subtotal * 0.11), 2)
+                isrR = FormatNumber(CDbl(subtotal * 0.1), 2)
+                totR = FormatNumber(CDbl(CDbl(isrR) + CDbl(ivaR)), 2)
+                If facRetensVal.Equals(True) Then
+                    total = FormatNumber(CDbl(subtotal) + CDbl(ivaF) - CDbl(ivaR) - CDbl(isrR), 2)
+                Else
+                    total = FormatNumber(CDbl(subtotal) + CDbl(ivaF), 2)
+                End If
+                totIVA = FormatNumber(CDbl(ivaF) + CDbl(ivaR), 2)
+            End If
         Else
-            facCorreosVal = ""
-        End If
-        facRetensVal = dr("facRetens")
-        If Not DBNull.Value.Equals(dr("facTercero")) Then
-            If dr("facTercero").Equals(True) Then
-                facTerceroVal = 1
-                facRfcVal = SecurityElement.Escape(dr("facRfc"))
-                facRazonVal = SecurityElement.Escape(dr("facRazon"))
-                facUsoVal = dr("facUso")
+            'subtotal editado
+            subtotalTxt.Text = subtotalTxt.Text.Replace("$", "").Replace(",", "")
+            If redondear.Checked.Equals(False) Then
+                subtotal = TruncateDecimal(subtotalTxt.Text, 2)
+                ivaF = TruncateDecimal(subtotal * 0.16, 2)
+                ivaR = TruncateDecimal(subtotal * 0.11, 2)
+                isrR = TruncateDecimal(subtotal * 0.1, 2)
+                totR = CDbl(TruncateDecimal(CDbl(isrR) + CDbl(ivaR), 2)).ToString("###############0.00")
+                If facRetensVal.Equals(True) Then
+                    total = TruncateDecimal(subtotal + ivaF - ivaR - isrR, 2)
+                Else
+                    total = TruncateDecimal(subtotal + ivaF, 2)
+                End If
+                totIVA = TruncateDecimal(ivaF + ivaR, 2).ToString("###############0.00")
+            Else ' redondear            
+                subtotal = FormatNumber(CDbl(subtotalTxt.Text), 2)
+                ivaF = FormatNumber(CDbl(subtotal * 0.16), 2)
+                ivaR = FormatNumber(CDbl(subtotal * 0.11), 2)
+                isrR = FormatNumber(CDbl(subtotal * 0.1), 2)
+                totR = FormatNumber(CDbl(CDbl(isrR) + CDbl(ivaR)), 2)
+                If facRetensVal.Equals(True) Then
+                    total = FormatNumber(CDbl(subtotal) + CDbl(ivaF) - CDbl(ivaR) - CDbl(isrR), 2)
+                Else
+                    total = FormatNumber(CDbl(subtotal) + CDbl(ivaF), 2)
+                End If
+                totIVA = FormatNumber(CDbl(ivaF) + CDbl(ivaR), 2)
             End If
         End If
-        dr.Close()
-        Dim fecha = Date.Now.ToString("yyyy/MM/dd HH:mm:ss")
-        Dim total = FormatNumber(precioNetoContrato.Text, 2,,, TriState.False).ToString
-        Dim subtotal = FormatNumber((precioNetoContrato.Text / 1.16), 2,,, TriState.False)
-        Dim ivaF = FormatNumber((subtotal * 0.16), 2,,, TriState.False).ToString
-        Dim ivaR = FormatNumber((subtotal * 0.11), 2,,, TriState.False).ToString
-        Dim isrR = FormatNumber((subtotal * 0.1), 2,,, TriState.False).ToString
-        Dim totR = FormatNumber((CDbl(isrR) + CDbl(ivaR)), 2,,, TriState.False).ToString
-        Dim totIVA = FormatNumber((CDbl(ivaF) + CDbl(ivaR)), 2,,, TriState.False).ToString
-        subtotal = subtotal.ToString 'casteo a cadena
+
+        total = CDbl(Val(total)).ToString("###############0.00")
+        subtotal = CDbl(subtotal).ToString("###############0.00") 'casteo a cadena
+        ivaR = CDbl(ivaR).ToString("###############0.00") 'casteo a cadena
+        isrR = CDbl(isrR).ToString("###############0.00") 'casteo a cadena
+        ivaF = CDbl(ivaF).ToString("###############0.00") 'casteo a cadena
+
+        If facRetensVal.Equals(True) Then
+            calc.Text = "subtotal=" + subtotal.ToString + ", ivaTras=" + ivaF.ToString + ", ivaRet=" + ivaR.ToString + ", isrRet=" + isrR.ToString + ", Resultado=" + total.ToString
+        Else
+            calc.Text = "subtotal=" + subtotal.ToString + ", ivaTras=" + ivaF.ToString + ", Resultado=" + total.ToString
+        End If
+
         Dim concepto
         If elPlan.SelectedItem.Text = "PREMIUM" Then
             concepto = "Paquete de " + duracionMeses.Text + " meses PREMIUM de Delaraciones de depósitos en efectivo, apartir del " + periodoInicial.Text + ": Plataforma web para presentación y envío por el usuario."
@@ -1458,11 +1506,11 @@ CodigoRegBrindaPromos:
         Dim folio = id.Text
         Dim serie = "C"
         Dim cadenaFACT
-        cadenaFACT = "DOCUMENTO|Factura|ENVIO|" + facRfcVal + "|" + Session("curCorreo") + ",declaracioneside@gmail.com" + facCorreosVal + "|COMPROBANTE|3.3|" + serie + "|" + folio + "|" + fecha + "|" + facFPVal + "|" + subtotal + "||MXN||" + total + "|I|PUE|58230|||EMISOR|COPJ7809196S2|JOB JOSUE CONSTANTINO PRADO|612|RECEPTOR|" + facRfcVal + "|" + facRazonVal + "|||" + facUsoVal + "|CONCEPTO|81112106||1|E48|SERVICIO|" + concepto + "|" + subtotal + "|" + subtotal + "||"
+        cadenaFACT = "DOCUMENTO|Factura|ENVIO|" + facRfcVal + "|" + Session("curCorreo") + ",declaracioneside@gmail.com" + facCorreosVal + "|COMPROBANTE|3.3|" + serie + "|" + folio + "|" + fecha + "|" + facFPVal + "|" + subtotal.ToString + "||MXN||" + total.ToString + "|I|PUE|58230|||EMISOR|COPJ7809196S2|JOB JOSUE CONSTANTINO PRADO|612|RECEPTOR|" + facRfcVal + "|" + facRazonVal + "|||" + facUsoVal + "|CONCEPTO|81112106||1|E48|SERVICIO|" + concepto + "|" + subtotal.ToString + "|" + subtotal.ToString + "||"
         If facRetensVal = 0 Then 'iva 16%
-            cadenaFACT = cadenaFACT + "C_IMP_TRASLADADO|" + subtotal + "|002|Tasa|0.160000|" + ivaF + "|IMPUESTOSTOTALES|" + ivaF + "||IMPUESTOSCOMPROBANTE|IMP_TRASLADADO|002|" + ivaF + "|0.160000|Tasa|ADDENDA|ARFINSA|OBSERVACIONES|OBSERVACION|C" + id.Text + "|"
+            cadenaFACT = cadenaFACT + "C_IMP_TRASLADADO|" + subtotal.ToString + "|002|Tasa|0.160000|" + ivaF.ToString + "|IMPUESTOSTOTALES|" + ivaF.ToString + "||IMPUESTOSCOMPROBANTE|IMP_TRASLADADO|002|" + ivaF.ToString + "|0.160000|Tasa|ADDENDA|ARFINSA|OBSERVACIONES|OBSERVACION|C" + id.Text + "|"
         Else 'ret iva(002), isr(001)
-            cadenaFACT = cadenaFACT + "C_IMP_TRASLADADO|" + subtotal + "|002|Tasa|0.160000|" + ivaF + "|C_IMP_RETENIDO|" + subtotal + "|002|Tasa|0.110000|" + ivaR + "|C_IMP_RETENIDO|" + subtotal + "|001|Tasa|0.10000|" + isrR + "|IMPUESTOSTOTALES|" + ivaF + "|" + totR + "|IMPUESTOSCOMPROBANTE|IMP_TRASLADADO|002|" + totIVA + "|0.160000|Tasa|IMP_RETENIDO|002|" + ivaR + "|0.110000|Tasa|IMP_RETENIDO|001|" + isrR + "|0.100000|Tasa|ADDENDA|ARFINSA|OBSERVACIONES|OBSERVACION|C" + id.Text + "|"
+            cadenaFACT = cadenaFACT + "C_IMP_TRASLADADO|" + subtotal.ToString + "|002|Tasa|0.160000|" + ivaF.ToString + "|C_IMP_RETENIDO|" + subtotal.ToString + "|002|Tasa|0.110000|" + ivaR.ToString + "|C_IMP_RETENIDO|" + subtotal.ToString + "|001|Tasa|0.10000|" + isrR.ToString + "|IMPUESTOSTOTALES|" + ivaF.ToString + "|" + totR.ToString + "|IMPUESTOSCOMPROBANTE|IMP_TRASLADADO|002|" + totIVA.ToString + "|0.160000|Tasa|IMP_RETENIDO|002|" + ivaR.ToString + "|0.110000|Tasa|IMP_RETENIDO|001|" + isrR.ToString + "|0.100000|Tasa|ADDENDA|ARFINSA|OBSERVACIONES|OBSERVACION|C" + id.Text + "|"
         End If
 
         'Se procede a consumir el WS
@@ -1484,8 +1532,8 @@ CodigoRegBrindaPromos:
         If v.errores <> "" Then
             Response.Write("<script language='javascript'>alert('Error al facturar: " & v.errores.ToString + "');</script>")
         Else
-            myCommand = New SqlCommand("UPDATE contratos SET uuid='" + v.folioUUID + "' WHERE id=" + id.Text, myConnection)
-            myCommand.ExecuteNonQuery()
+            myCommand = New SqlCommand("UPDATE contratos SET uuid='" + v.folioUUID + "' WHERE id=" + id.Text)
+            ExecuteNonQueryFunction(myCommand)
             uuid.Text = v.folioUUID
             Response.Write("<script language='javascript'>alert('Factura timbrada y enviada, uuid " + v.folioUUID + "');</script>")
         End If
@@ -1499,14 +1547,14 @@ CodigoRegBrindaPromos:
         Call preciosFechas() 'p vars d comisiones
 
         If fechaPago.Text.Trim <> "" Then
-            myCommand = New SqlCommand("UPDATE contratos SET fechaPago='" + Format(Convert.ToDateTime(fechaPago.Text.Trim), "yyyy-MM-dd") + "' WHERE id=" + id.Text, myConnection)
-            myCommand.ExecuteNonQuery()
+            myCommand = New SqlCommand("UPDATE contratos SET fechaPago='" + Format(Convert.ToDateTime(fechaPago.Text.Trim), "yyyy-MM-dd") + "' WHERE id=" + id.Text)
+            ExecuteNonQueryFunction(myCommand)
 
             Dim fechaUltima = DateAdd(DateInterval.Day, -DatePart(DateInterval.Day, Now()) + 1, Now()) 'dia 1o del mes actual
             fechaUltima = DateAdd(DateInterval.Month, -1, fechaUltima) 'dia 1o del mes anterior
-            If CDate(periodoInicial.Text) <CDate(Format(fechaUltima, "yyyy-MM-dd")) Then 'convirtiendolo autom en esRegularizacion si ya se pasó
-                myCommand = New SqlCommand("UPDATE contratos SET esRegularizacion=1 WHERE id=" + id.Text, myConnection)
-                myCommand.ExecuteNonQuery()
+            If CDate(periodoInicial.Text) < CDate(Format(fechaUltima, "yyyy-MM-dd")) Then 'convirtiendolo autom en esRegularizacion si ya se pasó
+                myCommand = New SqlCommand("UPDATE contratos SET esRegularizacion=1 WHERE id=" + id.Text)
+                ExecuteNonQueryFunction(myCommand)
             End If
 
             'Al pagar un contrato ya cubre inscripcion
@@ -1526,12 +1574,12 @@ CodigoRegBrindaPromos:
 
             Dim correo, numDistribuidor, q
             q = "SELECT correo,idDistribuidor FROM clientes WHERE id=" + idCliente.Text
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            correo = dr("correo")
-            numDistribuidor = dr("idDistribuidor")
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            Using dr = ExecuteReaderFunction(myCommand)
+                dr.Read()
+                correo = dr("correo")
+                numDistribuidor = dr("idDistribuidor")
+            End Using
 
             'notificacion de pago al cliente
             Dim elcorreo As New System.Net.Mail.MailMessage
@@ -1545,7 +1593,7 @@ CodigoRegBrindaPromos:
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -1563,150 +1611,145 @@ CodigoRegBrindaPromos:
                 Call timbrarFactura()
             End If
 
+            Dim precioBaseContrato
             q = "select * from iva where porcen in (select ivaPorcen from actuales)"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            Dim precioBaseContrato = precioNetoContrato.Text / (1 + dr("porcen") / 100)
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            Using dr = ExecuteReaderFunction(myCommand)
+                dr.Read()
+                precioBaseContrato = precioNetoContrato.Text / (1 + dr("porcen") / 100)
+            End Using
+
 
             q = "select * from distribuidores where id=" + numDistribuidor.ToString
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            Dim nombreFiscal = dr("nombreFiscal")
-            Dim banco = dr("banco")
-            Dim clabe = dr("clabe")
-            Dim correoDistribuidor = dr("correo")
-            Dim comisPorcen
-            If dr("clisForzosos").Equals(True) Then
-                comisPorcen = 15
-            Else
-                comisPorcen = dr("comisPorcen")
-            End If
-            Dim comisCaduca = dr("comisCaduca")
-            Dim comisMesesCaducidad = dr("comisMesesCaducidad")
-            Dim comision = FormatCurrency((precioNetoContrato.Text - Session("precioNetoInscripcion")) * comisPorcen / 100, 0) 'sobre precioNeto desp de impuestos, sobre contratos que no incluye inscripcion
+            myCommand = New SqlCommand(q)
 
-            If dr("nombreFiscal") <> "DEFAULT" Then 'distribuidores
-                If dr("doctos").Equals(True) Then 'solo pagar a los autorizados
-                    Dim activo
-                    If dr("clisForzosos").Equals(True) Then
-                        dr.Close()
+            Using dr = ExecuteReaderFunction(myCommand)
+                dr.Read()
+                Dim nombreFiscal = dr("nombreFiscal")
+                Dim banco = dr("banco")
+                Dim clabe = dr("clabe")
+                Dim correoDistribuidor = dr("correo")
+                Dim comisPorcen
+                If dr("clisForzosos").Equals(True) Then
+                    comisPorcen = 15
+                Else
+                    comisPorcen = dr("comisPorcen")
+                End If
+                Dim comisCaduca = dr("comisCaduca")
+                Dim comisMesesCaducidad = dr("comisMesesCaducidad")
+                Dim comision = FormatCurrency((precioNetoContrato.Text - Session("precioNetoInscripcion")) * comisPorcen / 100, 0) 'sobre precioNeto desp de impuestos, sobre contratos que no incluye inscripcion
 
-                        q = "select esEl1o from contratos where id=" + id.Text
-                        myCommand = New SqlCommand(q, myConnection)
-                        dr = myCommand.ExecuteReader()
-                        dr.Read()
-                        Dim esEl1o = dr("esEl1o")
-                        dr.Close()
+                If dr("nombreFiscal") <> "DEFAULT" Then 'distribuidores
+                    If dr("doctos").Equals(True) Then 'solo pagar a los autorizados
+                        Dim activo
+                        If dr("clisForzosos").Equals(True) Then
 
-                        If esEl1o.Equals(False) Then
-                            q = "select id from clientes where idDistribuidor=" + numDistribuidor.ToString + " and YEAR(fechaRegistro)='" + DatePart(DateInterval.Year, Convert.ToDateTime(fechaPago.Text.Trim)).ToString + "' and MONTH(fechaRegistro)='" + DatePart(DateInterval.Month, Convert.ToDateTime(fechaPago.Text.Trim)).ToString + "'"
-                            myCommand = New SqlCommand(q, myConnection)
-                            dr = myCommand.ExecuteReader()
-                            If dr.Read() Then
-                                activo = 1
-                            Else
-                                activo = 0
-                            End If
-
-                            dr.Close()
-                        Else
-                            activo = 1
-                        End If
-                    Else 'distribuidores comision negociada en base a % y caducidad sin oblig de ingreso cte de clis
-                        If comisCaduca.Equals(False) Then 'indefinida
-                            activo = 1
-                            dr.Close()
-                        Else 'caduca
-                            dr.Close()
 
                             q = "select esEl1o from contratos where id=" + id.Text
-                            myCommand = New SqlCommand(q, myConnection)
-                            dr = myCommand.ExecuteReader()
-                            dr.Read()
-                            Dim esEl1o = dr("esEl1o")
-                            dr.Close()
+                            myCommand = New SqlCommand(q)
+                            Dim v = ExecuteScalarFunction(myCommand)
+                            Dim esEl1o = v
 
                             If esEl1o.Equals(False) Then
-                                q = "select fechaRegistro from clientes where id=" + idCliente.Text.Trim
-                                myCommand = New SqlCommand(q, myConnection)
-                                dr = myCommand.ExecuteReader()
-                                dr.Read()
-                                Dim fechaRegistro = dr("fechaRegistro")
-                                dr.Close()
-                                Dim fechaCaducidad = DateAdd(DateInterval.Month, comisMesesCaducidad, fechaRegistro) 'n meses tras registro
-                                If Format(Convert.ToDateTime(Now()), "dd-MM-yyyy") >= fechaCaducidad Then
-                                    activo = 0
-                                Else
+                                q = "select id from clientes where idDistribuidor=" + numDistribuidor.ToString + " and YEAR(fechaRegistro)='" + DatePart(DateInterval.Year, Convert.ToDateTime(fechaPago.Text.Trim)).ToString + "' and MONTH(fechaRegistro)='" + DatePart(DateInterval.Month, Convert.ToDateTime(fechaPago.Text.Trim)).ToString + "'"
+                                myCommand = New SqlCommand(q)
+                                v = ExecuteScalarFunction(myCommand)
+                                If Not IsNothing(v) Then
                                     activo = 1
+                                Else
+                                    activo = 0
                                 End If
                             Else
                                 activo = 1
                             End If
+                        Else 'distribuidores comision negociada en base a % y caducidad sin oblig de ingreso cte de clis
+                            If comisCaduca.Equals(False) Then 'indefinida
+                                activo = 1
+                            Else 'caduca
+
+                                q = "select esEl1o from contratos where id=" + id.Text
+                                myCommand = New SqlCommand(q)
+                                Dim v = ExecuteScalarFunction(myCommand)
+                                Dim esEl1o = v
+
+                                If esEl1o.Equals(False) Then
+                                    q = "select fechaRegistro from clientes where id=" + idCliente.Text.Trim
+                                    myCommand = New SqlCommand(q)
+                                    v = ExecuteScalarFunction(myCommand)
+                                    Dim fechaRegistro = v
+                                    Dim fechaCaducidad = DateAdd(DateInterval.Month, comisMesesCaducidad, fechaRegistro) 'n meses tras registro
+                                    If Format(Convert.ToDateTime(Now()), "dd-MM-yyyy") >= fechaCaducidad Then
+                                        activo = 0
+                                    Else
+                                        activo = 1
+                                    End If
+                                Else
+                                    activo = 1
+                                End If
+                            End If
+                        End If
+
+                        If activo = 1 Then
+                            'recordatorio para pagarles comisiones
+                            Dim elcorreo2 As New System.Net.Mail.MailMessage
+                            Using elcorreo2
+                                elcorreo2.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
+                                elcorreo2.To.Add("declaracioneside@gmail.com")
+                                elcorreo2.Subject = "Comisiones al distribuidor #" + numDistribuidor.ToString
+                                elcorreo2.Body = "<html><body>NombreFiscal = " + nombreFiscal + "<br>Banco = " + banco + "<br>Clabe interbancaria = " + clabe + "<br>Contrato #" + Session("GidContrato").ToString + "<br>Comisión $ = " + comision.ToString + " <br><br>Atentamente,<br><br><a href='declaracioneside.com' target='_blank'>Declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet</body></html>"
+                                elcorreo2.IsBodyHtml = True
+                                elcorreo2.Priority = System.Net.Mail.MailPriority.Normal
+                                Dim smpt As New System.Net.Mail.SmtpClient
+                                smpt.Host = "smtp.gmail.com"
+                                smpt.Port = "587"
+                                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
+                                smpt.EnableSsl = True 'req p server gmail
+                                Try
+                                    smpt.Send(elcorreo2)
+                                    elcorreo2.Dispose()
+                                Catch ex As Exception
+                                    Response.Write("<script language='javascript'>alert('Error en Notificación de recordatorio de pago de comisiones: " & ex.Message + "');</script>")
+                                    Exit Sub
+                                Finally
+                                    Response.Write("<script language='javascript'>alert('Notificación de recordatorio de pago de comisiones');</script>")
+                                End Try
+                            End Using
+
+                            Dim elcorreo3 As New System.Net.Mail.MailMessage
+                            Using elcorreo3
+                                elcorreo3.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
+                                elcorreo3.To.Add(correoDistribuidor)
+                                elcorreo3.Subject = "Favor de enviarnos su factura/recibo de honorarios para poder pagarle su comisión"
+                                elcorreo3.Body = "<html><body>Hola " + nombreFiscal + "<br>Favor de enviarnos su factura/recibo de honorarios (electrónica, impresa o escaneada) con las siguientes especificaciones: <br><br><br><br>A nombre de: Job Josué Constantino Prado<br>RFC: COPJ7809196S2 <br>Domicilio: Lacas de Uruapan 737 Col. Vasco de Quiroga C.P. 58230 Morelia, Mich. <br><br>Monto total (impuestos incluidos) $ = " + comision.ToString + "<br><br> Concepto: Comisión por renta de servicio informático logrado con el contrato # " + Session("GidContrato").ToString + "<br><br><br>Atentamente,<br><br><a href='declaracioneside.com' target='_blank'>Declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet</body></html>"
+                                elcorreo3.IsBodyHtml = True
+                                elcorreo3.Priority = System.Net.Mail.MailPriority.Normal
+                                Dim smpt As New System.Net.Mail.SmtpClient
+                                smpt.Host = "smtp.gmail.com"
+                                smpt.Port = "587"
+                                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
+                                smpt.EnableSsl = True 'req p server gmail
+                                Try
+                                    smpt.Send(elcorreo3)
+                                    elcorreo3.Dispose()
+                                Catch ex As Exception
+                                    Response.Write("<script language='javascript'>alert('Error: " & ex.Message + "');</script>")
+                                    Exit Sub
+                                Finally
+                                    Response.Write("<script language='javascript'>alert('Solicitud de facturacion enviada al distribuidor');</script>")
+                                End Try
+                            End Using
+
                         End If
                     End If
-
-                    If activo = 1 Then
-                        'recordatorio para pagarles comisiones
-                        Dim elcorreo2 As New System.Net.Mail.MailMessage
-                        Using elcorreo2
-                            elcorreo2.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
-                            elcorreo2.To.Add("declaracioneside@gmail.com")
-                            elcorreo2.Subject = "Comisiones al distribuidor #" + numDistribuidor.ToString
-                            elcorreo2.Body = "<html><body>NombreFiscal = " + nombreFiscal + "<br>Banco = " + banco + "<br>Clabe interbancaria = " + clabe + "<br>Contrato #" + Session("GidContrato").ToString + "<br>Comisión $ = " + comision.ToString + " <br><br>Atentamente,<br><br><a href='declaracioneside.com' target='_blank'>Declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet</body></html>"
-                            elcorreo2.IsBodyHtml = True
-                            elcorreo2.Priority = System.Net.Mail.MailPriority.Normal
-                            Dim smpt As New System.Net.Mail.SmtpClient
-                            smpt.Host = "smtp.gmail.com"
-                            smpt.Port = "587"
-                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
-                            smpt.EnableSsl = True 'req p server gmail
-                            Try
-                                smpt.Send(elcorreo2)
-                                elcorreo2.Dispose()
-                            Catch ex As Exception
-                                Response.Write("<script language='javascript'>alert('Error en Notificación de recordatorio de pago de comisiones: " & ex.Message + "');</script>")
-                                Exit Sub
-                            Finally
-                                Response.Write("<script language='javascript'>alert('Notificación de recordatorio de pago de comisiones');</script>")
-                            End Try
-                        End Using
-
-                        Dim elcorreo3 As New System.Net.Mail.MailMessage
-                        Using elcorreo3
-                            elcorreo3.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
-                            elcorreo3.To.Add(correoDistribuidor)
-                            elcorreo3.Subject = "Favor de enviarnos su factura/recibo de honorarios para poder pagarle su comisión"
-                            elcorreo3.Body = "<html><body>Hola " + nombreFiscal + "<br>Favor de enviarnos su factura/recibo de honorarios (electrónica, impresa o escaneada) con las siguientes especificaciones: <br><br><br><br>A nombre de: Job Josué Constantino Prado<br>RFC: COPJ7809196S2 <br>Domicilio: Lacas de Uruapan 737 Col. Vasco de Quiroga C.P. 58230 Morelia, Mich. <br><br>Monto total (impuestos incluidos) $ = " + comision.ToString + "<br><br> Concepto: Comisión por renta de servicio informático logrado con el contrato # " + Session("GidContrato").ToString + "<br><br><br>Atentamente,<br><br><a href='declaracioneside.com' target='_blank'>Declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet</body></html>"
-                            elcorreo3.IsBodyHtml = True
-                            elcorreo3.Priority = System.Net.Mail.MailPriority.Normal
-                            Dim smpt As New System.Net.Mail.SmtpClient
-                            smpt.Host = "smtp.gmail.com"
-                            smpt.Port = "587"
-                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
-                            smpt.EnableSsl = True 'req p server gmail
-                            Try
-                                smpt.Send(elcorreo3)
-                                elcorreo3.Dispose()
-                            Catch ex As Exception
-                                Response.Write("<script language='javascript'>alert('Error: " & ex.Message + "');</script>")
-                                Exit Sub
-                            Finally
-                                Response.Write("<script language='javascript'>alert('Solicitud de facturacion enviada al distribuidor');</script>")
-                            End Try
-                        End Using
-
-                    End If
                 End If
-            End If
+            End Using
+
         Else ' borrar fechaPago
-            myCommand = New SqlCommand("UPDATE contratos SET fechaPago=NULL WHERE id=" + id.Text, myConnection)
-            myCommand.ExecuteNonQuery()
+            myCommand = New SqlCommand("UPDATE contratos SET fechaPago=NULL WHERE id=" + id.Text)
+            ExecuteNonQueryFunction(myCommand)
         End If
-        myCommand = New SqlCommand("UPDATE contratos SET pagoRealizado='" + pagoRealizado.SelectedItem.Value + "' WHERE id=" + id.Text, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand("UPDATE contratos SET pagoRealizado='" + pagoRealizado.SelectedItem.Value + "' WHERE id=" + id.Text)
+        ExecuteNonQueryFunction(myCommand)
         Response.Write("<script language='javascript'>alert('Actualizado');</script>")
     End Sub
 
@@ -1718,25 +1761,26 @@ CodigoRegBrindaPromos:
             cambios = 0
             hp = "1"
             Dim q = "select * from contratos where id=" + id.Text
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            If (dr("esRegularizacion").Equals(True) And esRegularizacion.Checked = False) Then
-                cambios = 1
-            End If
-            If (dr("esRegularizacion").Equals(False) And esRegularizacion.Checked = True) Then
-                cambios = 1
-            End If
-            If dr("periodoInicial") <> periodoInicial.Text.Trim Or dr("duracionMeses") <> duracionMeses.Text.Trim Or dr("idPlan") <> idPlan.Text.Trim Or dr("nDeclContratadas") <> nDeclContratadas.Text.Trim Then
-                cambios = 1
-            End If
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            Using dr = ExecuteReaderFunction(myCommand)
+                dr.Read()
+                If (dr("esRegularizacion").Equals(True) And esRegularizacion.Checked = False) Then
+                    cambios = 1
+                End If
+                If (dr("esRegularizacion").Equals(False) And esRegularizacion.Checked = True) Then
+                    cambios = 1
+                End If
+                If dr("periodoInicial") <> periodoInicial.Text.Trim Or dr("duracionMeses") <> duracionMeses.Text.Trim Or dr("idPlan") <> idPlan.Text.Trim Or dr("nDeclContratadas") <> nDeclContratadas.Text.Trim Then
+                    cambios = 1
+                End If
+            End Using
+
 
             q = "select cod from desctos where tipo='REF' and id in (select idDescto from desctosContra where idContra=" + id.Text + ")"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            If dr.Read() Then
-                If (codCliente.Text.Trim.ToUpper <> dr("cod")) Then
+            myCommand = New SqlCommand(q)
+            Dim v = ExecuteScalarFunction(myCommand)
+            If Not IsNothing(v) Then
+                If (codCliente.Text.Trim.ToUpper <> v) Then
                     cambios = 1
                 End If
             Else
@@ -1744,7 +1788,6 @@ CodigoRegBrindaPromos:
                     cambios = 1
                 End If
             End If
-            dr.Close()
             If cambios = 1 Then
                 Response.Write("<script>alert('Ha realizado cambios, guardelos primero, o salga y regrese al contrato sin hacer cambios para acceder a pagos');</script>")
                 Exit Sub
@@ -1845,7 +1888,7 @@ CodigoRegBrindaPromos:
             Dim smpt As New System.Net.Mail.SmtpClient
             smpt.Host = "smtp.gmail.com"
             smpt.Port = "587"
-            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
             smpt.EnableSsl = True 'req p server gmail
             Try
                 smpt.Send(elcorreo)
@@ -1868,8 +1911,8 @@ CodigoRegBrindaPromos:
         If ndeclhechascaptura.Text.Trim = "" Then
             Response.Write("<script language='javascript'>alert('Especifique el valor del #declHechas');</script>")
         Else
-            myCommand = New SqlCommand("UPDATE contratos SET nDeclHechas=" + nDeclHechasCaptura.Text.Trim + " where id=" + id.Text, myConnection)
-            myCommand.ExecuteNonQuery()
+            myCommand = New SqlCommand("UPDATE contratos SET nDeclHechas=" + nDeclHechasCaptura.Text.Trim + " where id=" + id.Text)
+            ExecuteNonQueryFunction(myCommand)
 
             nDeclHechas.Text = nDeclHechasCaptura.Text.Trim
             Dim MSG As String = "<script language='javascript'>alert('Actualizado');</script>"
@@ -1893,14 +1936,11 @@ CodigoRegBrindaPromos:
 
     Private Function validaCambios() As Integer
         Dim q = "select precioNetoContrato from contratos where id=" + id.Text
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        If FormatCurrency(dr("precioNetoContrato"), 2) <> FormatCurrency(precioNetoContrato.Text, 2) Then
-            dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If FormatCurrency(v, 2) <> FormatCurrency(precioNetoContrato.Text, 2) Then
             Return 0
         End If
-        dr.Close()
 
         Return 1
     End Function
@@ -1911,10 +1951,10 @@ CodigoRegBrindaPromos:
         '    Exit Sub
         'End If
 
-        myCommand = New SqlCommand("UPDATE contratos SET factTx=1 WHERE id=" + id.Text, myConnection)
-        myCommand.ExecuteNonQuery()
-        myCommand = New SqlCommand("UPDATE clientes SET factTx=1 WHERE id=" + idCliente.Text, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand("UPDATE contratos SET factTx=1 WHERE id=" + id.Text)
+        ExecuteNonQueryFunction(myCommand)
+        myCommand = New SqlCommand("UPDATE clientes SET factTx=1 WHERE id=" + idCliente.Text)
+        ExecuteNonQueryFunction(myCommand)
         enviada.Checked = True
         Response.Write("<script language='javascript'>alert('actualizado');</script>")
     End Sub
@@ -1931,7 +1971,116 @@ CodigoRegBrindaPromos:
         Call timbrarFactura()
     End Sub
 
-    Private Sub btnConfirm_Click(sender As Object, e As EventArgs) Handles btnConfirm.Click
-        Timbrar()
+
+    Protected Sub redondear_CheckedChanged(sender As Object, e As EventArgs) Handles redondear.CheckedChanged
+        aRedondear()
+    End Sub
+
+    Private Sub aRedondear()
+        Dim total = CDbl(precioNetoContrato.Text)
+        Dim subtotal
+        Dim ivaF
+        Dim ivaR
+        Dim isrR
+        Dim totR
+        Dim totIVA
+
+        Dim q = "select facRetens from clientes where correo='" + Session("curCorreo") + "'"
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        Dim facRetensVal = v
+
+        If chkSubtotal.Checked.Equals(False) Then
+            If redondear.Checked.Equals(False) Then
+                subtotal = TruncateDecimal(total / 1.16, 2)
+                ivaF = TruncateDecimal(subtotal * 0.16, 2)
+                ivaR = TruncateDecimal(subtotal * 0.11, 2)
+                isrR = TruncateDecimal(subtotal * 0.1, 2)
+                totR = CDbl(TruncateDecimal(CDbl(isrR) + CDbl(ivaR), 2)).ToString("###############0.00")
+                If facRetensVal.Equals(True) Then
+                    total = TruncateDecimal(subtotal + ivaF - ivaR - isrR, 2)
+                Else
+                    total = TruncateDecimal(subtotal + ivaF, 2)
+                End If
+                totIVA = TruncateDecimal(ivaF + ivaR, 2).ToString("###############0.00")
+            Else ' redondear            
+                subtotal = FormatNumber(CDbl(total / 1.16), 2)
+                ivaF = FormatNumber(CDbl(subtotal * 0.16), 2)
+                ivaR = FormatNumber(CDbl(subtotal * 0.11), 2)
+                isrR = FormatNumber(CDbl(subtotal * 0.1), 2)
+                totR = FormatNumber(CDbl(CDbl(isrR) + CDbl(ivaR)), 2)
+                If facRetensVal.Equals(True) Then
+                    total = FormatNumber(CDbl(subtotal) + CDbl(ivaF) - CDbl(ivaR) - CDbl(isrR), 2)
+                Else
+                    total = FormatNumber(CDbl(subtotal) + CDbl(ivaF), 2)
+                End If
+                totIVA = FormatNumber(CDbl(ivaF) + CDbl(ivaR), 2)
+            End If
+        Else
+            'subtotal editado
+            subtotalTxt.Text = subtotalTxt.Text.Replace("$", "").Replace(",", "")
+            If redondear.Checked.Equals(False) Then
+                subtotal = TruncateDecimal(subtotalTxt.Text, 2)
+                ivaF = TruncateDecimal(subtotal * 0.16, 2)
+                ivaR = TruncateDecimal(subtotal * 0.11, 2)
+                isrR = TruncateDecimal(subtotal * 0.1, 2)
+                totR = CDbl(TruncateDecimal(CDbl(isrR) + CDbl(ivaR), 2)).ToString("###############0.00")
+                If facRetensVal.Equals(True) Then
+                    total = TruncateDecimal(subtotal + ivaF - ivaR - isrR, 2)
+                Else
+                    total = TruncateDecimal(subtotal + ivaF, 2)
+                End If
+                totIVA = TruncateDecimal(ivaF + ivaR, 2).ToString("###############0.00")
+            Else ' redondear            
+                subtotal = FormatNumber(CDbl(subtotalTxt.Text), 2)
+                ivaF = FormatNumber(CDbl(subtotal * 0.16), 2)
+                ivaR = FormatNumber(CDbl(subtotal * 0.11), 2)
+                isrR = FormatNumber(CDbl(subtotal * 0.1), 2)
+                totR = FormatNumber(CDbl(CDbl(isrR) + CDbl(ivaR)), 2)
+                If facRetensVal.Equals(True) Then
+                    total = FormatNumber(CDbl(subtotal) + CDbl(ivaF) - CDbl(ivaR) - CDbl(isrR), 2)
+                Else
+                    total = FormatNumber(CDbl(subtotal) + CDbl(ivaF), 2)
+                End If
+                totIVA = FormatNumber(CDbl(ivaF) + CDbl(ivaR), 2)
+            End If
+        End If
+
+        total = CDbl(Val(total)).ToString("###############0.00")
+        subtotal = CDbl(subtotal).ToString("###############0.00") 'casteo a cadena
+        ivaR = CDbl(ivaR).ToString("###############0.00") 'casteo a cadena
+        isrR = CDbl(isrR).ToString("###############0.00") 'casteo a cadena
+        ivaF = CDbl(ivaF).ToString("###############0.00") 'casteo a cadena
+
+        If facRetensVal.Equals(True) Then
+            calc.Text = "subtotal=" + subtotal.ToString + ", ivaTras=" + ivaF.ToString + ", ivaRet=" + ivaR.ToString + ", isrRet=" + isrR.ToString + ", Resultado=" + total.ToString
+        Else
+            calc.Text = "subtotal=" + subtotal.ToString + ", ivaTras=" + ivaF.ToString + ", Resultado=" + total.ToString
+        End If
+
+    End Sub
+
+    Protected Sub chkSubtotal_CheckedChanged(sender As Object, e As EventArgs) Handles chkSubtotal.CheckedChanged
+        subTotalClic()
+    End Sub
+    Private Sub subTotalClic()
+        If chkSubtotal.Checked.Equals(True) Then
+            subtotalTxt.Visible = True
+            If subtotalTxt.Text = "" Or subtotalTxt.Text = "0" Then
+                If redondear.Checked.Equals(False) Then
+                    subtotalTxt.Text = TruncateDecimal(CDbl(precioNetoContrato.Text) / 1.16, 2)
+                Else
+                    subtotalTxt.Text = FormatNumber(CDbl(precioNetoContrato.Text) / 1.16, 2)
+                End If
+
+            End If
+        Else
+            subtotalTxt.Visible = False
+        End If
+        aRedondear()
+    End Sub
+
+    Protected Sub subtotalTxt_TextChanged(sender As Object, e As EventArgs) Handles subtotalTxt.TextChanged
+        subTotalClic()
     End Sub
 End Class

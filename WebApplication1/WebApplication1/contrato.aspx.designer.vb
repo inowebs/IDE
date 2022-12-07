@@ -374,6 +374,15 @@ Partial Public Class WebForm8
     Protected WithEvents cotizar As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''Control panelAdm.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents panelAdm As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
     '''Control lblfechaPagado.
     '''</summary>
     '''<remarks>
@@ -437,6 +446,42 @@ Partial Public Class WebForm8
     Protected WithEvents yFac As Global.System.Web.UI.WebControls.CheckBox
 
     '''<summary>
+    '''Control calc.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents calc As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control redondear.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents redondear As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
+    '''Control chkSubtotal.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents chkSubtotal As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
+    '''Control subtotalTxt.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents subtotalTxt As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
     '''Control actPago.
     '''</summary>
     '''<remarks>
@@ -453,15 +498,6 @@ Partial Public Class WebForm8
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents soloFac As Global.System.Web.UI.WebControls.Button
-
-    '''<summary>
-    '''Control btnConfirm.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents btnConfirm As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
     '''Control chkPostpago.

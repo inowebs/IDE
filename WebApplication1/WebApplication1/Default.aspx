@@ -253,14 +253,14 @@
                     <div class="video-player">
                         <img class="img-fluid rounded" src="images/slider/satvideo.png" alt="Declaraciones ide video demostrativo">
                         <a class="play-icon" href="javascript:void(0)">
-                            <i class="tf-ion-ios-play" data-video="https://www.youtube.com/embed/98becf3N4mw?autoplay=1&rel=0"></i>
+                            <i class="tf-ion-ios-play" data-video="https://www.youtube.com/embed/ixe94ZD_x18?autoplay=1&rel=0"></i>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="block">
                         <h3>Declaraciones informativas de Depósitos en Efectivo e IDE</h3>
-                        <p>Usa esta plataforma web para enviar al SAT las Declaraciones de depositos en efectivo de tu institucion financiera</p>
+                        <p>Ya puedes presentar al SAT las declaraciones mensuales de depositos en efectivo de tu institucion financiera del 2022 y posteriores </p>
                         <p>Llámanos al Tel. (443) 690 3616, 443 218 0237</p>
                         <ul class="list-inline">
                             <li class="list-inline-item">
@@ -268,6 +268,8 @@
                                 <a data-scroll href="registro.aspx" class="btn btn-main">Quiero registrarme</a>
                             </li>
                         </ul>
+                        <br/>
+                        Actualizado a la <strong>Reforma</strong> ISR Art. 55 Fracc IV 2022, RMF 2022 <strong>MENSUALES obligatorias 2022</strong>  
                     </div>
                 </div>
             </div>
@@ -277,9 +279,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
+                        <p>                        
+                            Anual 2021  y anteriores: A más tardar el 15 de febrero de 2022.<br/>
+                            Mensuales de enero a octubre de 2022: A partir del 01 de diciembre de 2022, y hasta el 31 de dicho mes y año<br/>
+                            A partir de 2022 la periodicidad es mensual.<br/>
+                            Mensuales de noviembre 2022 y posteriores: A partir del 01 de diciembre de 2022, y hasta el último día del mes de calendario inmediato siguiente al que corresponda<br/>
+                        </p>
                     <div class="counters-item">
-                        <span>
-                            <asp:Label ID="nAcuses" runat="server" Text="Label"></asp:Label></span>
+                            <asp:Label ID="nAcuses" runat="server" Text="Label"></asp:Label>
                         <p>Declaraciones enviadas y aceptadas por el SAT</p>
                     </div>
                 </div>
@@ -292,7 +299,7 @@
                                 <td>✔	Declara tu mismo, a tiempo, evíta múltas del SAT, Podemos presentar tu declaración si nos lo indicas.  </td>
                             </tr>
                             <tr>
-                                <td>✔	Actualizaciones gratis, al día con la versión 3.0 y 2.0 del SAT.</td>
+                                <td>✔	Actualizaciones gratis, al día con la ultima versión del SAT.</td>
                             </tr>
                             <tr>
                                 <td>✔	Seguiridad, sitio https, configuramos un socket de transmisión exclusivo por cada Institución, encriptamos datos sensibles </td>
@@ -321,8 +328,11 @@
                             <tr>
                                 <td>✔	
                                     <div class="video-player bg-white rounded ">
-                                        <a href="#" onclick="videoman_onClick('https://www.youtube.com/embed/eppVvWIBcF8', 'Fundamento legal vigente de depositos en efectivo')" data-toggle="modal" data-target="#modalvideo">Fundamento legal VIGENTE 2021 para declarar IDE: Ley del Impuesto sobre la Renta : Artículo 55, Fracción IV
+                                        <%--<a href="#" onclick="videoman_onClick('https://www.youtube.com/embed/eppVvWIBcF8', 'Fundamento legal vigente de depositos en efectivo')" data-toggle="modal" data-target="#modalvideo">Fundamento legal VIGENTE 2022 para declarar IDE: Ley ISR : Art. 55, Fracc. IV
+                                        </a>--%>
+                                        <a href="https://www.dof.gob.mx/nota_detalle.php?codigo=5635286&fecha=12/11/2021" target="_blank">Fundamento legal VIGENTE 2022 para declarar IDE: Ley ISR : Art. 55, Fracc. IV
                                         </a>
+
                                     </div>
                                 </td>
                             </tr>
@@ -339,9 +349,20 @@
                             </tr>
                             <tr>
                                 <td>✔	
-                                    <a href="https://facturaselectronicascfdi.com" target="_blank">NUEVOs servicios: 
-                                    </a>
-                                    Timbrado CFDI y facturación electrónica, nómina, retenciones, contabilidad electrónica.                                          
+                                    NUEVOs servicios: <a href="https://facturaselectronicascfdi.com" target="_blank">                                    
+                                    <u>
+                                    CFDI de Retenciones, Nómina, Timbrado de Estados de Cuenta, contabilidad electrónica.                                          
+                                    </u>
+                                        </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>✔	
+                                    NUEVO:
+                                    <a href="https://intereses.facturaselectronicascfdi.com" target="_blank">                                     
+                                    <u>
+                                    Declaracion anual de intereses</u>, afores, creditos hipotecarios, enajenacion de acciones.                                          
+                                        </a>
                                 </td>
                             </tr>
                         </tbody>
@@ -369,7 +390,14 @@ Start About Section
                 <div class="col-12 col-md-6 align-self-center">
                     <div class="align-self-center">
                         <h2>Depósitos en efectivo por parte de las instituciones del sistema financiero</h2>
-                        <p><strong>El artículo 55, fracción IV de la Ley del Impuesto sobre la Renta 2021</strong>, establece una obligación a las instituciones del sistema financiero, consistente en proporcionar anualmente a más tardar el 15 de febrero la información de depósitos en efectivo que se realicen en las cuentas abiertas a nombre de los contribuyentes en dichas instituciones, cuando el monto mensual acumulado por los depósitos en efectivo que se realicen en todas las cuentas de las que el contribuyente sea titular en una misma institución del sistema financiero <strong>exceda de $15,000.00</strong>, así como respecto de todas las adquisiciones en efectivo de cheques de caja.</p>
+                        <p><strong>Fundamento legal</strong>: <br/>
+                            Declaración Mensual 2022 y posteriores:<br/>
+                            Ley del Impuesto sobre la Renta para 2022: Artículo 55. fracción IV <br/>
+                            Resolución Miscelánea Fiscal para 2022: Reglas 3.5.19., 3.5.21., Artículo TRIGÉSIMO SEGUNDO transitorio y Artículo CUARTO transitorio de la Novena Resolución de Modificaciones a la Resolución Miscelánea Fiscal para 2022.<br/><br/>
+                            Declaraciones Mensuales y Anuales 2021 y anteriores:<br/>
+                            Ley del Impuesto sobre la Renta para 2021: Artículo 55, fracción IV.<br/>
+                            Resolución Miscelánea Fiscal para 2022: Artículo TRIGÉSIMO TERCERO transitorio
+                        </p>
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
@@ -416,12 +444,12 @@ Start About Section
 
                 <!-- Single Service Item -->
                 <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="service-block text-center">
+                    <div class="service-block color-bg text-center">
                         <div class="service-icon text-center">
-                            <i class="fa fa-usd" aria-hidden="true"></i>
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
                         </div>
-                        <h3>Sin pagos de dirección IP fija</h3>
-                        <p>Sin mensualidades costosas de IP fija</p>
+                        <h3>Estadísticas parciales y totales</h3>
+                        <p>en datos de tu Declaración Anual </p>
                     </div>
                 </div>
                 <!-- End Single Service Item -->
@@ -453,8 +481,8 @@ Start About Section
                         <div class="service-icon text-center">
                             <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                         </div>
-                        <h3>Desde Excel, XML o TXT</h3>
-                        <p>Solicita nuestros layouts de Excel/Txt o sube tu XML</p>
+                        <h3>Desde Excel</h3>
+                        <p>Solicita nuestros layouts de Excel</p>
                     </div>
                 </div>
                 <!-- End Single Service Item -->
@@ -465,42 +493,11 @@ Start About Section
                             <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                         </div>
                         <h3>Descarga acuses del SAT</h3>
-                        <p>Acuse XML y PDF desde tu cuenta en este portal</p>
                     </div>
                 </div>
                 <!-- End Single Service Item -->
 
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="service-block color-bg text-center">
-                        <div class="service-icon text-center">
-                            
-                        </div>
-                        <h3></h3>
-                        <p></p>
-                    </div>
-                </div>
-                <!-- End Single Service Item -->
-                <!-- Single Service Item -->
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="service-block color-bg text-center">
-                        <div class="service-icon text-center">
-                            <i class="fa fa-star-o" aria-hidden="true"></i>
-                        </div>
-                        <h3>Estadísticas parciales y totales</h3>
-                        <p>en datos de tu Declaración Anual </p>
-                    </div>
-                </div>
-                <!-- End Single Service Item -->
-                <!-- Single Service Item -->
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="service-block color-bg text-center">
-                        <div class="service-icon text-center">
-                            
-                        </div>
-                        <h3></h3>
-                        <p></p>
-                    </div>
-                </div>
+                
                 <!-- End Single Service Item -->
             </div>
             <!-- End row -->
@@ -536,14 +533,7 @@ Start About Section
                     <div class="service-item text-center">
                         <span class="count"><i class="fa fa-laptop" aria-hidden="true"></i></span>
                         <h4>2. Inicia sesión</h4>
-                        <p>Agrega al representante legal</p>
-                    </div>
-                </div>
-                <div class="col-md-3 p-0">
-                    <div class="service-item text-center">
-                        <span class="count"><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
-                        <h4>3. Envíanos carta de autorización</h4>
-                        <p>Descarga y envíanos x email la carta de autorización para tramitar socket en hoja membretada, firmada por representante legal</p>
+                        <p>Contar con la Firma electronica FIEL de la institucion</p>
                     </div>
                 </div>
                 <div class="col-md-3 p-0">
@@ -574,8 +564,7 @@ Start About Section
                 <div class="col">
                     <div class="title text-center">
                         <h2>Precios</h2>
-                        <h5>Te mejoramos cualquier cotización 10% menos: ¡Garantizado! Contáctanos para precios</h5>                        
-                        <p>Apresúrate (trámite de socket: 3 semanas con el SAT aprox.)</p>
+                        <h5>Te mejoramos cualquier cotización en un 15% ¡Garantizado! Contáctanos para precios</h5>                        
                     </div>
                 </div>
             </div>
@@ -595,16 +584,9 @@ Start About Section
                 </div>
                 <div class="col-md-3 p-0">
                     <div class="service-item text-center">
-                        <span class="count"><i class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i></span>
-                        <h4>Plan Premium</h4>
-                        <p>Declaraciones mensuales complementarias ilimitadas. Paga 10 y llévate 12 meses, anual gratis</p>
-                    </div>
-                </div>
-                <div class="col-md-3 p-0">
-                    <div class="service-item text-center">
                         <span class="count"><i class="fa fa-envelope-o fa-2x" aria-hidden="true"></i></span>
-                        <h4>Trámite de Socket $0</h4>
-                        <p>Promoción de noviembre a febrero (Precio regular $2,000)</p>
+                        <h4>Contratalo</h4>
+                        <p>Servicio de presentacion de declaraciones</p>
                     </div>
                 </div>
             </div>

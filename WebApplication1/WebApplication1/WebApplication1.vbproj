@@ -199,6 +199,7 @@
     <Content Include="decla.aspx" />
     <Content Include="declaAyu.aspx" />
     <Content Include="declaAyu2.aspx" />
+    <Content Include="declaAyu22.aspx" />
     <Content Include="descrip.aspx" />
     <Content Include="distribuidores.aspx" />
     <Content Include="faq.aspx" />
@@ -285,6 +286,7 @@
     <Content Include="Login.aspx" />
     <Content Include="mensual.aspx" />
     <Content Include="mensual2.aspx" />
+    <Content Include="mensual22.aspx" />
     <Content Include="misContra.aspx" />
     <Content Include="misDecla.aspx" />
     <Content Include="newPasswordSent.aspx" />
@@ -437,6 +439,13 @@
       <DependentUpon>declaAyu2.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="declaAyu22.aspx.designer.vb">
+      <DependentUpon>declaAyu22.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="declaAyu22.aspx.vb">
+      <DependentUpon>declaAyu22.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="Default.aspx.vb">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>Default.aspx</DependentUpon>
@@ -487,6 +496,13 @@
     </Compile>
     <Compile Include="mensual2.aspx.vb">
       <DependentUpon>mensual2.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="mensual22.aspx.designer.vb">
+      <DependentUpon>mensual22.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="mensual22.aspx.vb">
+      <DependentUpon>mensual22.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="misContra.aspx.designer.vb">

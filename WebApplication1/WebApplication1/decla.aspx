@@ -158,7 +158,7 @@
                 </div>
                 <div class="row pb-1">
                     <div class="col-sm-5">
-                         <asp:CheckBox ID="complementaria" runat="server" AutoPostBack="True" Text="Crear Complementaria" Font-Size="Small" />
+                         <asp:CheckBox ID="complementaria" runat="server" AutoPostBack="True" Text="Crear Complementaria" Font-Size="Small" Visible="false" />
                     </div>
                     <div class="col-sm-7"></div>
                 </div>

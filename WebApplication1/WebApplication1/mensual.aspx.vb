@@ -1016,7 +1016,7 @@ Public Class WebForm12
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -2468,7 +2468,7 @@ siguiente2:
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -2511,7 +2511,7 @@ siguiente2:
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -2587,7 +2587,7 @@ siguiente2:
         '                                    Dim smpt As New System.Net.Mail.SmtpClient
         '                                    smpt.Host = "smtp.gmail.com"
         '                                    smpt.Port = "587"
-        '                                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+        '                                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
         '                                    smpt.EnableSsl = True 'req p server gmail
         '                                    Try
         '                                        smpt.Send(elcorreo)
@@ -2776,7 +2776,7 @@ siguiente2:
     '                                    Dim smpt As New System.Net.Mail.SmtpClient
     '                                    smpt.Host = "smtp.gmail.com"
     '                                    smpt.Port = "587"
-    '                                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+    '                                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
     '                                    smpt.EnableSsl = True 'req p server gmail
     '                                    Try
     '                                        smpt.Send(elcorreo)
@@ -3179,7 +3179,7 @@ siguiente2:
             '                            Dim smpt As New System.Net.Mail.SmtpClient
             '                            smpt.Host = "smtp.gmail.com"
             '                            smpt.Port = "587"
-            '                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+            '                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
             '                            smpt.EnableSsl = True 'req p server gmail
             '                            Try
             '                                smpt.Send(elcorreo)
@@ -3246,7 +3246,7 @@ siguiente2:
                         Dim elcorreo As New System.Net.Mail.MailMessage
                         Using elcorreo
                             elcorreo.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
-                            elcorreo.To.Add("armando.delatorre@sat.gob.mx")
+                            elcorreo.To.Add("guadalupe.hernandezr@sat.gob.mx")
                             'elcorreo.CC.Add("miguel.chantes@sat.gob.mx")
                             elcorreo.CC.Add("declaracioneside@gmail.com")
                             elcorreo.Subject = "Solicitud de acuses"
@@ -3256,7 +3256,7 @@ siguiente2:
                             Dim smpt As New System.Net.Mail.SmtpClient
                             smpt.Host = "smtp.gmail.com"
                             smpt.Port = "587"
-                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                             smpt.EnableSsl = True 'req p server gmail
                             Try
                                 smpt.Send(elcorreo)
@@ -3297,7 +3297,7 @@ siguiente2:
                         Dim smpt As New System.Net.Mail.SmtpClient
                         smpt.Host = "smtp.gmail.com"
                         smpt.Port = "587"
-                        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                         smpt.EnableSsl = True 'req p server gmail
                         Try
                             smpt.Send(elcorreo)
@@ -3337,7 +3337,7 @@ siguiente2:
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -3650,7 +3650,7 @@ siguiente2:
             Dim smpt As New System.Net.Mail.SmtpClient
             smpt.Host = "smtp.gmail.com"
             smpt.Port = "587"
-            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
             smpt.EnableSsl = True 'req p server gmail
             Try
                 smpt.Send(elcorreo)

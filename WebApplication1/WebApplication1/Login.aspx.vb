@@ -101,10 +101,10 @@ Public Class WebForm24
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         'RegisterHyperLink.NavigateUrl = "Register.aspx?ReturnUrl=" + HttpUtility.UrlEncode(Request.QueryString("ReturnUrl"))
         RegisterHyperLink.NavigateUrl = "~/registro.aspx"
-        myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';")
-        myConnection.Open()
-        myCommand = New SqlCommand("set dateformat ymd", myConnection)
-        myCommand.ExecuteNonQuery()
+        'myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';")
+        'myConnection.Open()
+        myCommand = New SqlCommand("set dateformat ymd")
+        ExecuteNonQueryFunction(myCommand)
 
         SetFocus(LoginUser.FindControl("UserName"))
 
@@ -124,10 +124,11 @@ Public Class WebForm24
 
             If Request.QueryString("id") IsNot Nothing Then 'viene de admon            
                 Dim q
+                myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';MultipleActiveResultSets=True")
+                myConnection.Open()
                 'Encriptacion
                 myCommand = New SqlCommand("OPEN SYMMETRIC KEY SYM_KEY DECRYPTION BY PASSWORD ='##Djjcp##'", myConnection)
                 myCommand.ExecuteNonQuery()
-
                 q = "SELECT correo, CAST(DECRYPTBYKEY(passWeb) AS VARCHAR(15)) as passWeb FROM clientes WHERE id='" + Trim(Request.QueryString("id")) + "'"
                 myCommand = New SqlCommand(q, myConnection)
                 dr = myCommand.ExecuteReader()
@@ -139,6 +140,8 @@ Public Class WebForm24
                 dr.Close()
                 myCommand = New SqlCommand("CLOSE SYMMETRIC KEY SYM_KEY", myConnection)
                 myCommand.ExecuteNonQuery()
+
+                myConnection.Close()
             Else
                 v.Text = "pruebasdeide@gmail.com"
                 txtPass.Text = "sistema"
@@ -182,7 +185,7 @@ Public Class WebForm24
             End If
         End If
 
-        If HttpContext.Current.Request.IsLocal Or Session("runAsAdmin") = "1" Then
+        If (HttpContext.Current.Request.IsLocal And String.IsNullOrEmpty(Request.QueryString("user"))) Or Session("runAsAdmin") = "1" Then
         Else
             Dim secretKey = ConfigurationManager.AppSettings("CaptchaSecret").ToString
             Dim urlCapt = "https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}"
@@ -215,11 +218,13 @@ Public Class WebForm24
             Return False
         End If
 
+        myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';MultipleActiveResultSets=True")
+        myConnection.Open()
         'Encriptacion
         myCommand = New SqlCommand("OPEN SYMMETRIC KEY SYM_KEY DECRYPTION BY PASSWORD ='##Djjcp##'", myConnection)
         myCommand.ExecuteNonQuery()
 
-        If (Request.QueryString("id") IsNot Nothing) Or HttpContext.Current.Request.IsLocal Or Session("runAsAdmin") = "1" Then 'viene de admon            
+        If (Request.QueryString("id") IsNot Nothing) Or (HttpContext.Current.Request.IsLocal And String.IsNullOrEmpty(Request.QueryString("user"))) Or Session("runAsAdmin") = "1" Then 'viene de admon            
             q = "SELECT id FROM clientes WHERE correo=@corr" 'parametrizando para evitar inyeccion sql
         Else
             q = "Select id FROM clientes WHERE correo=@corr And CAST(DECRYPTBYKEY(passWeb) As VARCHAR(15))=@pass" 'parametrizando para evitar inyeccion sql
@@ -230,16 +235,17 @@ Public Class WebForm24
             myCommand.Parameters.AddWithValue("@pass", Trim(Password.Trim))
         End If
         dr = myCommand.ExecuteReader()
-
-        If dr.Read() Then
-            dr.Close()
+        If dr.HasRows Then
             myCommand = New SqlCommand("CLOSE SYMMETRIC KEY SYM_KEY", myConnection)
             myCommand.ExecuteNonQuery()
+
+            myConnection.Close()
             Return True
         Else
-            dr.Close()
             myCommand = New SqlCommand("CLOSE SYMMETRIC KEY SYM_KEY", myConnection)
             myCommand.ExecuteNonQuery()
+
+            myConnection.Close()
             LoginUser.FailureText = "Correo o contraseña incorrecta ¿los olvidó?"
             Return False
         End If
@@ -252,17 +258,17 @@ Public Class WebForm24
 
         Dim q
         q = "SELECT id,razonSoc FROM clientes WHERE correo='" + Session("curCorreo") + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
-            Session("GidCliente") = dr("id").ToString()
-            Session("Gcliente") = dr("razonSoc").ToString()
-        End If
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            If dr.Read() Then
+                Session("GidCliente") = dr("id").ToString()
+                Session("Gcliente") = dr("razonSoc").ToString()
+            End If
+        End Using
 
-        If myConnection.State <> ConnectionState.Closed Then
-            myConnection.Close()
-        End If
+        'If myConnection.State <> ConnectionState.Closed Then
+        '    myConnection.Close()
+        'End If
 
         Response.Redirect("~/cliente.aspx")
     End Sub

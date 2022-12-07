@@ -170,6 +170,45 @@
                     </div>                    
                 </div>
                 <div class="row pb-1">
+                    <div class="col-sm-12 text-right"></div>formaPresentacion:
+                    <asp:DropDownList  ID="formaPresentacion" runat="server" AutoPostBack="True"  style="text-align:right" ToolTip="Como va a declararse" >                                
+                                <asp:ListItem Value="Subir FIEL">Subir FIEL</asp:ListItem>                                
+                                <asp:ListItem Value="Conexion remota">Conexion remota a mi equipo con la fiel</asp:ListItem>                                
+                                <asp:ListItem Value="Por Cliente">El Cliente lo hara por su cuenta</asp:ListItem>
+                            </asp:DropDownList>
+                </div>
+
+                <div class="row pb-1">
+                    <div class="col-sm-12 text-right">
+                        <asp:FileUpload ID="FileUploadFiel" runat="server" ToolTip="Seleccione el zip de fiel con el .cer, .key y contraseña, lo encriptaremos para seguridad"  />
+                        &nbsp;&nbsp;<asp:CheckBox ID="fielUp" runat="server" Text="Fiel cargada" /> 
+                        &nbsp;&nbsp;&nbsp;
+                        <asp:Button ID="subirFiel" runat="server" Text="subirFIEL" ToolTip="Seleccione el zip de fiel con el .cer, .key y contraseña" CssClass="btn btn-sm btn-info" />
+                        &nbsp;&nbsp;&nbsp;&nbsp; 
+                        <asp:Button ID="fielBajar" runat="server" Text="Bajar fiel"  CssClass="btn btn-sm btn-info"/>
+                    </div>
+                </div>
+
+                <div class="row pb-1">
+                    <div class="col-sm-12 text-right">
+                        <asp:Label ID="lblConexion" runat="server" Text="Conexion remota:" ></asp:Label>
+                        <asp:DropDownList  ID="remoto" runat="server" style="text-align:right" Visible="false"  >
+                                <asp:ListItem Value="-">-</asp:ListItem>
+                                <asp:ListItem Value="Anydesk">Anydesk</asp:ListItem>                                
+                                <asp:ListItem Value="Teamviewer">Teamviewer</asp:ListItem>                                
+                            </asp:DropDownList>
+                        <asp:Label ID="lblIdNum" runat="server" Text="Id o Num. de puesto de trabajo:" ></asp:Label>
+                        <asp:TextBox ID="idNumRemoto" runat="server"  Visible="false"></asp:TextBox>
+                        <asp:Label ID="lblContra" runat="server" Text="Contrasena del remoto:" ></asp:Label>
+                        <asp:TextBox ID="passRemoto" runat="server" Visible="false"></asp:TextBox>
+                        <asp:Label ID="lblRuta" runat="server" Text="Ruta FIEL en mi PC o red:" ></asp:Label>
+                        <asp:TextBox ID="rutaFiel" runat="server" ToolTip="Puede referirse a una ruta local o en red"  Visible="false"></asp:TextBox>
+                        <asp:Label ID="LabelW" runat="server" Text="Num. Whatsapp:" ></asp:Label>
+                        <asp:TextBox ID="whats" runat="server" ToolTip="Indique el whatsapp donde rapidamente se pueda agendar o reprogramar la cita para conectarnos y declarar"  Visible="false" Columns="10" MaxLength="10"></asp:TextBox>
+                    </div>
+                </div>
+
+                <div class="row pb-1">
                     <div class="col-sm-3 text-right" style="display:none">Número de Distribuidor (opcional)</div>
                     <div class="col-sm-3">
                         <div class="row pb-1">
@@ -516,9 +555,11 @@
         <div class="row pb-1">
             <div class="col-sm-12">
                 <p>
-                    <asp:LinkButton ID="ayuda2" runat="server" style="color:#007bff" ToolTip="Cómo declarar">Ayuda desde 2014</asp:LinkButton>                    
+                    <asp:LinkButton ID="ayuda22" runat="server" style="color:#007bff" ToolTip="Cómo declarar">Ayuda >= 2022</asp:LinkButton>                    
                     <br/> 
-                    <asp:LinkButton ID="ayuda" runat="server" style="color:#007bff" ToolTip="Cómo declarar" >Ayuda previa a 2014</asp:LinkButton>
+                    <asp:LinkButton ID="ayuda2" runat="server" style="color:#007bff" ToolTip="Cómo declarar">Ayuda >= 2014</asp:LinkButton>                    
+                    <br/> 
+                    <asp:LinkButton ID="ayuda" runat="server" style="color:#007bff" ToolTip="Cómo declarar" >Ayuda <= 2013</asp:LinkButton>
                 </p>
             </div>
         </div>

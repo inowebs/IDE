@@ -82,14 +82,11 @@ Public Class WebForm4
     Private Sub cuentaRegistros()
         Dim q
         q = "SELECT COUNT(*) as cuenta FROM reprLegal where idCliente=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        reprLegNregs.Text = FormatNumber(dr("cuenta").ToString, 0) + " Registros"
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        reprLegNregs.Text = FormatNumber(v.ToString, 0) + " Registros"
         GridView2.SelectedIndex = -1
     End Sub
-
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If IsNothing(Session("curCorreo")) = True Then
             Response.Write("<script language='javascript'>alert('Expiró su sesión');</script>")
@@ -98,10 +95,11 @@ Public Class WebForm4
             Exit Sub
         End If
 
-        myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';")
-        myConnection.Open()
-        myCommand = New SqlCommand("set dateformat ymd", myConnection)
-        myCommand.ExecuteNonQuery()
+        'myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';")
+        'myConnection.Open()
+
+        myCommand = New SqlCommand("set dateformat ymd")
+        ExecuteNonQueryFunction(myCommand)
 
 
 
@@ -124,21 +122,25 @@ Public Class WebForm4
                 idDistribuidor.Enabled = True
                 facRetens.Visible = True
                 clientesEstatus.Visible = True
+                fielUp.Enabled = True
+                fielBajar.Visible = True
             Else
                 idDistribuidor.Enabled = False
                 facRetens.Visible = False
                 clientesEstatus.Visible = False
+                fielUp.Enabled = False
+                fielBajar.Visible = False
             End If
+            frame1.Attributes("src") = "declaAyu22.aspx"
         End If
 
         Dim q
         q = "SELECT id FROM clientes WHERE correo='" + Session("curCorreo") + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
-            idParam = dr("id").ToString()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
+            idParam = v.ToString()
         End If
-        dr.Close()
 
         If Not IsPostBack Then  '1a vez
             cargaDatos(idParam) 'id
@@ -173,136 +175,186 @@ Public Class WebForm4
 
     Private Sub cargaDatos(ByVal id)
         'carga x id
-        Dim q
+        Dim q, estatuscli
 
+        myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';MultipleActiveResultSets=True")
+        myConnection.Open()
         'Encriptacion
         myCommand = New SqlCommand("OPEN SYMMETRIC KEY SYM_KEY DECRYPTION BY PASSWORD ='##Djjcp##'", myConnection)
         myCommand.ExecuteNonQuery()
-
+        'ExecuteNonQueryFunction(myCommand)
         q = "SELECT *, CAST(DECRYPTBYKEY(passWeb) AS VARCHAR(15)) as CripPassWeb FROM clientes WHERE id=" + id.ToString
         myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-
-        If dr.Read() Then
-            correo.Text = dr("correo").ToString()
-            'passWeb.Text = dr("passWeb").ToString()
-            passWeb.Attributes.Add("value", dr("CripPassWeb").ToString())
-            passWeb2.Attributes.Add("value", dr("CripPassWeb").ToString())
-            Session("pkPass") = dr("CripPassWeb").ToString()
-            loginSAT.Text = dr("loginSAT").ToString()
-            directorioServidor.Text = dr("directorioServidor").ToString()
-            razonSoc.Text = dr("razonSoc").ToString()
-            contacto.Text = dr("contacto").ToString()
-            puesto.Text = dr("puesto").ToString()
-            tel.Text = dr("tel").ToString()
-            cel.Text = dr("cel").ToString()
-            paginaWeb.Text = dr("paginaWeb").ToString()
-            rfcDeclarante.Text = dr("rfcDeclarante").ToString()
-            domFiscal.Text = dr("domFiscal").ToString()
-            numSucursales.Text = FormatNumber(dr("numSucursales"), 0, , , )
-            numSociosClientes.Text = FormatNumber(dr("numSociosClientes"), 0, , , )
-            directorioSat.Text = dr("directorioSat").ToString()
-            casfim.Text = dr("casfim").ToString()
-            If dr("casfimProvisional").Equals(False) Then
+        Dim dr2 = myCommand.ExecuteReader()
+        If dr2.Read() Then
+            correo.Text = dr2("correo").ToString()
+            'passWeb.Text = dr2("passWeb").ToString()
+            passWeb.Attributes.Add("value", dr2("CripPassWeb").ToString())
+            passWeb2.Attributes.Add("value", dr2("CripPassWeb").ToString())
+            Session("pkPass") = dr2("CripPassWeb").ToString()
+            loginSAT.Text = dr2("loginSAT").ToString()
+            directorioServidor.Text = dr2("directorioServidor").ToString()
+            razonSoc.Text = dr2("razonSoc").ToString()
+            contacto.Text = dr2("contacto").ToString()
+            puesto.Text = dr2("puesto").ToString()
+            tel.Text = dr2("tel").ToString()
+            cel.Text = dr2("cel").ToString()
+            paginaWeb.Text = dr2("paginaWeb").ToString()
+            rfcDeclarante.Text = dr2("rfcDeclarante").ToString()
+            domFiscal.Text = dr2("domFiscal").ToString()
+            numSucursales.Text = FormatNumber(dr2("numSucursales"), 0, , , )
+            numSociosClientes.Text = FormatNumber(dr2("numSociosClientes"), 0, , , )
+            directorioSat.Text = dr2("directorioSat").ToString()
+            casfim.Text = dr2("casfim").ToString()
+            If dr2("casfimProvisional").Equals(False) Then
                 casfimProvisional.Checked = False
             Else
                 casfimProvisional.Checked = True
             End If
-            fechaSolSocketSat.Text = Left(dr("fechaSolSocketSat").ToString(), 10)
-            fechaPrueba.Text = Left(dr("fechaPrueba").ToString(), 10)
-            fechaRegistro.Text = Left(dr("fechaRegistro").ToString(), 10)
-            ipSat.Text = dr("ipSat").ToString()
-            If dr("esInstitCredito").Equals(False) Then
+            fechaSolSocketSat.Text = Left(dr2("fechaSolSocketSat").ToString(), 10)
+            fechaPrueba.Text = Left(dr2("fechaPrueba").ToString(), 10)
+            fechaRegistro.Text = Left(dr2("fechaRegistro").ToString(), 10)
+            ipSat.Text = dr2("ipSat").ToString()
+            If dr2("esInstitCredito").Equals(False) Then
                 esInstitCredito.Checked = False
             Else
                 esInstitCredito.Checked = True
             End If
-            solSocketEstatus.Text = dr("solSocketEstatus")
-            If dr("rfcComodinPm").Equals(False) Then
+            solSocketEstatus.Text = dr2("solSocketEstatus")
+            If dr2("rfcComodinPm").Equals(False) Then
                 rfcComodinPm.Checked = False
             Else
                 rfcComodinPm.Checked = True
             End If
-            If dr("nombreFull").Equals(False) Then
+            If dr2("nombreFull").Equals(False) Then
                 chkNombreFull.Checked = False
             Else
                 chkNombreFull.Checked = True
             End If
-            idDistribuidor.Text = dr("idDistribuidor").ToString
-            clientesEstatus.SelectedValue = dr("idEstatus")
-            If dr("transmisionOk").Equals(False) Then
+            idDistribuidor.Text = dr2("idDistribuidor").ToString
+            estatuscli = dr2("idEstatus")
+            If estatuscli < 1 Then
+                clientesEstatus.SelectedValue = 27
+            Else
+                clientesEstatus.SelectedValue = dr2("idEstatus")
+            End If
+
+            If dr2("transmisionOk").Equals(False) Then
                 transmisionOk.Checked = False
             Else
                 transmisionOk.Checked = True
             End If
-            If dr("recepcionOk").Equals(False) Then
+            If dr2("recepcionOk").Equals(False) Then
                 recepcionOk.Checked = False
             Else
                 recepcionOk.Checked = True
             End If
-            If dr("contactadoPguiarDecl").Equals(False) Then
+            If dr2("contactadoPguiarDecl").Equals(False) Then
                 contactadoPguiarDecl.Checked = False
             Else
                 contactadoPguiarDecl.Checked = True
             End If
-            If dr("solSockConfirmadaSAT").Equals(False) Then
+            If dr2("solSockConfirmadaSAT").Equals(False) Then
                 solSockConfirmadaSAT.Checked = False
             Else
                 solSockConfirmadaSAT.Checked = True
             End If
-            If Not DBNull.Value.Equals(dr("facTercero")) Then
-                If dr("facTercero").Equals(False) Then
+            If Not DBNull.Value.Equals(dr2("facTercero")) Then
+                If dr2("facTercero").Equals(False) Then
                     facTercero.Checked = False
                     facPanel.Visible = False
                 Else
                     facTercero.Checked = True
                     facPanel.Visible = True
-                    If Not DBNull.Value.Equals(dr("facRfc")) Then
-                        facRfc.Text = dr("facRfc")
+                    If Not DBNull.Value.Equals(dr2("facRfc")) Then
+                        facRfc.Text = dr2("facRfc")
                     End If
-                    If Not DBNull.Value.Equals(dr("facRazon")) Then
-                        facRazon.Text = dr("facRazon")
+                    If Not DBNull.Value.Equals(dr2("facRazon")) Then
+                        facRazon.Text = dr2("facRazon")
                     End If
-                    If Not DBNull.Value.Equals(dr("facUso")) Then
-                        facUso.SelectedValue = dr("facUso")
+                    If Not DBNull.Value.Equals(dr2("facUso")) Then
+                        facUso.SelectedValue = dr2("facUso")
                     End If
-                    'If Not DBNull.Value.Equals(dr("facFP")) Then
-                    '    facFP.SelectedValue = dr("facFP")
+                    'If Not DBNull.Value.Equals(dr2("facFP")) Then
+                    '    facFP.SelectedValue = dr2("facFP")
                     'End If
                 End If
             Else
                 facTercero.Checked = False
                 facPanel.Visible = False
             End If
-            If Not DBNull.Value.Equals(dr("fuente")) Then
-                fuente.Text = dr("fuente")
+            If DBNull.Value.Equals(dr2("remoto")) Then
+                remoto.SelectedIndex = 0
+            Else
+                remoto.SelectedValue = dr2("remoto")
             End If
-            If Not DBNull.Value.Equals(dr("dxFac")) Then
-                dxFac.Text = dr("dxFac")
+            If DBNull.Value.Equals(dr2("formaPresentacion")) Then
+                formaPresentacion.SelectedIndex = 0
+            Else
+                formaPresentacion.SelectedValue = dr2("formaPresentacion")
             End If
-            If Not DBNull.Value.Equals(dr("facCorreos")) Then
-                facCorreos.Text = dr("facCorreos")
+            formaPresentacionChange()
+            If Not DBNull.Value.Equals(dr2("rutaFiel")) Then
+                rutaFiel.Text = dr2("rutaFiel")
+            Else
+                rutaFiel.Text = ""
             End If
-            If Not DBNull.Value.Equals(dr("facRetens")) Then
-                facRetens.Checked = dr("facRetens")
+            If Not DBNull.Value.Equals(dr2("whats")) Then
+                whats.Text = dr2("whats")
+            Else
+                whats.Text = ""
+            End If
+            If Not DBNull.Value.Equals(dr2("idNumRemoto")) Then
+                idNumRemoto.Text = dr2("idNumRemoto")
+            Else
+                idNumRemoto.Text = ""
+            End If
+            If Not DBNull.Value.Equals(dr2("passRemoto")) Then
+                passRemoto.Text = dr2("passRemoto")
+            Else
+                passRemoto.Text = ""
+            End If
+            If Not DBNull.Value.Equals(dr2("fuente")) Then
+                fuente.Text = dr2("fuente")
+            End If
+            If Not DBNull.Value.Equals(dr2("dxFac")) Then
+                dxFac.Text = dr2("dxFac")
+            End If
+            If Not DBNull.Value.Equals(dr2("facCorreos")) Then
+                facCorreos.Text = dr2("facCorreos")
+            End If
+            If Not DBNull.Value.Equals(dr2("facRetens")) Then
+                facRetens.Checked = dr2("facRetens")
             Else
                 facRetens.Checked = 0
             End If
-            If Not DBNull.Value.Equals(dr("otrosCorreos")) Then
-                otrosCorreos.Text = dr("otrosCorreos")
+            If Not DBNull.Value.Equals(dr2("fielUp")) Then
+                fielUp.Checked = dr2("fielUp")
+            Else
+                fielUp.Checked = 0
+            End If
+            If Not DBNull.Value.Equals(dr2("otrosCorreos")) Then
+                otrosCorreos.Text = dr2("otrosCorreos")
             End If
         End If
-        dr.Close()
+        dr2.Close()
+
         myCommand = New SqlCommand("CLOSE SYMMETRIC KEY SYM_KEY", myConnection)
         myCommand.ExecuteNonQuery()
 
-        q = "SELECT id FROM reprLegal WHERE idCliente=" + id.ToString + " AND esActual=1"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
-            actualRepr.Text = dr("id").ToString()
+        myConnection.Close()
+
+        If estatuscli = 27 Then
+            myCommand = New SqlCommand("update clientes set idEstatus=27 where correo='" + Session("curCorreo") + "'")
+            ExecuteNonQueryFunction(myCommand)
         End If
-        dr.Close()
+
+        q = "SELECT id FROM reprLegal WHERE idCliente=" + id.ToString + " AND esActual=1"
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
+            actualRepr.Text = v.ToString()
+        End If
         cuentaRegistros()
 
     End Sub
@@ -486,7 +538,15 @@ Public Class WebForm4
             Return 0
         End If
         If InStr(facRfc.Text.ToUpper, "SELECT ") > 0 Or InStr(facRfc.Text.ToUpper, "INSERT ") > 0 Or InStr(facRfc.Text.ToUpper, "UPDATE ") > 0 Or InStr(facRfc.Text.ToUpper, "DELETE ") > 0 Or InStr(facRfc.Text.ToUpper, "DROP ") > 0 Or InStr(facRfc.Text.ToUpper, "ALTER ") > 0 Then
-            Response.Write("<script language='javascript'>alert('No use palabras reservadas en ');</script>")
+            Response.Write("<script language='javascript'>alert('No use palabras reservadas en rfc de factura');</script>")
+            Return 0
+        End If
+        If InStr(rutaFiel.Text.ToUpper, "SELECT ") > 0 Or InStr(rutaFiel.Text.ToUpper, "INSERT ") > 0 Or InStr(rutaFiel.Text.ToUpper, "UPDATE ") > 0 Or InStr(rutaFiel.Text.ToUpper, "DELETE ") > 0 Or InStr(rutaFiel.Text.ToUpper, "DROP ") > 0 Or InStr(rutaFiel.Text.ToUpper, "ALTER ") > 0 Then
+            Response.Write("<script language='javascript'>alert('No use palabras reservadas en rutafiel');</script>")
+            Return 0
+        End If
+        If InStr(whats.Text.ToUpper, "SELECT ") > 0 Or InStr(whats.Text.ToUpper, "INSERT ") > 0 Or InStr(whats.Text.ToUpper, "UPDATE ") > 0 Or InStr(whats.Text.ToUpper, "DELETE ") > 0 Or InStr(whats.Text.ToUpper, "DROP ") > 0 Or InStr(whats.Text.ToUpper, "ALTER ") > 0 Then
+            Response.Write("<script language='javascript'>alert('No use palabras reservadas en whatsapp');</script>")
             Return 0
         End If
 
@@ -550,41 +610,42 @@ Public Class WebForm4
         End If
 
         Dim q2
+        Dim v
         If idDistribuidor.Text.Trim <> "" Then
             q2 = "SELECT id FROM distribuidores WHERE id=@idDis"
-            myCommand = New SqlCommand(q2, myConnection)
+            myCommand = New SqlCommand(q2)
             myCommand.Parameters.AddWithValue("@idDis", idDistribuidor.Text.ToUpper.Trim)
+            v = ExecuteScalarFunction(myCommand)
         Else
             q2 = "SELECT id FROM distribuidores WHERE nombreFiscal='DEFAULT'"
-            myCommand = New SqlCommand(q2, myConnection)
+            myCommand = New SqlCommand(q2)
+            v = ExecuteScalarFunction(myCommand)
         End If
 
-        dr = myCommand.ExecuteReader()
-        If Not dr.Read() Then
+        If IsNothing(v) Then
             idDistribuidor.Focus()
             Response.Write("<script language='javascript'>alert('Ese distribuidor no existe o no está autorizado, verifiquelo o dejelo en blanco');</script>")
             Exit Sub
         End If
-        idDistribuidor.Text = dr("id")
-        dr.Close()
+        idDistribuidor.Text = v
 
         'tomando casfim original
         q = "SELECT casfim from clientes WHERE id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        bkCasfim = dr("casfim").ToString()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        bkCasfim = ExecuteScalarFunction(myCommand)
 
         'encriptacion
+        myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';")
+        myConnection.Open()
         myCommand = New SqlCommand("DECLARE @KEYID UNIQUEIDENTIFIER SET @KEYID = KEY_GUID('SYM_KEY') OPEN SYMMETRIC KEY SYM_KEY DECRYPTION BY PASSWORD='##Djjcp##' UPDATE clientes SET passWeb=ENCRYPTBYKEY(@KEYID,'" + Trim(passWeb.Text) + "') WHERE id=" + idParam.ToString, myConnection)
         myCommand.ExecuteNonQuery()
         myCommand = New SqlCommand("CLOSE SYMMETRIC KEY SYM_KEY", myConnection)
         myCommand.ExecuteNonQuery()
+        myConnection.Close()
 
         'el pass se act arriba aparte
-        q = "UPDATE clientes SET correo=@corr, razonSoc=@raz, contacto=@con, puesto=@pue, tel=@tel, cel=@cel, paginaWeb=@pag, rfcDeclarante=@rfc, domFiscal=@dom, numSucursales=@suc, numSociosClientes=@soc, casfim=@cas, directorioServidor=@cas, esInstitCredito=" + esInstitCreditoVal + ", rfcComodinPm=" + rfcComodinPmVal + ", nombreFull=" + nombreFullVal + ", idDistribuidor=@idDis,  idEstatus=@cli, fuente=@fue, casfimProvisional=" + casfimProvisionalVal + ", dxFac=@dxF, facTercero=@facTercero, facRfc=@facRfc, facRazon=@facRazon, facUso=@facUso, facCorreos=@facCorreos, facRetens=@facRetens WHERE id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
+        q = "UPDATE clientes SET correo=@corr, razonSoc=@raz, contacto=@con, puesto=@pue, tel=@tel, cel=@cel, paginaWeb=@pag, rfcDeclarante=@rfc, domFiscal=@dom, numSucursales=@suc, numSociosClientes=@soc, casfim=@cas, directorioServidor=@cas, esInstitCredito=" + esInstitCreditoVal + ", rfcComodinPm=" + rfcComodinPmVal + ", nombreFull=" + nombreFullVal + ", idDistribuidor=@idDis,  idEstatus=@cli, fuente=@fue, casfimProvisional=" + casfimProvisionalVal + ", dxFac=@dxF, facTercero=@facTercero, facRfc=@facRfc, facRazon=@facRazon, facUso=@facUso, facCorreos=@facCorreos, facRetens=@facRetens, remoto=@remoto, rutaFiel=@rutaFiel, whats=@whats, idNumRemoto=@idNumRemoto, passRemoto=@passRemoto, formaPresentacion=@formaPresentacion WHERE id=" + idParam.ToString
+        myCommand = New SqlCommand(q)
         myCommand.Parameters.AddWithValue("@corr", correo.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@raz", razonSoc.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@con", contacto.Text.ToUpper.Trim)
@@ -607,11 +668,14 @@ Public Class WebForm4
         myCommand.Parameters.AddWithValue("@facRazon", facRazon.Text)
         myCommand.Parameters.AddWithValue("@facUso", facUso.SelectedValue)
         myCommand.Parameters.AddWithValue("@facRetens", facRetens.Checked)
+        myCommand.Parameters.AddWithValue("@rutaFiel", rutaFiel.Text.Trim)
+        myCommand.Parameters.AddWithValue("@whats", whats.Text.Trim)
+        myCommand.Parameters.AddWithValue("@remoto", remoto.SelectedValue)
+        myCommand.Parameters.AddWithValue("@idNumRemoto", idNumRemoto.Text.Trim)
+        myCommand.Parameters.AddWithValue("@passRemoto", passRemoto.Text.Trim)
+        myCommand.Parameters.AddWithValue("@formaPresentacion", formaPresentacion.SelectedValue)
         'myCommand.Parameters.AddWithValue("@facFP", facFP.SelectedValue)
-        dr = myCommand.ExecuteReader()
-
-        'If dr.Count Then
-        dr.Close()
+        ExecuteReaderFunction(myCommand)
 
         If casfim.Text.Trim <> "" Then
             If (Not System.IO.Directory.Exists("C:\SAT")) Then
@@ -624,8 +688,8 @@ Public Class WebForm4
             directorioServidor.Text = casfim.Text.Trim
             directorioServidor.Enabled = False
         End If
-        If session("curCorreo") <> correo.Text.ToUpper.Trim Then
-            session("curCorreo") = correo.Text.ToUpper.Trim
+        If Session("curCorreo") <> correo.Text.ToUpper.Trim Then
+            Session("curCorreo") = correo.Text.ToUpper.Trim
             FormsAuthentication.SignOut()
             Session.Abandon()
             Response.Cache.SetCacheability(HttpCacheability.Private)
@@ -658,48 +722,42 @@ Public Class WebForm4
     Private Function validaDuplModUsuario(ByVal id) As Integer
         Dim q
         q = "SELECT * FROM clientes WHERE id<>" + id.ToString + " and (correo=@corr or razonSoc=@razon or rfcDeclarante=@rfc or casfim=@casfim)" 'or->1 col NO puede repet en otro reg
-        myCommand = New SqlCommand(q, myConnection)
+        myCommand = New SqlCommand(q)
         myCommand.Parameters.AddWithValue("@corr", correo.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@razon", razonSoc.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@rfc", rfcDeclarante.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@casfim", casfim.Text.ToUpper.Trim)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Ese correo, razon social, rfc o clave casfim ya están en uso x otro usuario');</script>")
-            dr.Close()
             Return 0
         End If
-        dr.Close()
 
         Return 1
     End Function
 
     Private Function validaDuplModAdmin(ByVal id) As Integer
-        Dim q
+        Dim q, v
         If Trim(loginSAT.Text.ToUpper) <> "" Then
             q = "SELECT id FROM clientes WHERE id<>" + id.ToString + " and loginSAT='" + Trim(loginSAT.Text.ToUpper) + "'"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            If dr.Read() Then
+            myCommand = New SqlCommand(q)
+            v = ExecuteScalarFunction(myCommand)
+            If Not IsNothing(v) Then
                 loginSAT.Focus()
                 Response.Write("<script language='javascript'>alert('Ese loginSAT ya está en uso x otro usuario');</script>")
-                dr.Close()
                 Return 0
             End If
-            dr.Close()
         End If
 
         If Trim(directorioSat.Text.ToUpper) <> "" Then
             q = "SELECT id FROM clientes WHERE id<>" + id.ToString + " and directorioSat='" + Trim(directorioSat.Text.ToUpper) + "'"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            If dr.Read() Then
+            myCommand = New SqlCommand(q)
+            v = ExecuteScalarFunction(myCommand)
+            If Not IsNothing(v) Then
                 directorioSat.Focus()
                 Response.Write("<script language='javascript'>alert('Ese directorioSat ya está en uso x otro usuario');</script>")
-                dr.Close()
                 Return 0
             End If
-            dr.Close()
         End If
 
         If fechaSolSocketSat.Text.Trim <> "" Then
@@ -756,10 +814,8 @@ Public Class WebForm4
 
         'loginSAT, directorioSAT tal cual lo da hacienda
         q = "UPDATE clientes SET loginSAT='" + Trim(loginSAT.Text) + "',directorioServidor='" + Trim(directorioServidor.Text.ToUpper) + "', directorioSat='" + Trim(directorioSat.Text) + "'" + fechaSolSocketSatVal + fechaPruebaVal + ", ipSat='" + Trim(ipSat.Text.ToUpper) + "', solSocketEstatus='" + solSocketEstatus.Text + "' WHERE id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        'If dr.Count Then
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteReaderFunction(myCommand)
 
         If FileUpload2.HasFile Then
             Dim savePath As String = "C:\SocketGrl\etc\"
@@ -783,14 +839,14 @@ Public Class WebForm4
             Dim elcorreo As New System.Net.Mail.MailMessage
             elcorreo.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
             elcorreo.To.Add("declaracioneside@gmail.com")
-            elcorreo.Subject = "Probar socket el dia " + fechaPrueba.Text.Trim + " para " + session("curCorreo")
+            elcorreo.Subject = "Probar socket el dia " + fechaPrueba.Text.Trim + " para " + Session("curCorreo")
             elcorreo.Body = "<html><body>Si no se ha llegado la fecha y no has hecho la prueba, marca como no leído este correo, pero si ya es la fecha, haz la prueba del socket</body></html>"
             elcorreo.IsBodyHtml = True
             elcorreo.Priority = System.Net.Mail.MailPriority.Normal
             Dim smpt As New System.Net.Mail.SmtpClient
             smpt.Host = "smtp.gmail.com"
             smpt.Port = "587"
-            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
             smpt.EnableSsl = True 'req p server gmail
             Try
                 smpt.Send(elcorreo)
@@ -851,23 +907,20 @@ Public Class WebForm4
             esActualVal = "0"
         End If
         q = "INSERT INTO reprLegal(idCliente,nombres,ap1,ap2,nombrecompleto,rfc,esActual,curp) VALUES(" + Trim(idParam.ToString) + ",@nom,@ap1,@ap2,@nomc,@rfc," + esActualVal + ",@curp)"
-        myCommand = New SqlCommand(q, myConnection)
+        myCommand = New SqlCommand(q)
         myCommand.Parameters.AddWithValue("@nom", nombres.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@ap1", ap1.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@ap2", ap2.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@nomC", nombres.Text.ToUpper.Trim + " " + ap1.Text.ToUpper.Trim + " " + ap2.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@rfc", rfc.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@curp", curp.Text.ToUpper.Trim)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        ExecuteReaderFunction(myCommand)
 
         If esActualVal = "1" Then
             q = "select id from reprLegal where idCliente=" + Trim(idParam.ToString)
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            actualRepr.Text = dr("id").ToString
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            Dim v = ExecuteScalarFunction(myCommand)
+            actualRepr.Text = v.ToString
         End If
 
         'refrescar grid
@@ -937,14 +990,13 @@ Public Class WebForm4
         Dim q, elnombrecompleto
         elnombrecompleto = nombres.Text.ToUpper.Trim + " " + ap1.Text.ToUpper.Trim + " " + ap2.Text.ToUpper.Trim
         q = "SELECT id FROM reprLegal WHERE idCliente=" + idParam.ToString + " AND nombreCompleto=@nom"
-        myCommand = New SqlCommand(q, myConnection)
+        myCommand = New SqlCommand(q)
         myCommand.Parameters.AddWithValue("@nom", elnombrecompleto)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Ya existe ese representante legal para ese cliente');</script>")
             Return 0
         End If
-        dr.Close()
 
         Return 1
     End Function
@@ -952,23 +1004,19 @@ Public Class WebForm4
     Private Function validaDuplModRL() As Integer
         Dim q
         q = "SELECT nombreCompleto FROM reprLegal WHERE ID='" + Trim(idReprLeg.Text) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        PKnombreCompleto = dr("nombreCompleto").ToString()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        PKnombreCompleto = v.ToString()
 
         Dim elnombrecompleto
         elnombrecompleto = nombres.Text.ToUpper.Trim + " " + ap1.Text.ToUpper.Trim + " " + ap2.Text.ToUpper.Trim
         q = "SELECT id FROM reprLegal WHERE idCliente=" + idParam.ToString + "AND nombreCompleto='" + elnombrecompleto + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() And (PKnombreCompleto <> elnombrecompleto) Then
+        myCommand = New SqlCommand(q)
+        v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) And (PKnombreCompleto <> elnombrecompleto) Then
             Response.Write("<script language='javascript'>alert('Ese representante legal ya está en uso');</script>")
-            dr.Close()
             Return 0
         End If
-        dr.Close()
 
         Return 1
     End Function
@@ -981,15 +1029,13 @@ Public Class WebForm4
         Dim q
         If actualRepr.Text <> "" Then
             q = "UPDATE reprLegal SET esActual=0 where id=" + actualRepr.Text
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            ExecuteNonQueryFunction(myCommand)
         End If
 
         q = "UPDATE reprLegal SET esActual=1 where idCliente=" + idParam.ToString + " AND id=" + idReprLeg.Text.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
 
         Response.Write("<script language='javascript'>alert('Actualizado correctamente');</script>")
         actualRepr.Text = Trim(idReprLeg.Text)
@@ -1029,15 +1075,14 @@ Public Class WebForm4
         End If
         Dim q As String
         q = "UPDATE reprLegal SET nombres=@nom,ap1=@ap1,ap2=@ap2, nombreCompleto=@nomC, rfc=@rfc, curp=@curp WHERE id=" + idReprLeg.Text
-        myCommand = New SqlCommand(q, myConnection)
+        myCommand = New SqlCommand(q)
         myCommand.Parameters.AddWithValue("@nom", nombres.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@ap1", ap1.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@ap2", ap2.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@nomC", nombres.Text.ToUpper.Trim + " " + ap1.Text.ToUpper.Trim + " " + ap2.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@rfc", rfc.Text.ToUpper.Trim)
         myCommand.Parameters.AddWithValue("@curp", curp.Text.ToUpper.Trim)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        ExecuteNonQueryFunction(myCommand)
 
         'refrescar grid
         idReprLeg.Text = "ID"
@@ -1060,21 +1105,21 @@ Public Class WebForm4
         'validar si esta siendo usado x FKs
         Dim q As String
         q = "SELECT idRepresentanteLegal FROM ideAnual WHERE idRepresentanteLegal=" + Trim(idReprLeg.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('No se puede eliminar este registro pues esta siendo usado en una declaracion anual');</script>")
             Exit Sub
         End If
-        dr.Close()
+
         q = "SELECT idRepresentanteLegal FROM ideMens WHERE idRepresentanteLegal=" + Trim(idReprLeg.Text)
-        myCommand = New SqlCommand(q, myConnection)
+        myCommand = New SqlCommand(q)
         dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('No se puede eliminar este registro pues esta siendo usado en una declaracion mensual');</script>")
             Exit Sub
         End If
-        dr.Close()
 
         'del cascadas
         If Trim(idReprLeg.Text) = actualRepr.Text And GridView2.Rows.Count > 1 Then 'borrando la actual
@@ -1083,9 +1128,8 @@ Public Class WebForm4
         End If
 
         q = "DELETE FROM reprLegal WHERE id=" + Trim(idReprLeg.Text)
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
         idReprLeg.Text = "ID"
         nombres.Text = ""
         ap1.Text = ""
@@ -1106,29 +1150,23 @@ Public Class WebForm4
     Private Function validaRequisitos() As Integer
         Dim q
         q = "SELECT id, casfim, loginSAT FROM clientes cli WHERE cli.id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        If dr("casfim") = "" Or isnothing(dr("casfim")) = True Then
-            dr.Close()
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If v = "" Or IsNothing(v) = True Then
             Response.Write("<script language='javascript'>alert('Requiere especificar su clave CASFIM');</script>")
             Return 0
         End If
-        dr.Close()
 
 
         q = "select solSocketEstatus from clientes WHERE id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        If Not DBNull.Value.Equals(dr("solSocketEstatus")) Then
-            If dr("solSocketEstatus") <> "VALIDADA" Then
+        myCommand = New SqlCommand(q)
+        v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
+            If v <> "VALIDADA" Then
                 Response.Write("<script language='javascript'>alert('Se ocupa que el estatus del socket sea carta validada o bien suba y valide la carta');</script>")
-                dr.Close()
                 Return 0
             End If
         End If
-        dr.Close()
 
 
         Return 1
@@ -1142,8 +1180,8 @@ Public Class WebForm4
         fechaSolSocketSat.Text = Left(Format(Now(), "dd/MM/yyyy"), 10)
         Dim q
         q = "UPDATE clientes SET fechaSolSocketSat='" + Format(Now(), "yyyy-MM-dd") + "' WHERE id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
 
         Dim oDir As New System.IO.DirectoryInfo(Server.MapPath("~"))
         oDir.Attributes = oDir.Attributes And Not IO.FileAttributes.ReadOnly
@@ -1212,9 +1250,9 @@ Public Class WebForm4
         Dim elcorreo As New System.Net.Mail.MailMessage
         Using elcorreo
             elcorreo.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com", "Declaraciones IDE")
-            elcorreo.To.Add("armando.delatorre@sat.gob.mx") 'declaracioneside@gmail.com
-            'elcorreo.CC.Add("miguel.chantes@sat.gob.mx") 'declaracioneside@gmail.com
-            elcorreo.CC.Add("alberto.rivera@sat.gob.mx") 'declaracioneside@gmail.com
+            elcorreo.To.Add("guadalupe.hernandezr@sat.gob.mx") 'declaracioneside@gmail.com
+            elcorreo.CC.Add("ana.arroyo@sat.gob.mx") 'declaracioneside@gmail.com
+            elcorreo.CC.Add("brenda.gordillo@sat.gob.mx") 'declaracioneside@gmail.com
             elcorreo.Bcc.Add("declaracioneside@gmail.com") 'declaracioneside@gmail.com
             elcorreo.Subject = "Solicitud de matriz para Conexión Segura"
             elcorreo.Body = "<html><body>Buen día, <br><br>Anexo la autorización recibida para tramitar y el formato para solicitarle matriz para Conexión Segura para declaraciones del IDE de la institución: " + razonSoc.Text.ToUpper.Trim + " cuyo RFC es " + rfcDeclarante.Text + "<br><br>Reciba un cordial saludo,<br><br>Gracias</body></html>"
@@ -1227,13 +1265,13 @@ Public Class WebForm4
             smpt.UseDefaultCredentials = False
             smpt.Host = "smtp.gmail.com"
             smpt.Port = 587 ' 465 
-            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")  '("admon.declaracioneside", "a1declaracioneside")
+            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")  '("admon.declaracioneside", "a1declaracioneside")
             smpt.EnableSsl = True 'req p server gmail
 
             Try
                 smpt.Send(elcorreo)
                 elcorreo.Dispose()
-                Response.Write("<script language='javascript'>alert('Envío exitoso de solicitud por correo, espere un minuto y llame al SAT para validar recepción de solicitud de socket al 5551282300x43873 con Armando de la Torre, si no la recibió reenviarla o redactarla hasta que le llegue, está en Enviados de declaracioneside@gmail.com');</script>")
+                Response.Write("<script language='javascript'>alert('Envío exitoso de solicitud por correo, espere un minuto y llame al SAT para validar recepción de solicitud de socket con Brenda Gordillo Sanchez, Ana Lilia Arroyo Gonzalez (55) 12 03 10 00 ext. 43881, si no la recibió reenviarla o redactarla hasta que le llegue, está en Enviados de declaracioneside@gmail.com');</script>")
             Catch ex As Exception
                 Response.Write("<script language='javascript'>alert('Error: " & ex.Message + "');</script>")
                 Exit Sub
@@ -1249,8 +1287,8 @@ Public Class WebForm4
     Protected Sub notifica_Click(sender As Object, e As EventArgs) Handles notifica.Click
         Dim q
         q = "UPDATE clientes SET solSocketEstatus='APROBADA' WHERE id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
 
         Dim elcorreo As New System.Net.Mail.MailMessage
         elcorreo.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
@@ -1262,7 +1300,7 @@ Public Class WebForm4
         Dim smpt As New System.Net.Mail.SmtpClient
         smpt.Host = "smtp.gmail.com"
         smpt.Port = "587"
-        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
         smpt.EnableSsl = True 'req p server gmail
         Try
             smpt.Send(elcorreo)
@@ -1273,11 +1311,11 @@ Public Class WebForm4
         End Try
     End Sub
 
-    Sub AddFileSecurity(ByVal fileName As String, ByVal account As String, _
+    Sub AddFileSecurity(ByVal fileName As String, ByVal account As String,
         ByVal rights As FileSystemRights, ByVal controlType As AccessControlType)
 
         Dim fSecurity As FileSecurity = File.GetAccessControl(fileName)
-        Dim accessRule As FileSystemAccessRule = _
+        Dim accessRule As FileSystemAccessRule =
         New FileSystemAccessRule(account, rights, controlType)
         fSecurity.AddAccessRule(accessRule)
         File.SetAccessControl(fileName, fSecurity)
@@ -1295,17 +1333,14 @@ Public Class WebForm4
 
             Dim q
             q = "select solSocketEstatus from clientes WHERE id=" + idParam.ToString
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            If Not DBNull.Value.Equals(dr("solSocketEstatus")) Then
-                If dr("solSocketEstatus") = "VALIDADA" Then
+            myCommand = New SqlCommand(q)
+            Dim v = ExecuteScalarFunction(myCommand)
+            If Not IsNothing(v) Then
+                If v = "VALIDADA" Then
                     Response.Write("<script language='javascript'>alert('El archivo anterior ya es el válido');</script>")
-                    dr.Close()
                     Exit Sub
                 End If
             End If
-            dr.Close()
             Dim savePath As String = Server.MapPath("~/")
             Dim fileSize As Integer = FileUpload1.PostedFile.ContentLength
             Dim fileName As String = Server.HtmlEncode(FileUpload1.FileName)
@@ -1390,7 +1425,7 @@ Public Class WebForm4
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -1410,12 +1445,8 @@ Public Class WebForm4
             If solSocketEstatus.SelectedValue <> "APROBADA" Then
                 solSocketEstatus.SelectedValue = "RECIBIDA"
                 q = "update clientes set solSocketEstatus = 'RECIBIDA' WHERE id=" + idParam.ToString
-                Dim myCommand3 As New SqlCommand
-                With myCommand3
-                    .Connection = myConnection
-                    .CommandText = q
-                    .ExecuteReader()
-                End With
+                Dim myCommand3 = New SqlCommand(q)
+                ExecuteNonQueryFunction(myCommand3)
             End If
 
             Response.Write("<script language='javascript'>alert('Archivo recibido correctamente, en breve será notificado sobre la validez de esta carta de autorización');</script>")
@@ -1426,16 +1457,14 @@ Public Class WebForm4
 
     Protected Sub solVerFormato_Click(ByVal sender As Object, ByVal e As EventArgs) Handles solVerFormato.Click
         Dim q, nombreRL
-        q = "SELECT rl.id, rl.nombreCompleto FROM reprLegal rl, clientes cli WHERE cli.id=" + idParam.ToString + " AND cli.id=rl.idCliente AND rl.esActual=1"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If Not dr.Read() Then
-            dr.Close()
+        q = "SELECT rl.nombreCompleto FROM reprLegal rl, clientes cli WHERE cli.id=" + idParam.ToString + " AND cli.id=rl.idCliente AND rl.esActual=1"
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Requiere especificar un representante legal actual');</script>")
             Exit Sub
         End If
-        nombreRL = dr("nombreCompleto")
-        dr.Close()
+        nombreRL = v
 
         Dim oDir As New System.IO.DirectoryInfo(Server.MapPath("~/"))
         oDir.Attributes = oDir.Attributes And Not IO.FileAttributes.ReadOnly
@@ -1470,21 +1499,17 @@ Public Class WebForm4
     Protected Sub mostrarSol_Click(ByVal sender As Object, ByVal e As EventArgs) Handles mostrarSol.Click
         Dim q
         q = "select casfim from clientes WHERE id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If Not dr.Read() Then
-            'If DBNull.Value.Equals(dr("casfim")) Then
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Es necesario que guarde la clave casfim en el sistema');</script>")
-            dr.Close()
             Exit Sub
         Else
-            If dr("casfim") = "" Then
+            If v = "" Then
                 Response.Write("<script language='javascript'>alert('Es necesario que guarde la clave casfim en el sistema');</script>")
-                dr.Close()
                 Exit Sub
             End If
         End If
-        dr.Close()
 
         'bajar de la BD
         Dim myCommand2 As New SqlCommand
@@ -1508,7 +1533,7 @@ Public Class WebForm4
                     writeBinay.Close()
 
                     'descarga archivo, file download
-                    Dim filename As String = session("curCorreo") + ".pdf.ZIP"
+                    Dim filename As String = Session("curCorreo") + ".pdf.ZIP"
                     Dim path As String = Server.MapPath("./autorizaciones/" & filename)
                     Dim file1 As System.IO.FileInfo = New System.IO.FileInfo(path)
                     Response.Clear()
@@ -1534,28 +1559,24 @@ Public Class WebForm4
         If solSocketEstatus.Text = "RECIBIDA" Then
             Dim q
             q = "update clientes set solSocketEstatus='VALIDADA' where id=" + idParam.ToString
-            myCommand = New SqlCommand(q, myConnection)
-            myCommand.ExecuteNonQuery()
+            myCommand = New SqlCommand(q)
+            ExecuteNonQueryFunction(myCommand)
 
             q = "SELECT inscrip FROM planes"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            Dim inscripBase = dr("inscrip")
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            Dim v = ExecuteScalarFunction(myCommand)
+            Dim inscripBase = v
             q = "SELECT ivaPorcen FROM actuales"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            Dim ivaActual = dr("ivaPorcen")
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            v = ExecuteScalarFunction(myCommand)
+            Dim ivaActual = v
             Dim inscripNeto = inscripBase * (1 + ivaActual / 100)
 
             solSocketEstatus.SelectedValue = "VALIDADA"
 
             Dim elcorreo As New System.Net.Mail.MailMessage
             elcorreo.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
-            elcorreo.To.Add(session("curCorreo"))
+            elcorreo.To.Add(Session("curCorreo"))
             elcorreo.Subject = "Su autorización para declarar depositos en efectivo mediante nuestro sistema está validada, ahora proceda a realizar los contratos que desee"
             elcorreo.Body = "<html><body>Buen día " + razonSoc.Text + ",<br> A partir de este momento, puede realizar los contratos que desee en el submenú Mis Contratos, una vez que ud. cuente con su clave casfim / clave ide / clave de institucion financiera y nos la notifique, procederemos a tramitar, configurar y realizar las pruebas de su matriz de conexión segura con el SAT para aperturar el canal para el envío de sus declaraciónes cuyo proceso toma 2-3 semanas aprox. tras lo cual será notificado en su correo para que acceda a la sección de declaraciones. Videotutorial para hacer contratos en linea: <a href='http://www.youtube.com/watch?v=ZpeOxQg9SKo' target='_blank'>http://www.youtube.com/watch?v=ZpeOxQg9SKo</a><br><br>Hasta que reciba nuestra notificacion de que su socket ya esta listo, entonces podra proceder al pago indicado en sus contratos para que le activemos su contrato y envienos el comprobante de pago, al hacer sus contratos recibira por correo instrucciones de pago<br><br>Los formatos en que requiere generar la información para enviar desde nuestra página sus declaraciones con reporte de Depósitos en efectivo puede descargarlos en seguida: <a href='declaracioneside.com/ejemploMensual.xlsx'>mensual previa al 2014</a>, <a href='declaracioneside.com/ejemploAnual.xlsx'>anual previa al 2014</a>, <a href='declaracioneside.com/ejemploMensual2.xlsx'>mensual desde 2014</a>, <a href='declaracioneside.com/ejemploAnual2.xlsx'>anual desde 2014</a>, si su declaración es en ceros no requiere dichos formatos y en un par de clics enviara su declaración guiado por nuestros videotutoriales <br><br>Reciba un cordial saludo, <br>Atte. <a href='declaracioneside.com'>declaracioneside.com</a><br><br><br>Tu solución en declaraciones de depósitos en efectivo por internet. Tel 4436903616, 4432180237</body></html>"
             elcorreo.IsBodyHtml = True
@@ -1563,7 +1584,7 @@ Public Class WebForm4
             Dim smpt As New System.Net.Mail.SmtpClient
             smpt.Host = "smtp.gmail.com"
             smpt.Port = "587"
-            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
             smpt.EnableSsl = True 'req p server gmail
             Try
                 smpt.Send(elcorreo)
@@ -1588,16 +1609,16 @@ Public Class WebForm4
 
     Protected Sub prueba_Click(sender As Object, e As EventArgs) Handles prueba.Click
         Dim loginSAT, archivoLocal, directorioServidor, casfim, ipSAT, directorioSAT, archivoLocalSinDir
-        Dim q = "SELECT loginSAT,directorioServidor,casfim,ipSAT, directorioSAT FROM clientes WHERE id=" + session("GidCliente").ToString
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        loginSAT = dr("loginSAT")
-        casfim = dr("casfim")
-        directorioServidor = "C:\SAT\" + dr("directorioServidor")
-        ipSAT = dr("ipSAT")
-        directorioSAT = dr("directorioSAT")
-        dr.Close()
+        Dim q = "SELECT loginSAT,directorioServidor,casfim,ipSAT, directorioSAT FROM clientes WHERE id=" + Session("GidCliente").ToString
+        myCommand = New SqlCommand(q)
+        Using dr = ExecuteReaderFunction(myCommand)
+            dr.Read()
+            loginSAT = dr("loginSAT")
+            casfim = dr("casfim")
+            directorioServidor = "C:\SAT\" + dr("directorioServidor")
+            ipSAT = dr("ipSAT")
+            directorioSAT = dr("directorioSAT")
+        End Using
 
         archivoLocal = "C:\SAT\prueba.txt"
         archivoLocalSinDir = "prueba.txt"
@@ -1726,11 +1747,10 @@ Public Class WebForm4
 
     Protected Sub pruebaAcuse_Click(sender As Object, e As EventArgs) Handles pruebaAcuse.Click
         Dim directorioServidor
-        Dim q = "SELECT directorioServidor FROM clientes WHERE id=" + session("GidCliente").ToString
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        dr.Read()
-        directorioServidor = "C:\SAT\" + dr("directorioServidor")
+        Dim q = "SELECT directorioServidor FROM clientes WHERE id=" + Session("GidCliente").ToString
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        directorioServidor = "C:\SAT\" + v
 
         Dim NewCopy As String
         NewCopy = directorioServidor + "\prueba.txt"
@@ -1832,7 +1852,7 @@ Public Class WebForm4
         '                            Dim smpt As New System.Net.Mail.SmtpClient
         '                            smpt.Host = "smtp.gmail.com"
         '                            smpt.Port = "587"
-        '                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+        '                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
         '                            smpt.EnableSsl = True 'req p server gmail
         '                            Try
         '                                smpt.Send(elcorreo)
@@ -1895,30 +1915,30 @@ Public Class WebForm4
     Protected Sub aprobarEnvio_Click(sender As Object, e As EventArgs) Handles aprobarEnvio.Click
         Dim q
         q = "update clientes set transmisionOk=1 where id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
         transmisionOk.Checked = True
     End Sub
 
     Protected Sub aprobarRecepcion_Click(sender As Object, e As EventArgs) Handles aprobarRecepcion.Click
         Dim q
         q = "update clientes set recepcionOk=1 where id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
         recepcionOk.Checked = True
     End Sub
 
     Protected Sub guiarDecla_Click(sender As Object, e As EventArgs) Handles guiarDecla.Click
-        myCommand = New SqlCommand("update clientes set contactadoPguiarDecl=1 where id=" + idParam.ToString, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand("update clientes set contactadoPguiarDecl=1 where id=" + idParam.ToString)
+        ExecuteNonQueryFunction(myCommand)
         contactadoPguiarDecl.Checked = True
     End Sub
 
     Protected Sub confirmarRecibida_Click(sender As Object, e As EventArgs) Handles confirmarRecibida.Click
         Dim q
         q = "update clientes set solSockConfirmadaSAT=1 where id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
         solSockConfirmadaSAT.Checked = True
     End Sub
 
@@ -1950,8 +1970,8 @@ Public Class WebForm4
 
     Private Sub btnActOtros_Click(sender As Object, e As EventArgs) Handles btnActOtros.Click
         Dim q = "UPDATE clientes SET otrosCorreos='" + otrosCorreos.Text.Trim.ToUpper + "' WHERE id=" + idParam.ToString
-        myCommand = New SqlCommand(q, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
         Response.Write("<script language='javascript'>alert('ok');</script>")
     End Sub
 
@@ -1972,12 +1992,146 @@ Public Class WebForm4
     End Sub
 
     Protected Sub desValidaCarta_Click(sender As Object, e As EventArgs) Handles desValidaCarta.Click
-        myCommand = New SqlCommand("UPDATE clientes set solSocketEstatus='VACIA' where id=" + idParam.ToString, myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand("UPDATE clientes set solSocketEstatus='VACIA' where id=" + idParam.ToString)
+        ExecuteNonQueryFunction(myCommand)
         Response.Write("<script language='javascript'>alert('ok, ahora borra el archivo " + Session("curCorreo") + ".pdf.ZIP y el .pdf" + "');</script>")
     End Sub
 
     Protected Sub facRetens_CheckedChanged(sender As Object)
 
+    End Sub
+
+    Protected Sub mod_Click7(sender As Object, e As EventArgs) Handles [mod].Click
+
+    End Sub
+
+    Protected Sub ayuda22_Click(sender As Object, e As EventArgs) Handles ayuda22.Click
+        frame1.Attributes("src") = "declaAyu22.aspx"
+    End Sub
+
+    Private Sub formaPresentacionChange()
+        If formaPresentacion.SelectedValue = "Subir FIEL" Then
+            FileUploadFiel.Visible = True
+            subirFiel.Visible = True
+            remoto.Visible = False
+            idNumRemoto.Visible = False
+            passRemoto.Visible = False
+            rutaFiel.Visible = False
+            whats.Visible = False
+            fielUp.Visible = True
+            'fielBajar.Visible = True
+            lblConexion.Visible = False
+            lblIdNum.Visible = False
+            lblContra.Visible = False
+            lblRuta.Visible = False
+            LabelW.Visible = False
+        ElseIf formaPresentacion.SelectedValue = "Conexion remota" Then
+            FileUploadFiel.Visible = False
+            subirFiel.Visible = False
+            remoto.Visible = True
+            idNumRemoto.Visible = True
+            passRemoto.Visible = True
+            rutaFiel.Visible = True
+            whats.Visible = True
+            fielUp.Visible = False
+            'fielBajar.Visible = False
+            lblConexion.Visible = True
+            lblIdNum.Visible = True
+            lblContra.Visible = True
+            lblRuta.Visible = True
+            LabelW.Visible = True
+        Else 'cliente
+            FileUploadFiel.Visible = False
+            subirFiel.Visible = False
+            remoto.Visible = False
+            idNumRemoto.Visible = False
+            passRemoto.Visible = False
+            rutaFiel.Visible = False
+            whats.Visible = False
+            fielUp.Visible = False
+            'fielBajar.Visible = False
+            lblConexion.Visible = False
+            lblIdNum.Visible = False
+            lblContra.Visible = False
+            lblRuta.Visible = False
+            LabelW.Visible = False
+        End If
+    End Sub
+
+    Protected Sub formaPresentacion_SelectedIndexChanged(sender As Object, e As EventArgs) Handles formaPresentacion.SelectedIndexChanged
+        formaPresentacionChange()
+    End Sub
+
+    Protected Sub passRemoto_TextChanged(sender As Object, e As EventArgs) Handles passRemoto.TextChanged
+
+    End Sub
+
+    Protected Sub subirFiel_Click(sender As Object, e As EventArgs) Handles subirFiel.Click
+        If casfim.Text.Trim = "" Then
+            ScriptManager.RegisterStartupScript(Me, Me.GetType(), "clientScript", "<script language='javascript'>alert('no esta guardada la casfim');</script>", False)
+            Exit Sub
+        End If
+        Dim nomArchAnualDatos = "C:\SAT\" + casfim.Text + "\fiel"
+        Dim MSG
+        myCommand = New SqlCommand("update clientes set fielUp=" + IIf(fielUp.Checked, "1", "0") + " where correo='" + Session("curCorreo") + "'")
+        ExecuteNonQueryFunction(myCommand)
+        Dim archDest
+        If FileUploadFiel.HasFile Then
+            Dim fileSize As Integer = FileUploadFiel.PostedFile.ContentLength
+            Dim fileName As String = Server.HtmlEncode(FileUploadFiel.FileName)
+            Dim extension As String = System.IO.Path.GetExtension(fileName)
+            If extension.ToUpper <> ".ZIP" Then
+                MSG = "<script language='javascript'>alert('el archivo debe ser comprimido tipo .zip e incluir el .key, .cer y la contrasena de la fiel');</script>"
+                ScriptManager.RegisterStartupScript(Me, Me.GetType(), "clientScript", MSG, False)
+                Exit Sub
+            End If
+            archDest = nomArchAnualDatos + extension
+            If File.Exists(archDest) Then
+                File.Delete(archDest)
+            End If
+            If (Not System.IO.Directory.Exists("C:\SAT\" + casfim.Text)) Then
+                System.IO.Directory.CreateDirectory("C:\SAT\" + casfim.Text)
+            End If
+            Try
+                FileUploadFiel.SaveAs(archDest)
+                fielUp.Checked = True
+                myCommand = New SqlCommand("update clientes set fielUp=1 where correo='" + Session("curCorreo") + "'")
+                ExecuteNonQueryFunction(myCommand)
+            Catch ex As Exception
+                MSG = "<script language='javascript'>alert('" + ex.Message + "');</script>"
+                ScriptManager.RegisterStartupScript(Me, Me.GetType(), "clientScript", MSG, False)
+            Finally
+                FileUploadFiel.PostedFile.InputStream.Flush()
+                FileUploadFiel.PostedFile.InputStream.Close()
+                FileUploadFiel.FileContent.Dispose()
+                FileUploadFiel.Dispose()
+            End Try
+        End If
+        MSG = "<script language='javascript'>alert('guardado, lo encriptaremos');</script>"
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "clientScript", MSG, False)
+    End Sub
+
+    Protected Sub fielBajar_Click(sender As Object, e As EventArgs) Handles fielBajar.Click
+        If casfim.Text.Trim = "" Then
+            ScriptManager.RegisterStartupScript(Me, Me.GetType(), "clientScript", "<script language='javascript'>alert('no esta guardada la casfim');</script>", False)
+            Exit Sub
+        End If
+        Dim nomArchAnualDatos = "C:\SAT\" + casfim.Text + "\fiel.zip"
+        If Not File.Exists(nomArchAnualDatos) Then
+            Dim MSG = "<script language='javascript'>alert('no se encontro la fiel');</script>"
+            ScriptManager.RegisterStartupScript(Me, Me.GetType(), "clientScript", MSG, False)
+            Exit Sub
+        End If
+        Dim file1 As System.IO.FileInfo = New System.IO.FileInfo(nomArchAnualDatos)
+        Response.Clear()
+        Response.AddHeader("Content-Disposition", "attachment; filename=" + file1.Name)
+        Response.AddHeader("Content-Length", file1.Length.ToString())
+        Response.ContentType = "application/octet-stream"
+        Response.WriteFile(file1.FullName)
+        Response.End()
+
+        Response.Clear()
+        Response.AddHeader("Content-Disposition", "inline")
+        Response.ContentType = "text/html"
     End Sub
 End Class

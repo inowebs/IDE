@@ -384,10 +384,8 @@
     <a class="style13" href="mailto:declaracioneside@gmail.com">
     declaracioneside@gmail.com</a></span><span 
         style="font-size: 8.0pt; font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; mso-fareast-font-family: &quot;Times New Roman&quot;; color: #3E3E3E; mso-fareast-language: ES-MX">,
-    <a href="mailto:admon.declaracioneside@gmail.com">
-    admon.declaracioneside@gmail.com</a>
-    <a href="mailto:ventas.declaracioneside@gmail.com">
-    ventas.declaracioneside@gmail.com</a>&nbsp; <o:p></o:p>
+    <a href="mailto:ventas@inowebs.com">
+    ventas@inowebs.com</a>&nbsp; <o:p></o:p>
     </span>
 </p>
 <p class="MsoNormal">
@@ -516,6 +514,7 @@ es-MX"><a __designer:mapid="18bd" href="planes.aspx"><span __designer:mapid="18c
         o declinar la solicitud, el costo de este servicio por presentar las 
         declaraciones de los clientes podría generar cargos adicionales los cuales se 
         haran de conocimiento del cliente con anticipación. </p>
+        <p class="style27">h.&nbsp;&nbsp;&nbsp; La presentacion de las declaraciones mensuales de depositos en efectivo del 2022 y posteriores, se hara en el portal del SAT mediante autenticacion con la firma electronica FIEL de la institucion financiera, para ello el cliente podra hacerlo por cuenta propia con base al archivo proporcionado por el proveedor, o bien podra contrataar de este ultimo el servicio para que las presente ya sea que le proporcione la fiel la cual sera encriptada por el proveedor para seguridad y solo se usara para presentar dichas declaraciones, o bien por conexion remota al equipo del cliente donde tenga la fiel para desde dicho equipo ingresar al sat para subir la declaracion. </p>
 <p class="MsoNormal">
     <span class="style15" 
         style="mso-bidi-font-size: 11.0pt; mso-fareast-font-family: &quot;Times New Roman&quot;; color: #3E3E3E; mso-fareast-language: ES-MX">
@@ -1159,10 +1158,8 @@ es-MX"><a __designer:mapid="18bd" href="planes.aspx"><span __designer:mapid="18c
     </p>
     <p style="color: rgb(62, 62, 62); font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 16px; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); ">
         <a href="mailto:declaracioneside@gmail.com">declaracioneside@gmail.com</a>,
-        <a href="mailto:admon.declaracioneside@gmail.com">
-        admon.declaracioneside@gmail.com</a>,
-        <a href="mailto:ventas.declaracioneside@gmail.com">
-        ventas.declaracioneside@gmail.com</a> <br />
+        <a href="mailto:ventas@inowebs.com">
+        ventas@inowebs.com</a> <br />
     <br />
     Todas las peticiones de servicio enviadas a DeclaracionesIde solicitando cambios o modificaciones de un servicio, deberán ser 
     solicitados única y exclusivamente desde la cuenta de correo del contacto 
@@ -1251,8 +1248,8 @@ es-MX"><a __designer:mapid="18bd" href="planes.aspx"><span __designer:mapid="18c
     <p style="color: rgb(62, 62, 62); font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 16px; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); ">
         &nbsp;</p>
         <strong>Ultima actualización:<span class="Apple-converted-space">&nbsp;</span></strong> 
-    05 
-        de Marzo de 2014<br />
+    23 
+        de Noviembre de 2022<br />
     <br />
     <br />
     <br />

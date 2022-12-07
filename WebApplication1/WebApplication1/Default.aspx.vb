@@ -13,21 +13,19 @@ Public Class _Default
     Dim dr2 As SqlDataReader
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        ipServidor = "200.77.146.31" 'ip publica fija asignada por proveedor telmex o megacable
+        ipServidor = "177.225.200.5" 'ip publica fija asignada por proveedor telmex o megacable
         nombreServidor = "tcp:." 'nombre asignado al servidor
         'nombreServidor = "tcp:job-PC" 'nombre asignado al servidor
-        platafServer = "WINDOWS SERVER 2008 R2"
+        platafServer = "WINDOWS 10 PRO"
         loginTx = "Administrator"
         rutaSAT = "C:\SAT"
         loginRxSAT = "SAT"
         passS = "Djobjosue2"
         asesoriaPrecioBase = 350
 
-        myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';")
-        myConnection.Open()
 
-        myCommand = New SqlCommand("set dateformat ymd", myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand("set dateformat ymd")
+        ExecuteNonQueryFunction(myCommand)
 
         If (Not System.IO.Directory.Exists("C:\inetpub\wwwroot\autorizaciones")) Then
             System.IO.Directory.CreateDirectory("C:\inetpub\wwwroot\autorizaciones")
@@ -40,15 +38,14 @@ Public Class _Default
             File.Delete(FileFound) 'borra locales
         Next
 
+        Dim v
         If Not IsPostBack Then '1a vez                        
             If Not Request.QueryString("id") Is Nothing Then 'implementando hopads de distribuidores
-                myCommand = New SqlCommand("SELECT id FROM distribuidores WHERE id=" + Request.QueryString("id").ToString + " and doctos=1", myConnection)
-                dr = myCommand.ExecuteReader()
-                If Not dr.Read() Then
-                    dr.Close()
+                myCommand = New SqlCommand("SELECT id FROM distribuidores WHERE id=" + Request.QueryString("id").ToString + " and doctos=1")
+                v = ExecuteScalarFunction(myCommand)
+                If IsNothing(v) Then
                     Session("refDistribuidor") = "1"
                 Else
-                    dr.Close()
                     Session("refDistribuidor") = Request.QueryString("id")
                 End If
             Else
@@ -102,7 +99,7 @@ Public Class _Default
                 '        Dim smpt As New System.Net.Mail.SmtpClient
                 '        smpt.Host = "smtp.gmail.com"
                 '        smpt.Port = "587"
-                '        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                '        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 '        smpt.EnableSsl = True 'req p server gmail
                 '        Try
                 '            smpt.Send(elcorreo)
@@ -119,25 +116,21 @@ Public Class _Default
                 '    dr.Close()
                 'End If
             Else
-                myCommand = New SqlCommand("UPDATE actuales SET msgFactParciales=0", myConnection) 'restablezco var p recordatorio
-                myCommand.ExecuteNonQuery()
+                myCommand = New SqlCommand("UPDATE actuales SET msgFactParciales=0") 'restablezco var p recordatorio
+                ExecuteNonQueryFunction(myCommand)
             End If
             Session("refDistribuidor") = "1"
 
             Dim numAn, numMens
             Dim q = "select COUNT(id) as numAn from ideAnual where archivoXML is not null"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            numAn = dr("numAn")
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            v = ExecuteScalarFunction(myCommand)
+            numAn = v
 
             q = "select COUNT(id) as numMens from ideMens where archivoXML is not null"
-            myCommand = New SqlCommand(q, myConnection)
-            dr = myCommand.ExecuteReader()
-            dr.Read()
-            numMens = dr("numMens")
-            dr.Close()
+            myCommand = New SqlCommand(q)
+            v = ExecuteScalarFunction(myCommand)
+            numMens = v
 
             nAcuses.Text = FormatNumber(CDbl(numAn) + CDbl(numMens), 0) 'FormatNumber(Directory.GetFiles("C:\SAT", "AA*.xml", SearchOption.AllDirectories).Length.ToString(), 0)
 

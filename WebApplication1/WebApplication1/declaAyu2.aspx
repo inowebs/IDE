@@ -65,9 +65,7 @@
 <body>
     <form id="form1" runat="server">
     <div class="style2">
-    
-        <span class="style1"><strong>Ayuda para informes de depósitos en efectivo 2014 y 
-        posteriores </strong></span><br 
+        <span class="style1"><strong>Ayuda para informes de depósitos en efectivo del 2014 al 2021</strong></span><br 
             class="style5" />
         <br /><span class="style8">- Con el esquema nuevo del SAT, al optar por el 
         esquema de declaraciones mensuales (el más recomendado), cuando reciba de sus 
@@ -107,6 +105,11 @@
         Las declaraciones en ceros que ya tienen estatus de envío &#39;aceptada&#39; o bien &#39;contingencia&#39;, no pueden editarse/modificarse/reenviarse, tendrían que 
         complementarse en otra declaración</span><br class="style8" />
         <span class="style8">-
+        Para acceder a esta ayuda: Ingrese al sistema, vaya al menu cuenta, desplacese abajo hasta ayuda</span><br class="style8" />
+        <span class="style8">-
+        La complementaria es sobre la última declaracion del periodo, la cual requiere 
+        tener sus acuses aceptados para poder complementarse</span><br class="style8" />
+            <span class="style8">-
         En el sistema los datos de la declaración anual son independientes de los de las 
         mensuales</span><br class="style8" /><span class="style8">-
         La complementaria es sobre la última declaracion del periodo, la cual requiere 
@@ -145,7 +148,7 @@
         <span class="style8">&nbsp;&nbsp; Abajo de los encabezados deben ir los datos correspondientes
         (recuerde dejar los renglones de encabezados) </span>
         <br class="style8" />
-        <span class="style8">&nbsp;&nbsp; Si usted lo desea puede utilizar fórmulas en las celdas 
+        <span class="style8">&nbsp;&nbsp; Si usted lo desea puede utilizar fórmulas en las celdas o bien sin formulas
         </span><br class="style8" />
         <span class="style8">&nbsp;&nbsp; Tanto los conceptos de importes de excedente y cheques de caja son ambos opcionales, 
         pero requiere especificarse al menos uno de ellos (y donde no lo especifique 
@@ -162,7 +165,8 @@
             CssClass="style8">mensual</asp:HyperLink> <span class="style8">&nbsp;(ejemplo)
         <br />
         Esta declaración requiere la especificación del desglose de los cotitulares de 
-        las cuentas que causaron ide por cada contribuyente.
+        las cuentas que causaron ide por cada contribuyente.Por cotitulares entendemos aquellos co-propietarios de una misma cuenta donde cada uno de ellos tiene un porcentaje de proporcion 
+	(un ejemplo claro son las cuentas mancomunadas). Si se manejan cotitulares use el formato del ejemploMensual2, pero no los maneja use el ejemploMensual2corto
         <br />
         Los renglones se clasifican en 3 grupos de acuerdo a la columna Descripción, el 
         2° renglón especifica las columnas para indicar un CONTRIBUYENTE, el 3er renglón 
@@ -245,6 +249,9 @@
             class="style8" />
         <span class="style8">- <strong>Razon social</strong>. Para persona moral: Denominación o razón social del 
         contribuyente reportado</span><br class="style8" />
+        <span class="style8">- <strong>Razon social</strong>. Si se trata de persona fisica indique nombre, ap paterno, ap materno y deje vacia la razon social. Si se trata de persona moral indique la razon social 
+y deje vacios nombre, ap paterno, ap materno
+</span><br class="style8" />
         <span class="style8">- <strong>Rfc</strong>. RFC del contribuyente reportado
         </span> 
         <br class="style8" />
@@ -258,7 +265,7 @@
         <span class="style8">- <strong>Num de socio/cliente</strong>. Número de socio o de cliente del contribuyente 
         (opcional)</span><br class="style8" />
         <span classSuma de depositos en efectivo</strong class="style10">. 
-        <span class="style8"> <strong>Suma de depositos en efectivo</strong>. </span>
+        <span class="style8"> <strong>Suma de depositos en efectivo</strong>- </span>
         Suma de depositos en efectivo del contribuyente 
         reportado (solo en mensuales)</span><br class="style10" />
         <span class="style8">- <strong>Monto Excedente</strong>. Monto excedente a 
@@ -267,14 +274,14 @@
         <span class="style8">-  <strong>Monto de cheques de caja</strong></strong>. Monto del 
         cheque de caja, pagado en efectivo. Solo aplica 
         a instituciones de crédito (bancos)</span><br class="style8" />
-        <span class="style8">- <strong>Num. de cuenta o contrato.</strong> Si no 
+        <span class="style8">- <strong>Num. de cuenta o contrato.</strong> Número o clave que identifica la cuenta o 
+        contrato reportado. Expresión 
+        del(os) número(s) de la(s) cuenta(s) abierta(s) a nombre del contribuyente en 
+        la(s) que se realizaron los depósitos en efectivo.&nbsp; . Si no 
         manejan ningún número de cuenta o de contrato: anote aquí el Número de socio, a 
         la derecha en Número de cotitulares especifique 0 y los renglones inferiores NO 
         debe especificar renglones tipo COT(cotitulares) sino que deberá seguir con el 
-        siguiente CON (contribuyente) en caso de haber mas. Número o clave que identifica la cuenta o 
-        contrato reportado. Expresión 
-        del(os) número(s) de la(s) cuenta(s) abierta(s) a nombre del contribuyente en 
-        la(s) que se realizaron los depósitos en efectivo.&nbsp; </strong> </span>
+        siguiente CON (contribuyente) en caso de haber mas. </strong> </span>
         <strong><br class="style8" />
         <span class="style8">- Num. de cotitulares .</strong>Número de cotitulares que el titular de la cuenta indique. 
         Se trata de un número entero positivo. El valor deberá ser 0 cuando no existan 
@@ -308,7 +315,7 @@
         generar una copia, asegúrese de eliminar todos los renglones debajo del 
         encabezado antes de iniciar con los suyos, seleccionando todas esas filas sobre 
         la columna que indica los números de renglón, clic derecho y eliminar, hágalo 
-        así en lugar de borrar solamente el contenido)l contenido)borrar solamente el contenido)n lugar de borrar solamente el contenido) lugar de borrar solamente el contenido)</span><br class="style8" />
+        así en lugar de borrar solamente el contenido</span><br class="style8" />
         <br class="style8" />
         <span class="style8">Ud. es el único responsable del contenido de la información que está declarando 
         tanto mensual como anualmente</span><br class="style8" />
@@ -319,7 +326,15 @@
         <span class="style8">Si en el archivo de excel se encuentran repetidos números de cuenta, se 
         actualizarán los datos restantes de dicho registro en las coincidencias 
         anteriores.<br />
-        </span><br class="sSi en el archivo de excel se encuentran repetidos el nombre y apellidos o razón 
+        </span>
+        <span class="style8">Respecto al efectivo captado por concepto de abono a creditos o prestamos, hay que considerar que si el pago entra a una cuenta de la institucion 
+entonces no debera incluirse en la declaracion, pero si el efectivo entra a una cuenta del contribuyente si deberia incluirse.
+        </span>
+        <br />
+        <span class="style8">Para el caso donde hay cuentas de ahorro de menores de edad, que no tienen RFC, se pueden tomar los datos del tutor
+        </span>
+        <br />
+        <span class="style8"> Si en el archivo de excel se encuentran repetidos el nombre y apellidos o razón 
         social, se actualizarán los datos restantes de dicho registro reemplazando las 
         coincidencias anterioes<br />
         Si la importación detecta algún error, se le avisará y deberá importar de nuevo 

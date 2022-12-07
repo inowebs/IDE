@@ -16,6 +16,12 @@ Module Module1
         End If
     End Function
 
+    Function TruncateDecimal(value As Decimal, precision As Integer) As Decimal
+        Dim stepper As Decimal = Math.Pow(10, precision)
+        Dim tmp As Decimal = Math.Truncate(stepper * value)
+        Return tmp / stepper
+    End Function
+
     Public Function ExecuteReaderFunction(myCommand As SqlCommand) As SqlDataReader
         Dim myConnection = New SqlConnection(connectionString)
         myCommand.Connection = myConnection
@@ -36,5 +42,6 @@ Module Module1
             Return myCommand.ExecuteNonQuery()
         End Using
     End Function
+
 
 End Module

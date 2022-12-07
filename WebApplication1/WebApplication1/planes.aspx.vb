@@ -62,7 +62,7 @@ Public Class WebForm2
         Dim smpt As New System.Net.Mail.SmtpClient
         smpt.Host = "smtp.gmail.com"
         smpt.Port = "587"
-        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
         smpt.EnableSsl = True 'req p server gmail
         Try
             smpt.Send(elcorreo)

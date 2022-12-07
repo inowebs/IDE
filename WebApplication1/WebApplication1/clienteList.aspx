@@ -57,7 +57,7 @@
 
     <p class="style3clienteList">
         <strong>Listado de Clientes&nbsp;&nbsp;&nbsp; </strong>
-        <asp:LinkButton ID="verDecl" runat="server">Ver últimas declaraciones</asp:LinkButton>
+        <asp:LinkButton ID="verDecl" runat="server">Ultimas decla de Todos</asp:LinkButton>
     </p>
     <asp:Panel ID="Panel3" runat="server" BorderStyle="Groove">
         <span class="style10">Cliente seleccionado</span>: 
@@ -81,7 +81,7 @@
         <asp:SqlDataSource ID="SqlDataSourceEdoCli" runat="server" ConnectionString="<%$ ConnectionStrings:ideConnectionString %>" SelectCommand="SELECT * FROM [estatusCliente] order by id"></asp:SqlDataSource>
         &nbsp;</p>
         
-                                            <br />
+                                            <br />        
     Clientes order desc
     <br />
     <asp:Label ID="nRegs" runat="server" Text="0 Registros"></asp:Label>
@@ -115,6 +115,11 @@
                                                     <asp:BoundField DataField="facCorreos" HeaderText="facCorreos" SortExpression="facCorreos" />
                                                     <asp:BoundField DataField="otrosCorreos" HeaderText="otrosCorreos" SortExpression="otrosCorreos" />
                                                     <asp:BoundField DataField="facTercero" HeaderText="facTercero" SortExpression="facTercero"  ItemStyle-HorizontalAlign="Center"/>                                                    
+                                                    <asp:TemplateField>
+                                                        <ItemTemplate>
+                                                            <asp:Button Text="Logearse" runat="server" CommandName="logearse" CommandArgument="<%# Container.DataItemIndex %>" />
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
                                                 </Columns>
                                                 <HeaderStyle BackColor="#EDEDED" Height="26px" />
                                             </asp:GridView>
@@ -129,8 +134,95 @@
     <br />
     </asp:Panel>
 
+            <table style="width: 345px">
+                            <tr>
+                                <td class="style23">
+                                    x Periodo: 
+                                    <asp:TextBox ID="declaDesde" runat="server" Columns="10" MaxLength="10"></asp:TextBox>
+                                    <ajaxToolkit:CalendarExtender ID="declaDesde_CalendarExtender" runat="server"
+                                Enabled="True" TargetControlID="declaDesde" CssClass="MyCalendar bg-white rounded " Format="dd/MM/yyyy">
+                            </ajaxToolkit:CalendarExtender>
+                                    <asp:TextBox ID="declaHasta" runat="server" Columns="10" MaxLength="10"></asp:TextBox>
+                                    <ajaxToolkit:CalendarExtender ID="declaHasta_CalendarExtender" runat="server"
+                                Enabled="True" TargetControlID="declaHasta" CssClass="MyCalendar bg-white rounded " Format="dd/MM/yyyy">
+                            </ajaxToolkit:CalendarExtender>
+                                    <asp:Button ID="declaBusPer" runat="server" style="font-size: small;" Text="Buscar" />
+                                </td>
+                            </tr>
+                        </table>
+    <br />
 
-    Resumen, lo ultimo:
+    <span class="style15admon"><strong>Declas y Contratos</strong></span><br />
+            Desde 2022:                        
+            <asp:TreeView ID="tv22" runat="server" style="font-size: small">
+            </asp:TreeView>
+            Hasta 2021:                        
+            <asp:TreeView ID="tvDeclas" runat="server" style="font-size: small">
+            </asp:TreeView>
+        Mensuales sin anual:
+    <asp:TreeView ID="TreeView2" runat="server" style="font-size: small">
+            </asp:TreeView>
+
+    Contratos:    
+    <asp:GridView ID="GridViewContras" runat="server"
+                    AlternatingRowStyle-BackColor="#C2D69B" AutoGenerateColumns="False"
+                    DataKeyNames="fechaPago,periodoInicial" DataSourceID="SqlDataSourceContras" Width="100%" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Horizontal" Font-Size="Small">
+                    <PagerStyle BackColor="White" ForeColor="Black" HorizontalAlign="Right" />
+                    <SelectedRowStyle BackColor="#CC3333" Font-Bold="True" ForeColor="white" />
+                    <Columns>
+                        <asp:CommandField ShowSelectButton="True" ButtonType="Button">
+                            <ItemStyle></ItemStyle>
+                        </asp:CommandField>
+                        <asp:BoundField DataField="id" HeaderText="Número de contrato" InsertVisible="False"
+                            ReadOnly="True" SortExpression="id" ItemStyle-HorizontalAlign="Right" HeaderStyle-HorizontalAlign="Right">
+                            <ItemStyle></ItemStyle>
+                        </asp:BoundField>
+                        <asp:BoundField DataField="precioNetoContrato" HeaderText="Precio Neto" ReadOnly="True"
+                            SortExpression="precioNetoContrato" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" HeaderStyle-HorizontalAlign="Right">
+                            <ItemStyle HorizontalAlign="Right"></ItemStyle>
+                        </asp:BoundField>
+                        <asp:BoundField DataField="fechaPago" HeaderText="Fecha de Pago" ReadOnly="True"
+                            SortExpression="fechaPago" DataFormatString="{0:d}">
+                            <ItemStyle></ItemStyle>
+                        </asp:BoundField>
+                        <asp:BoundField DataField="periodoInicial" HeaderText="Periodo Inicial" ReadOnly="True"
+                            SortExpression="periodoInicial" DataFormatString="{0:d}">
+                            <ItemStyle></ItemStyle>
+                        </asp:BoundField>
+                        <asp:BoundField DataField="elplan" HeaderText="Plan"
+                            SortExpression="elplan">
+                            <ItemStyle></ItemStyle>
+                        </asp:BoundField>
+                        <asp:BoundField DataField="fechaFinal" HeaderText="Fecha Final" SortExpression="fechaFinal"
+                            DataFormatString="{0:d}">
+                            <ItemStyle></ItemStyle>
+                        </asp:BoundField>
+                        <asp:BoundField DataField="nDeclHechas" HeaderText="Declaraciones Hechas"
+                            SortExpression="nDeclHechas" ItemStyle-HorizontalAlign="center" HeaderStyle-HorizontalAlign="Center">
+                            <ItemStyle></ItemStyle>
+                        </asp:BoundField>
+                        <asp:BoundField DataField="nDeclContratadas" HeaderText="Declaraciones Contratadas"
+                            SortExpression="nDeclContratadas" ItemStyle-HorizontalAlign="center" HeaderStyle-HorizontalAlign="Center">
+                            <ItemStyle></ItemStyle>
+                        </asp:BoundField>
+                        <asp:BoundField DataField="uuid" HeaderText="uuid"
+                            SortExpression="uuid" HeaderStyle-HorizontalAlign="center" ItemStyle-HorizontalAlign="center">
+                            <ItemStyle></ItemStyle>
+                        </asp:BoundField>
+                    </Columns>
+                    <FooterStyle BackColor="#CCCC99" ForeColor="Black" />
+                    <HeaderStyle BackColor="#333333" Font-Bold="True" ForeColor="White" />
+                    <SortedAscendingCellStyle BackColor="#F7F7F7" />
+                    <SortedAscendingHeaderStyle BackColor="#4B4B4B" />
+                    <SortedDescendingCellStyle BackColor="#E5E5E5" />
+                    <SortedDescendingHeaderStyle BackColor="#242121" />
+                </asp:GridView>
+                <asp:SqlDataSource ID="SqlDataSourceContras" runat="server"
+                    ConnectionString="<%$ ConnectionStrings:ideConnectionString %>"
+                    SelectCommand=""></asp:SqlDataSource>
+
+    <br />
+    Ultimas acciones clientes:
     <br />
     <div id="agrupaGV1" class="gvWidthHight">
                                             <asp:GridView ID="GridView1" runat="server" AlternatingRowStyle-BackColor="#C2D69B" AutoGenerateColumns="False" DataKeyNames="correo" DataSourceID="SqlDataSource1" ShowHeader="True" Font-Size="X-Small" style="width:100%">
@@ -183,13 +275,13 @@ estatusCli.id=cli.idEstatus and
 anual.idCliente=cli.id order by correo">
                                             </asp:SqlDataSource>
         </div>
-                                    <br />
-
     <br />
+    Ultimas Declas y Contras de todos:
     <br />
-    Última declaración, clic sobre renglones padre para iniciar ses. :<br />
-            <asp:TreeView ID="TreeView1" runat="server" style="font-size: small">
-
+    <asp:TreeView ID="TreeView1" runat="server" style="font-size: small">
             </asp:TreeView>
+    <br />
+
+    <br />
                                         
 </asp:Content>

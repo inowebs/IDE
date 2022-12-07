@@ -33,6 +33,19 @@
             }
         }
 
+        function pregunta(uuid, ped) {
+            var mensaje = confirm("Este contrato contiene una factura con el uuid: " + uuid + " ¿Desea continuar?");
+            if (mensaje) {
+                let valHiden = $("#<%:refactPedido.ClientID%>");
+                <%--let tipoP = "<%:tipoPed.SelectedValue%>";--%>
+                //valHiden.val(ped+"|"+tipoP);
+                valHiden.val(Now);
+                __doPostBack("<%:refactPedido.ClientID%>", "");
+            }
+            else {
+                return true;
+            }
+        }
 
     </script>
 
@@ -298,6 +311,7 @@
                 &nbsp;
             </div>
         </div>
+        <asp:Panel ID="panelAdm" runat="server">
         <hr class="bg-dark" style="border-width: 1px" />
             <div class="card">
                 <div class="card-body">
@@ -318,6 +332,12 @@
                     </div>
                     <div class="auto-style1">
                         <asp:CheckBox ID="yFac" runat="server" Text="y facturar" />
+                        &nbsp;
+                <asp:Label ID="calc" runat="server"></asp:Label>
+            &nbsp;<asp:CheckBox ID="redondear" runat="server" AutoPostBack="True" Text="Redondear" />
+                        <asp:CheckBox ID="chkSubtotal" runat="server" AutoPostBack="True" Text="Subtotal" />
+                        <asp:TextBox ID="subtotalTxt" runat="server" Visible="false" AutoPostBack="True"></asp:TextBox>
+&nbsp;
                         <asp:Button runat="server" ID="actPago" Text="Registrar Pago"
                             PostBackUrl="~/contrato.aspx"
                             ToolTip="y notificarlo al cliente, lo establece o lo limpia"
@@ -325,7 +345,7 @@
                     </div>  
                     <div class="col-sm-2">
                         <asp:Button runat="server" ID="soloFac" Text="Solo facturar FP" ToolTip="Verifica 1o formaPago" PostBackUrl="~/contrato.aspx" CssClass="btn btn-sm btn-info rounded p-1" />
-                        <asp:Button ID="btnConfirm" runat="server" Text="" Style="display: none" />
+                       <%--<asp:Button ID="btnConfirm" runat="server" Text="" Style="display: none" />--%>
                     </div>                        
         </div>
       </div>
@@ -408,7 +428,9 @@
                 <asp:TextBox runat="server" ID="uuid" Columns="36" MaxLength="36" Width="363px" Enabled="false" ></asp:TextBox>
             </div>
         </div>
-    </div>
+    </asp:Panel>
+            </div>
+    
     <hr class="bg-dark" style="border-width: 1px" />
     <div class="container">
         <div class="card">

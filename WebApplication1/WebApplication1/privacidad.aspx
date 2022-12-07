@@ -92,7 +92,9 @@
         Domicilio<br />
         CASFIM<br />
         Teléfonos<br />
-        Referencias bancarias para pago de comisiones
+        Referencias bancarias para pago de comisiones<br />
+        Firma electronica FIEL (solo en caso de contratar el servicio de presentacion de las declaraciones por el proveedor al SAT)<br />
+       
         </p>
     <p align="justify" 
         style="color: rgb(62, 62, 62); font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 16px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); ">
@@ -111,8 +113,8 @@
     <p align="justify" 
         style="color: rgb(62, 62, 62); font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 16px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); ">
         DeclaracionesIde.com aconseja al 
-        usuario que actualice sus datos cada vez que éstos sufran alguna modificación, 
-        ya que esto permitirá brindarle un servicio más personalizado.</p>
+        usuario que actualice sus datos cada vez que éstos sufran alguna modificación o que esten por caducar, 
+        ya que esto permitirá brindarle un servicio más personalizado y oportuno.</p>
     <p align="justify" 
         style="color: rgb(62, 62, 62); font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 16px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); ">
         <strong>Transferencias de información con terceros.</strong></p>
@@ -140,10 +142,13 @@
         información.</p>
     <p align="justify" 
         style="color: rgb(62, 62, 62); font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 16px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); ">
+        Adicionalmente se encriptara la firma electronica FIEL para brindar mayor seguridad.</p>
+    <p align="justify" 
+        style="color: rgb(62, 62, 62); font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 16px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); ">
         <strong>Datos Sensibles<br />
         <span style="color: rgb(62, 62, 62); font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 16px; orphans: 2; text-align: justify; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); display: inline !important; float: none;">
         Declaraciones Ide</span></strong> no solicita datos personales sensibles en los términos 
-        descritos por la&nbsp;Ley.&nbsp;</p>
+        descritos por la&nbsp;Ley, excepto aquellos que sean necesarios para el cumplimiento exclusivo de los servicios para los cuales es contratado.&nbsp;</p>
     <p align="justify" 
         style="color: rgb(62, 62, 62); font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 16px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); ">
         <strong>Confidencialidad</strong></p>
@@ -231,8 +236,8 @@
         Declaraciones Ide</span>.</p>
     <p align="justify" 
         style="color: rgb(62, 62, 62); font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 16px; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); ">
-        <strong>Ultima actualización:<span class="Apple-converted-space">&nbsp;</span></strong>27 
-        de Agosto de 2012</p>
+        <strong>Ultima actualización:<span class="Apple-converted-space">&nbsp;</span></strong>23 
+        de Noviembre de 2022</p>
 <br />
 <br />
 

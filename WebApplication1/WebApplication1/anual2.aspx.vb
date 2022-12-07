@@ -1064,7 +1064,7 @@ Public Class anual2
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -1383,14 +1383,14 @@ Public Class anual2
                             Dom = ""
                         End If
                         If Not array(ren, 8) Is Nothing Then
-                            If array(ren, 8).ToString <> "" Then
+                            If Regex.Replace(array(ren, 8).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "").Replace("/", ""), "[a-zA-Z\s]+", "") <> "" Then
                                 If Len(array(ren, 8).ToString.ToUpper.Trim) > 15 Then
                                     msgErr = msgErr + ". " + vbCr + "Truncando telefono1 a 15 caracteres en el renglon " + CStr(ren)
                                 End If
-                                If Not IsNumeric(Regex.Replace(array(ren, 8).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", ""), "[a-zA-Z\s]+", "")) Then
-                                    msgErr = msgErr + ". " + vbCr + "Telefono1 " + array(ren, 8).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "") + " solo debe tener numeros en el renglon " + CStr(ren)
+                                If Not IsNumeric(Regex.Replace(array(ren, 8).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "").Replace("/", ""), "[a-zA-Z\s]+", "")) Then
+                                    msgErr = msgErr + ". " + vbCr + "Telefono1 " + array(ren, 8).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "").Replace("/", "") + " solo debe tener numeros en el renglon " + CStr(ren)
                                 End If
-                                telefono1 = Left(Regex.Replace(array(ren, 8).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", ""), "[a-zA-Z\s]+", ""), 15).Trim
+                                telefono1 = Left(Regex.Replace(array(ren, 8).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "").Replace("/", ""), "[a-zA-Z\s]+", ""), 15).Trim
                             Else
                                 telefono1 = ""
                             End If
@@ -1398,14 +1398,14 @@ Public Class anual2
                             telefono1 = ""
                         End If
                         If Not array(ren, 9) Is Nothing Then
-                            If array(ren, 9).ToString <> "" Then
+                            If Regex.Replace(array(ren, 9).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "").Replace("/", ""), "[a-zA-Z\s]+", "") <> "" Then
                                 If Len(array(ren, 9).ToString.ToUpper.Trim) > 15 Then
                                     msgErr = msgErr + ". " + vbCr + "Truncando telefono2 a 15 caracteres en el renglon " + CStr(ren)
                                 End If
-                                If Not IsNumeric(Regex.Replace(array(ren, 9).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", ""), "[a-zA-Z\s]+", "")) Then
-                                    msgErr = msgErr + ". " + vbCr + "Telefono2 " + array(ren, 9).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "") + " solo debe tener numeros en el renglon " + CStr(ren)
+                                If Not IsNumeric(Regex.Replace(array(ren, 9).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "").Replace("/", ""), "[a-zA-Z\s]+", "")) Then
+                                    msgErr = msgErr + ". " + vbCr + "Telefono2 " + array(ren, 9).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "").Replace("/", "") + " solo debe tener numeros en el renglon " + CStr(ren)
                                 End If
-                                telefono2 = Left(Regex.Replace(array(ren, 9).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", ""), "[a-zA-Z\s]+", ""), 15).Trim
+                                telefono2 = Left(Regex.Replace(array(ren, 9).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "").Replace("/", ""), "[a-zA-Z\s]+", ""), 15).Trim
                             Else
                                 telefono2 = ""
                             End If
@@ -1446,18 +1446,20 @@ Public Class anual2
                         End If
                         If Not array(ren, 12) Is Nothing Then
                             If array(ren, 12).ToString <> "" Then
-                                If Not IsNumeric(array(ren, 12)) Then
-                                    msgErr = msgErr + ". " + vbCr + "El monto de cheques debe ser tipo numerico o dejelo en blanco eliminando el contenido en el renglon " + CStr(ren)
-                                    ctrlErr = 1
-                                    GoTo siguiente
-                                End If
-                                If CDbl(array(ren, 12)) < 0 Then
-                                    msgErr = msgErr + ". " + vbCr + "el monto de cheques debe ser >= 0 en el renglon " + CStr(ren)
-                                    ctrlErr = 1
-                                    GoTo siguiente
-                                End If
+                                If esInstitCredito = 1 Then
+                                    If Not IsNumeric(array(ren, 12)) Then
+                                        msgErr = msgErr + ". " + vbCr + "El monto de cheques debe ser tipo numerico o dejelo en blanco eliminando el contenido en el renglon " + CStr(ren)
+                                        ctrlErr = 1
+                                        GoTo siguiente
+                                    End If
+                                    If CDbl(array(ren, 12)) < 0 Then
+                                        msgErr = msgErr + ". " + vbCr + "el monto de cheques debe ser >= 0 en el renglon " + CStr(ren)
+                                        ctrlErr = 1
+                                        GoTo siguiente
+                                    End If
 
-                                cheque = redondea(array(ren, 12)).ToString.Trim
+                                    cheque = redondea(array(ren, 12)).ToString.Trim
+                                End If
                             Else
                                 cheque = ""
                             End If
@@ -1573,7 +1575,7 @@ Public Class anual2
                             End If
                             ctaNum = Left(array(ren, 2).ToString.ToUpper.Trim, 20)
                         Else
-                            If exedente = "" And cheque <> "" Then
+                            If exedente = "" And (cheque <> "" And cheque <> "0") Then
                                 ctaNum = "9"
                             Else
                                 ctaNum = ""
@@ -1592,7 +1594,7 @@ Public Class anual2
                             End If
                             ctaCotit = CInt(ctaCotit).ToString
                         Else
-                            If exedente = "" And cheque <> "" Then
+                            If exedente = "" And (cheque <> "" And cheque <> "0") Then
                                 ctaCotit = "0"
                             Else
                                 ctaCotit = ""
@@ -1829,12 +1831,12 @@ etqErr:
                             Dom = ""
                         End If
                         If Not array(ren, 8) Is Nothing Then
-                            telefono1 = Regex.Replace(Left(array(ren, 8).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", ""), 15), "[a-zA-Z\s]+", "")
+                            telefono1 = Regex.Replace(Left(array(ren, 8).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "").Replace("/", ""), 15), "[a-zA-Z\s]+", "")
                         Else
                             telefono1 = ""
                         End If
                         If Not array(ren, 9) Is Nothing Then
-                            telefono2 = Regex.Replace(Left(array(ren, 9).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", ""), 15), "[a-zA-Z\s]+", "")
+                            telefono2 = Regex.Replace(Left(array(ren, 9).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", "").Replace("/", ""), 15), "[a-zA-Z\s]+", "")
                         Else
                             telefono2 = ""
                         End If
@@ -1966,62 +1968,62 @@ etqErr:
                             End If
                         End Using
 
-                        q = "SELECT d.id FROM ideDetAnual d, contribuyente c WHERE d.idContribuyente=c.id AND idAnual=" + id.Text + " AND c.id=" + idContrib.ToString + " AND d.periodo='" + mes.ToString + "'"
+                        'q = "SELECT d.id FROM ideDetAnual d, contribuyente c WHERE d.idContribuyente=c.id AND idAnual=" + id.Text + " AND c.id=" + idContrib.ToString + " AND d.periodo='" + mes.ToString + "'"
+                        'myCommand = New SqlCommand(q)
+                        'Using dr = ExecuteReaderFunction(myCommand)
+                        'If dr.Read() Then 'registro duplicado (llaves) en el archivo->reemplazarlo por el mas reciente
+                        '    idIdeDet = dr("id")
+                        '    ideDetAnualActual = idIdeDet
+
+
+                        '    If esInstitCredito = 1 Then
+                        '        If exedente <> "" Then
+                        '            q = "UPDATE ideDetAnual SET exedente='" + exedente + "' WHERE id=" + idIdeDet.ToString
+                        '            myCommand2 = New SqlCommand(q)
+                        '            ExecuteNonQueryFunction(myCommand2)
+                        '        End If
+                        '        If cheque <> "" Then
+                        '            q = "UPDATE ideDetAnual SET chqCajaMonto='" + cheque + "' WHERE id=" + idIdeDet.ToString
+                        '            myCommand2 = New SqlCommand(q)
+                        '            ExecuteNonQueryFunction(myCommand2)
+                        '        End If
+                        '    Else
+                        '        q = "UPDATE ideDetAnual SET exedente='" + exedente + "' WHERE id=" + idIdeDet.ToString
+                        '        myCommand2 = New SqlCommand(q)
+                        '        ExecuteNonQueryFunction(myCommand2)
+
+                        '        If cheque <> "" Then
+                        '            q = "UPDATE ideDetAnual SET chqCajaMonto='" + cheque + "' WHERE id=" + idIdeDet.ToString
+                        '            myCommand2 = New SqlCommand(q)
+                        '            ExecuteNonQueryFunction(myCommand2)
+                        '        End If
+                        '    End If
+                        'Else    'nuevo registro                               
+
+                        'If esInstitCredito = 1 Then
+                        q = "INSERT INTO ideDetAnual(idAnual,idContribuyente, periodo"
+                        If exedente <> "" Then
+                            q = q + ",exedente"
+                        End If
+                        If cheque <> "" Then
+                            q = q + ",chqCajaMonto"
+                        End If
+                        q = q + ") VALUES(" + id.Text + "," + idContrib.ToString + ",'" + mes + "'"
+                        If exedente <> "" Then
+                            q = q + ",'" + exedente + "'"
+                        End If
+                        If cheque <> "" Then
+                            q = q + ",'" + cheque + "'"
+                        End If
+                        q = q + ")"
+                        myCommand2 = New SqlCommand(q)
+                        ExecuteNonQueryFunction(myCommand2)
+
+                        q = "SELECT TOP 1 id FROM ideDetAnual ORDER BY id DESC"
                         myCommand = New SqlCommand(q)
-                        Using dr = ExecuteReaderFunction(myCommand)
-                            If dr.Read() Then 'registro duplicado (llaves) en el archivo->reemplazarlo por el mas reciente
-                                idIdeDet = dr("id")
-                                ideDetAnualActual = idIdeDet
-
-
-                                If esInstitCredito = 1 Then
-                                    If exedente <> "" Then
-                                        q = "UPDATE ideDetAnual SET exedente='" + exedente + "' WHERE id=" + idIdeDet.ToString
-                                        myCommand2 = New SqlCommand(q)
-                                        ExecuteNonQueryFunction(myCommand2)
-                                    End If
-                                    If cheque <> "" Then
-                                        q = "UPDATE ideDetAnual SET chqCajaMonto='" + cheque + "' WHERE id=" + idIdeDet.ToString
-                                        myCommand2 = New SqlCommand(q)
-                                        ExecuteNonQueryFunction(myCommand2)
-                                    End If
-                                Else
-                                    q = "UPDATE ideDetAnual SET exedente='" + exedente + "' WHERE id=" + idIdeDet.ToString
-                                    myCommand2 = New SqlCommand(q)
-                                    ExecuteNonQueryFunction(myCommand2)
-
-                                    If cheque <> "" Then
-                                        q = "UPDATE ideDetAnual SET chqCajaMonto='" + cheque + "' WHERE id=" + idIdeDet.ToString
-                                        myCommand2 = New SqlCommand(q)
-                                        ExecuteNonQueryFunction(myCommand2)
-                                    End If
-                                End If
-                            Else    'nuevo registro                               
-
-                                'If esInstitCredito = 1 Then
-                                q = "INSERT INTO ideDetAnual(idAnual,idContribuyente, periodo"
-                                If exedente <> "" Then
-                                    q = q + ",exedente"
-                                End If
-                                If cheque <> "" Then
-                                    q = q + ",chqCajaMonto"
-                                End If
-                                q = q + ") VALUES(" + id.Text + "," + idContrib.ToString + ",'" + mes + "'"
-                                If exedente <> "" Then
-                                    q = q + ",'" + exedente + "'"
-                                End If
-                                If cheque <> "" Then
-                                    q = q + ",'" + cheque + "'"
-                                End If
-                                q = q + ")"
-                                myCommand2 = New SqlCommand(q)
-                                ExecuteNonQueryFunction(myCommand2)
-
-                                q = "SELECT TOP 1 id FROM ideDetAnual ORDER BY id DESC"
-                                myCommand = New SqlCommand(q)
-                                ideDetAnualActual = ExecuteScalarFunction(myCommand)
-                            End If
-                        End Using
+                        ideDetAnualActual = ExecuteScalarFunction(myCommand)
+                        'End If
+                        'End Using
                     ElseIf descrip = "CTA" Then
                         'repetidos: update
                         Dim idCotitularesCuenta
@@ -2044,6 +2046,21 @@ etqErr:
                                 cotitularesCuentaActual = ExecuteScalarFunction(myCommand)
                             End If
                         End Using
+
+                        'validamos que solo 1 vez exista para la misma cuenta depositos para el mismo contrib, anio y mes
+                        q = "SELECT count(*) as n FROM cotitularesCuentaAnual WHERE numeroCuenta='" + ctaNum + "' AND idideDetAnual IN (SELECT id from ideDetAnual WHERE idAnual=" + id.Text + " AND idContribuyente = " + idContrib.ToString + " AND periodo ='" + mes + "')"
+                        myCommand = New SqlCommand(q)
+                        Using dr = ExecuteReaderFunction(myCommand)
+                            dr.Read()
+                            If dr("n") > 1 Then
+                                Session("error") = "Para una misma cuenta (" + ctaNum + ") se detectaron mas de 1 depositos en el mismo anio, mes (" + mes + ") y contribuyente, en el renglon " + ren.ToString + ", verifique"
+                                Response.Write("<script language='javascript'>alert('Para una misma cuenta se detectaron mas de 1 depositos en el mismo anio, mes y contribuyente, verifique');</script>")
+                                statusImport.Text = Session("error") + ". Se procesaron exitosamente los primeros " + Session("barraIteracion").ToString + " registros"
+                                objThread.Abort()
+                                Return 0
+                            End If
+                        End Using
+
                     ElseIf descrip = "COT" Then
                         myCommand2 = New SqlCommand("INSERT INTO tcotitularAnual(idCotitularesCuentaAnual,nombreCompleto,rfc,proporcion,curp) VALUES(" + cotitularesCuentaActual.ToString + ",'" + cotNom + "','" + cotRfc + "','" + cotProporcion.ToString + "','" + cotCurp + "')")
                         ExecuteNonQueryFunction(myCommand2)
@@ -2053,6 +2070,7 @@ siguiente2:
                     'percent = Double.Parse(ren * 100 / rens).ToString("0")
                     'progressbar.Style("width") = percent + "px"
                 Next
+
 
                 Session("barraIteracion") = Session("barraN")
                 myCommand2 = New SqlCommand("UPDATE ideAnual SET estado='IMPORTADA', idContrato=" + idContrato.Value.ToString + ", viaImportacion=1 WHERE id=" + id.Text)
@@ -2346,7 +2364,7 @@ siguiente2:
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -2384,15 +2402,16 @@ siguiente2:
                     elcorreo.To.Add("declaracioneside@gmail.com")
                 Else
                     elcorreo.To.Add(Session("curCorreo"))
+                    elcorreo.Bcc.Add("declaracioneside@gmail.com")
                 End If
-                elcorreo.Subject = "Declaración Anual Ejercicio " + ejercicio.Value.ToString + ", constancia de envío"
+                elcorreo.Subject = "Declaración Anual Ejercicio " + ejercicio.Value.ToString + ", constancia de envío de " + Session("curCorreo")
                 elcorreo.Body = "<html><body>Evidencia de envío: <br/><br/>" + resultado + "<br/><br/>Favor de conservar este correo para rastreo de acuses en caso necesario; En cuanto el SAT deposite el acuse en nuestros servidores, podrá descargarlo de nuestra página o bien si después de 3 dias hábiles no lo puede bajar, solicítelo a este correo y le será enviado en caso de ya haberlo recibido del SAT, Saludos. <br><br>Atentamente,<br><br><a href='declaracioneside.com' target='_blank'>Declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet<br>Tel 01 443 690 3616<br>Correo declaracioneside@gmail.com<br><a href='https://twitter.com/declaracionesid' target='_blank'><img src='declaracioneside.com/twitter.jpg' alt='Clic aquí, siguenos en twitter' Height='30px' Width='30px' BorderWidth='0px'></a>&nbsp;<a href='http://www.youtube.com/user/declaracioneside' target='_blank'><img src='declaracioneside.com/iconoyoutube.png' alt='Suscribete a nuestro canal declaraciones de depósitos en efectivo e IDE en youtube' Height='30px' Width='30px' BorderWidth='0px'></a> &nbsp;<a href='http://www.facebook.com/depositosenefectivo' target='_blank'><img src='declaracioneside.com/facebook.jpg' alt='Clic aquí para seguirnos en facebook' Height='30px' Width='30px' BorderWidth='0px'></a>&nbsp;&nbsp;<a href='https://mx.linkedin.com/in/declaraciones-depósitos-en-efectivo-1110125b' target='_blank'><img src='declaracioneside.com/linkedin.png' alt='Siguenos en linkedin' Height='30px' Width='30px' BorderWidth='0px'></a>&nbsp;<a href='http://plus.google.com/107594546767340388428?prsrc=3'><img src='http://ssl.gstatic.com/images/icons/gplus-32.png' alt='Google+' Height='30px' Width='30px' BorderWidth='0px'></a><br/></body></html>"
                 elcorreo.IsBodyHtml = True
                 elcorreo.Priority = System.Net.Mail.MailPriority.Normal
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -2467,7 +2486,7 @@ siguiente2:
         '                                    Dim smpt As New System.Net.Mail.SmtpClient
         '                                    smpt.Host = "smtp.gmail.com"
         '                                    smpt.Port = "587"
-        '                                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+        '                                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
         '                                    smpt.EnableSsl = True 'req p server gmail
         '                                    Try
         '                                        smpt.Send(elcorreo)
@@ -2685,8 +2704,8 @@ siguiente2:
         progressbar1.Style("width") = "0px"
         statusImport.Text = ""
         descrip.Text = ""
-        Dim qAcuseSolicitado, qFechaEnvio
-        Dim q = "SELECT id,estado,acuseSolicitado,fechaEnvio FROM ideAnual WHERE id='" + id.Text + "'"
+        Dim qAcuseSolicitado, qFechaEnvio, evidEnvio
+        Dim q = "SELECT id,estado,acuseSolicitado,fechaEnvio, evidEnvio FROM ideAnual WHERE id='" + id.Text + "'"
         myCommand = New SqlCommand(q)
         Using dr = ExecuteReaderFunction(myCommand)
             If Not dr.Read() Then
@@ -2698,10 +2717,11 @@ siguiente2:
             End If
             qAcuseSolicitado = dr("acuseSolicitado")
             qFechaEnvio = dr("fechaEnvio")
+            evidEnvio = dr("evidEnvio")
         End Using
 
-        Dim loginSAT, directorioServidor, casfim, tipo, idArch, razonSoc
-        q = "SELECT loginSAT,directorioServidor,casfim,razonSoc FROM clientes WHERE id=" + Session("GidCliente").ToString
+        Dim loginSAT, directorioServidor, casfim, tipo, idArch, razonSoc, rfc
+        q = "SELECT loginSAT,directorioServidor,casfim,razonSoc,rfcDeclarante FROM clientes WHERE id=" + Session("GidCliente").ToString
         myCommand = New SqlCommand(q)
         Using dr = ExecuteReaderFunction(myCommand)
             dr.Read()
@@ -2709,6 +2729,7 @@ siguiente2:
             directorioServidor = "C:\SAT\" + dr("directorioServidor")
             casfim = dr("casfim")
             razonSoc = dr("razonSoc")
+            rfc = dr("rfcDeclarante")
         End Using
         If normalComplementaria.Text = "NORMAL" Then
             tipo = "N"
@@ -2721,6 +2742,7 @@ siguiente2:
         nomArchMensSinPath = casfim + "-" + "A-" + ejercicio.Value.ToString + tipo + idArch + ".XML"
         Dim fechaHoraFmt
         fechaHoraFmt = CDate(qFechaEnvio).ToString("yyyy-MM-dd HH:mm:ss").Replace(" ", "_").Replace(":", "-")
+        Dim acusesMayo2022 = False
         If CDate(qFechaEnvio).ToString("yyyy-MM-dd") >= "2017-03-15" And CDate(qFechaEnvio).ToString("yyyy-MM-dd") < "2021-01-01" Then  'cambio de nomenclatura de archivos
             nomArchMens = "C:\SAT\" + casfim + "\" + "A-" + ejercicio.Value.ToString + tipo + idArch + fechaHoraFmt + ".XML"
             nomArchMensSinPath = "A-" + ejercicio.Value.ToString + tipo + idArch + fechaHoraFmt + ".XML"
@@ -2729,6 +2751,10 @@ siguiente2:
             nomArchMensSinPath = casfim + "-" + "A-" + ejercicio.Value.ToString + tipo + idArch + fechaHoraFmt + ".XML"
         End If
 
+        'fecha en que cambiaron formato de acuses
+        If CDate(qFechaEnvio).ToString("yyyy-MM-dd") >= "2022-04-05" Then  'cambio de nomenclatura de archivos
+            acusesMayo2022 = True
+        End If
         'Dim nWnd As IntPtr
         'Dim ceroIntPtr As New IntPtr(0)
         'Dim Wnd_name As String
@@ -2806,7 +2832,7 @@ siguiente2:
         '                            Dim smpt As New System.Net.Mail.SmtpClient
         '                            smpt.Host = "smtp.gmail.com"
         '                            smpt.Port = "587"
-        '                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+        '                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
         '                            smpt.EnableSsl = True 'req p server gmail
         '                            Try
         '                                smpt.Send(elcorreo)
@@ -2835,7 +2861,12 @@ siguiente2:
         Dim fName As String
         Dim allRead As String
         Dim regMatch As String 'string to search for inside of text file. It is case sensitive.
-        regMatch = nomArchMensSinPath  'buscando el nomArchMensSinPath como texto dentro del archivo
+        If acusesMayo2022 = False Then
+            regMatch = nomArchMensSinPath  'buscando el nomArchMensSinPath como texto dentro del archivo
+        Else
+            regMatch = rfc  'buscando el RFC como texto dentro del archivo
+        End If
+
         Try
             Using zip As ZipFile = New ZipFile
                 Dim c As Integer, archPdf As String, listaAcuses As New List(Of String)(), cont As Integer
@@ -2847,27 +2878,74 @@ siguiente2:
                     allRead = testTxt.ReadToEnd() 'Reads the whole text file to the end
                     testTxt.Close() 'Closes the text file after it is fully read.
                     If (Regex.IsMatch(allRead, regMatch)) Then 'If match found in allRead
-                        zip.AddFile(fName, "")
-                        If Left(dra.Name, 2) = "AA" Then 'acuse aceptado, solo esos traen numOper y fechaPresentacion
-                            extraeNumoperDeAcuse(allRead)
-                            'borro movs de decls con acuse de aceptacion, ya se aceptó y ya no están disp pal user y se libera espacio
-                            myCommand = New SqlCommand("DELETE FROM mov WHERE idCuentasIdeDetAnual IN (SELECT id FROM cuentasIdeDetAnual WHERE idideDetAnual IN (SELECT id FROM ideDetAnual WHERE idAnual=" + id.Text + "))")
-                            ExecuteNonQueryFunction(myCommand)
+                        If acusesMayo2022 = False Then
+                            zip.AddFile(fName, "")
+                            If Left(dra.Name, 2) = "AA" Then 'acuse aceptado, solo esos traen numOper y fechaPresentacion
+                                extraeNumoperDeAcuse(allRead)
+                                'borro movs de decls con acuse de aceptacion, ya se aceptó y ya no están disp pal user y se libera espacio
+                                myCommand = New SqlCommand("DELETE FROM mov WHERE idCuentasIdeDetAnual IN (SELECT id FROM cuentasIdeDetAnual WHERE idideDetAnual IN (SELECT id FROM ideDetAnual WHERE idAnual=" + id.Text + "))")
+                                ExecuteNonQueryFunction(myCommand)
 
-                            archPdf = acusePdf("A", dra.DirectoryName, dra.Name, casfim) 'aceptado, ruta, nombre
-                        Else 'solo trae fechaPresentacion y archivo
-                            archPdf = acusePdf("R", dra.DirectoryName, dra.Name, casfim) 'rechazado
+                                archPdf = acusePdf("A", dra.DirectoryName, dra.Name, casfim) 'aceptado, ruta, nombre
+                            Else 'solo trae fechaPresentacion y archivo
+                                archPdf = acusePdf("R", dra.DirectoryName, dra.Name, casfim) 'rechazado
+                            End If
+                            zip.AddFile(archPdf, "")
+
+                            c = 1
+                            listaAcuses.Add(archPdf)
+                            cont = cont + 1
+                        Else 'desde mayo2022
+                            If (Regex.IsMatch(allRead, "AcuseRecepcionAnualIDE")) Then 'If match found in allRead
+                                Dim doc As XmlDocument
+                                Dim nodelist As XmlNodeList
+                                Dim nodo As System.Xml.XmlNode
+                                doc = New XmlDocument
+                                doc.Load(fName)
+                                nodelist = doc.SelectNodes("/AcuseRecepcionAnualIDE")
+                                For Each nodo In nodelist
+                                    Dim ejercicioXml = nodo.Attributes.GetNamedItem("ejercicio").Value
+                                    Dim denominacionXml = nodo.Attributes.GetNamedItem("denominacion").Value
+                                    Dim tipoXml = nodo.Attributes.GetNamedItem("tipo").Value
+                                    Dim selloXml = nodo.Attributes.GetNamedItem("sello").Value
+
+                                    If ejercicioXml = ejercicio.Value Then
+                                        zip.AddFile(fName, "")
+                                        If Left(dra.Name, 2) = "AA" Then 'acuse aceptado, solo esos traen numOper y fechaPresentacion
+                                            'extraeNumoperDeAcuse(allRead)
+                                            Session("numOperAcuse") = ""
+                                            Session("fechaPresentacionAcuse") = ""
+                                            Session("rfcAcuse") = rfc
+                                            Session("denominacionAcuse") = denominacionXml
+                                            Session("recaudadoAcuse") = ""
+                                            Session("ejercicioAcuse") = ejercicioXml
+                                            Session("tipoAcuse") = tipoXml
+                                            Session("folioAcuse") = ""
+                                            Session("archivoAcuse") = ""
+                                            Session("selloAcuse") = selloXml
+                                            'borro movs de decls con acuse de aceptacion, ya se aceptó y ya no están disp pal user y se libera espacio
+                                            myCommand = New SqlCommand("DELETE FROM mov WHERE idCuentasIdeDetAnual IN (SELECT id FROM cuentasIdeDetAnual WHERE idideDetAnual IN (SELECT id FROM ideDetAnual WHERE idAnual=" + id.Text + "))")
+                                            ExecuteNonQueryFunction(myCommand)
+
+                                            archPdf = acusePdf("A", dra.DirectoryName, dra.Name, casfim) 'aceptado, ruta, nombre
+                                        Else 'solo trae fechaPresentacion y archivo
+                                            archPdf = acusePdf("R", dra.DirectoryName, dra.Name, casfim) 'rechazado
+                                        End If
+                                        zip.AddFile(archPdf, "")
+
+                                        c = 1
+                                        listaAcuses.Add(archPdf)
+                                        cont = cont + 1
+                                    End If
+                                Next
+                            End If
                         End If
-                        zip.AddFile(archPdf, "")
 
-                        c = 1
-                        listaAcuses.Add(archPdf)
-                        cont = cont + 1
                     End If
                 Next
                 If c = 0 Then
                     'Response.Write("<script language='javascript'>alert('No se encontraron acuses para este periodo');</script>")
-                    descrip.Text = descrip.Text + "No se encontraron aún acuses para este periodo"
+                    descrip.Text = descrip.Text + "No se encontraron aún acuses para este periodo. Si no le llegan durante el dia habil siguiente de haber enviado correctamente su declaracion, contactenos."
                     Dim nulo
                     If DBNull.Value.Equals(qAcuseSolicitado) Then
                         nulo = True
@@ -2879,18 +2957,20 @@ siguiente2:
                         Dim elcorreo As New System.Net.Mail.MailMessage
                         Using elcorreo
                             elcorreo.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
-                            elcorreo.To.Add("armando.delatorre@sat.gob.mx")
-                            'elcorreo.CC.Add("miguel.chantes@sat.gob.mx")
+                            elcorreo.To.Add("guadalupe.hernandezr@sat.gob.mx")
+                            elcorreo.CC.Add("ana.arroyo@sat.gob.mx")
                             elcorreo.CC.Add("declaracioneside@gmail.com")
                             elcorreo.Subject = "Solicitud de acuses"
-                            elcorreo.Body = "<html><body>Buen dia<br><br>Nos podría proporcionar los acuses de la declaración anual " + ejercicio.Value.ToString + " de " + razonSoc + ", casfim " + casfim + ", Enviado en la fecha (año-mes-dia): " + CDate(qFechaEnvio).ToString("yyyy-MM-dd") + ", en el archivo " + nomArchMensSinPath + ".ZIP" + " <br><br>Atentamente, <a href='declaracioneside.com'>declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet </body></html>"
+                            elcorreo.Body = "<html><body>Buen dia<br><br>Nos podría proporcionar los acuses de la declaración anual " + ejercicio.Value.ToString + " de " + razonSoc + ", casfim " + casfim + ", Enviado en la fecha (año-mes-dia): " + CDate(qFechaEnvio).ToString("yyyy-MM-dd") + ", en el archivo " + nomArchMensSinPath + ".ZIP" + "<br><br> la información del envío exitoso es:<br><br> " + evidEnvio + " <br><br><br>Atentamente, <a href='declaracioneside.com'>declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet </body></html>"
                             elcorreo.IsBodyHtml = True
                             elcorreo.Priority = System.Net.Mail.MailPriority.Normal
                             Dim smpt As New System.Net.Mail.SmtpClient
                             smpt.Host = "smtp.gmail.com"
                             smpt.Port = "587"
-                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                            smpt.UseDefaultCredentials = False
+                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                             smpt.EnableSsl = True 'req p server gmail
+
                             Try
                                 smpt.Send(elcorreo)
                                 elcorreo.Dispose()
@@ -2930,7 +3010,7 @@ siguiente2:
                             Dim smpt As New System.Net.Mail.SmtpClient
                             smpt.Host = "smtp.gmail.com"
                             smpt.Port = "587"
-                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                             smpt.EnableSsl = True 'req p server gmail
                             Try
                                 smpt.Send(elcorreo)
@@ -2969,7 +3049,7 @@ siguiente2:
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -3088,7 +3168,9 @@ siguiente2:
                 Textperiodo.Text = Data(6)
             End If
             Texttipo.Text = Data(7)
-            Textfecha.Text = CDate(Data(8)).ToString("dd/MM/yyyy")
+            If Data(8) <> "" Then
+                Textfecha.Text = CDate(Data(8)).ToString("dd/MM/yyyy")
+            End If
             Textfolio.Text = Data(9)
             Textnumero.Text = Data(10)
             Textarchivo.Text = Data(11)
@@ -3214,7 +3296,7 @@ siguiente2:
     '                            Dim smpt As New System.Net.Mail.SmtpClient
     '                            smpt.Host = "smtp.gmail.com"
     '                            smpt.Port = "587"
-    '                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+    '                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
     '                            smpt.EnableSsl = True 'req p server gmail
     '                            Try
     '                                smpt.Send(elcorreo)
@@ -3281,7 +3363,7 @@ siguiente2:
     '                                    Dim smpt As New System.Net.Mail.SmtpClient
     '                                    smpt.Host = "smtp.gmail.com"
     '                                    smpt.Port = "587"
-    '                                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+    '                                    smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
     '                                    smpt.EnableSsl = True 'req p server gmail
     '                                    Try
     '                                        smpt.Send(elcorreo)
@@ -3311,7 +3393,7 @@ siguiente2:
     '                            Dim smpt As New System.Net.Mail.SmtpClient
     '                            smpt.Host = "smtp.gmail.com"
     '                            smpt.Port = "587"
-    '                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+    '                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
     '                            smpt.EnableSsl = True 'req p server gmail
     '                            Try
     '                                smpt.Send(elcorreo)
@@ -3481,7 +3563,7 @@ siguiente2:
             Dim smpt As New System.Net.Mail.SmtpClient
             smpt.Host = "smtp.gmail.com"
             smpt.Port = "587"
-            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
             smpt.EnableSsl = True 'req p server gmail
             Try
                 smpt.Send(elcorreo)

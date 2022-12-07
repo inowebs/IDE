@@ -73,9 +73,11 @@ Public Class mensual2
             If Left(Request.ServerVariables("REMOTE_ADDR"), 10) = "192.168.0." Or Left(Request.ServerVariables("REMOTE_ADDR"), 10) = "127.0.0.1" Or Session("runAsAdmin") = "1" Then 'red local
                 chkPostpago.Visible = True
                 acuSinCorr.Visible = True
+                chkSinCorreo.Visible = True
             Else
                 chkPostpago.Visible = False
                 acuSinCorr.Visible = False
+                chkSinCorreo.Visible = False
             End If
         End If
 
@@ -929,7 +931,7 @@ Public Class mensual2
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -1260,40 +1262,40 @@ Public Class mensual2
                             dr.Close()
                         End If
 
-                        q = "SELECT d.id FROM ideDet d, contribuyente c WHERE idMens=" + id.Text + " AND idAnual=" + idAnual.Text + " AND d.idContribuyente=c.id AND c.id=" + idContrib.ToString
-                        myCommand = New SqlCommand(q, myConnection)
-                        dr = myCommand.ExecuteReader()
-                        If dr.Read() Then 'registro duplicado (llaves) en el archivo->reemplazarlo por el mas reciente
-                            idIdeDet = dr("id")
-                            dr.Close()
+                        'q = "SELECT d.id FROM ideDet d, contribuyente c WHERE idMens=" + id.Text + " AND idAnual=" + idAnual.Text + " AND d.idContribuyente=c.id AND c.id=" + idContrib.ToString
+                        'myCommand = New SqlCommand(q, myConnection)
+                        'dr = myCommand.ExecuteReader()
+                        'If dr.Read() Then 'registro duplicado (llaves) en el archivo->reemplazarlo por el mas reciente
+                        '    idIdeDet = dr("id")
+                        '    dr.Close()
 
-                            If esInstitCredito = 1 Then
-                                If sumaDeposEfe <> "" Then
-                                    q = "UPDATE ideDet SET exedente='" + exedente + "' WHERE id=" + idIdeDet.ToString
-                                    myCommand2 = New SqlCommand(q, myConnection)
-                                    myCommand2.ExecuteNonQuery()
-                                End If
-                                If chqCajaMonto <> "" Then
-                                    q = "UPDATE ideDet SET chqCajaMonto='" + chqCajaMonto + "' WHERE id=" + idIdeDet.ToString
-                                    myCommand2 = New SqlCommand(q, myConnection)
-                                    myCommand2.ExecuteNonQuery()
-                                End If
-                            Else
-                                q = "UPDATE ideDet SET exedente='" + exedente + "' WHERE id=" + idIdeDet.ToString
-                                myCommand2 = New SqlCommand(q, myConnection)
-                                myCommand2.ExecuteNonQuery()
+                        '    If esInstitCredito = 1 Then
+                        '        If sumaDeposEfe <> "" Then
+                        '            q = "UPDATE ideDet SET exedente='" + exedente + "' WHERE id=" + idIdeDet.ToString
+                        '            myCommand2 = New SqlCommand(q, myConnection)
+                        '            myCommand2.ExecuteNonQuery()
+                        '        End If
+                        '        If chqCajaMonto <> "" Then
+                        '            q = "UPDATE ideDet SET chqCajaMonto='" + chqCajaMonto + "' WHERE id=" + idIdeDet.ToString
+                        '            myCommand2 = New SqlCommand(q, myConnection)
+                        '            myCommand2.ExecuteNonQuery()
+                        '        End If
+                        '    Else
+                        '        q = "UPDATE ideDet SET exedente='" + exedente + "' WHERE id=" + idIdeDet.ToString
+                        '        myCommand2 = New SqlCommand(q, myConnection)
+                        '        myCommand2.ExecuteNonQuery()
 
-                                If chqCajaMonto <> "" Then
-                                    q = "UPDATE ideDet SET chqCajaMonto='" + chqCajaMonto + "' WHERE id=" + idIdeDet.ToString
-                                    myCommand2 = New SqlCommand(q, myConnection)
-                                    myCommand2.ExecuteNonQuery()
-                                End If
-                            End If
-                        Else    'nuevo registro
-                            dr.Close()
+                        '        If chqCajaMonto <> "" Then
+                        '            q = "UPDATE ideDet SET chqCajaMonto='" + chqCajaMonto + "' WHERE id=" + idIdeDet.ToString
+                        '            myCommand2 = New SqlCommand(q, myConnection)
+                        '            myCommand2.ExecuteNonQuery()
+                        '        End If
+                        '    End If
+                        'Else    'nuevo registro
+                        '    dr.Close()
 
-                            'If esInstitCredito = 1 Then
-                            q = "INSERT INTO ideDet(idMens,idAnual,idContribuyente"
+                        'If esInstitCredito = 1 Then
+                        q = "INSERT INTO ideDet(idMens,idAnual,idContribuyente"
                             If sumaDeposEfe <> "" Then
                                 q = q + ",exedente,sumaDeposEfe"
                             End If
@@ -1320,7 +1322,7 @@ Public Class mensual2
                             dr.Read()
                             idIdeDet = dr("id")
                             dr.Close()
-                        End If
+                        'End If
 
                         'Dim percent As String = Double.Parse(i * 100 / rens).ToString("0")
                         'progressbar.Style("width") = percent + "px"
@@ -1349,6 +1351,23 @@ Public Class mensual2
                             cotitularesCuentaActual = dr("id")
                             dr.Close()
                         End If
+
+                        'validamos que solo 1 vez exista para la misma cuenta depositos para el mismo contrib, anio y mes
+                        q = "SELECT count(*) as n FROM cotitularesCuenta WHERE numeroCuenta='" + ctaNum + "' AND idideDet IN (SELECT id from ideDet WHERE idContribuyente = " + idContrib.ToString + " AND idMens=" + id.Text + " AND idAnual=" + idAnual.Text + ")"
+                        myCommand = New SqlCommand(q)
+                        Using dr = ExecuteReaderFunction(myCommand)
+                            If dr.HasRows Then
+                                dr.Read()
+                                If dr("n") > 1 Then
+                                    Session("error") = "Para una misma cuenta (" + ctaNum + ") se detectaron mas de 1 depositos en el mismo mes (" + mes + ") del ejercicio y contribuyente, en el renglon " + i.ToString + ", verifique"
+                                    Response.Write("<script language='javascript'>alert('Para una misma cuenta (" + ctaNum + ") se detectaron mas de 1 depositos en el mismo mes (" + mes + ") del ejercicio y contribuyente, en el renglon " + i.ToString + ", verifique');</script>")
+                                    statusImport.Text = Session("error") + ". Se procesaron exitosamente los primeros " + Session("barraIteracion").ToString + " registros"
+                                    objThread.Abort()
+                                    Return 0
+                                End If
+                            End If
+                        End Using
+
 
                     ElseIf descrip = "COT" Then
                         myCommand2 = New SqlCommand("INSERT INTO tcotitular(idCotitularesCuenta,nombreCompleto,rfc,proporcion) VALUES(" + cotitularesCuentaActual.ToString + ",'" + cotNom.ToString + "','" + cotRfc + "','" + cotProporcion + "')", myConnection)
@@ -1454,13 +1473,13 @@ siguiente2:
                                 GoTo siguiente
                             End If
                         Else
-                            msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " la descripción es inválida"
+                            msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " la descripción es inválida"
                             ctrlErr = 1
                             GoTo siguiente
                         End If
                     Else
                         descrip = ""
-                        msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " la descripción no puede estar vacia"
+                        msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " la descripción no puede estar vacia"
                         ctrlErr = 1
                         GoTo siguiente
                     End If
@@ -1469,7 +1488,7 @@ siguiente2:
                     If descrip = "CON" Then 'contribuyente
                         If Not IsNothing(array(i, 2)) Then
                             If Len(array(i, 2).ToString.ToUpper.Trim) > 40 Then
-                                msgErr = msgErr + ". " + "Truncando nombre a 40 caracteres en el renglon " + CStr(i)
+                                msgErr = msgErr + ". " + vbCr + "Truncando nombre a 40 caracteres en el renglon " + CStr(i)
                             End If
                             nombres = Left(array(i, 2).ToString.ToUpper.Trim, 40).Replace("'", "''")
                         Else
@@ -1477,7 +1496,7 @@ siguiente2:
                         End If
                         If Not IsNothing(array(i, 3)) Then
                             If Len(array(i, 3).ToString.ToUpper.Trim) > 40 Then
-                                msgErr = msgErr + ". " + "Truncando apellido paterno a 40 caracteres en el renglon " + CStr(i)
+                                msgErr = msgErr + ". " + vbCr + "Truncando apellido paterno a 40 caracteres en el renglon " + CStr(i)
                             End If
                             ap1 = Left(array(i, 3).ToString.ToUpper.Trim, 40).Replace("'", "''")
                         Else
@@ -1485,7 +1504,7 @@ siguiente2:
                         End If
                         If Not IsNothing(array(i, 4)) Then
                             If Len(array(i, 4).ToString.ToUpper.Trim) > 40 Then
-                                msgErr = msgErr + ". " + "Truncando apellido materno a 40 caracteres en el renglon " + CStr(i)
+                                msgErr = msgErr + ". " + vbCr + "Truncando apellido materno a 40 caracteres en el renglon " + CStr(i)
                             End If
                             ap2 = Left(array(i, 4).ToString.ToUpper.Trim, 40).Replace("'", "''")
                         Else
@@ -1493,7 +1512,7 @@ siguiente2:
                         End If
                         If Not IsNothing(array(i, 5)) Then
                             If Len(array(i, 5).ToString.ToUpper.Trim) > 250 Then
-                                msgErr = msgErr + ". " + "Truncando razon social a 250 caracteres en el renglon " + CStr(i)
+                                msgErr = msgErr + ". " + vbCr + "Truncando razon social a 250 caracteres en el renglon " + CStr(i)
                             End If
                             razon = Left(array(i, 5).ToString.ToUpper.Trim, 250).Replace("'", "''")
                         Else
@@ -1501,17 +1520,17 @@ siguiente2:
                         End If
 
                         If (nombres = "" And ap1 = "") And razon = "" Then
-                            msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " requiere especificar el nombre con apellidos o bien la razon social"
+                            msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " requiere especificar el nombre con apellidos o bien la razon social"
                             ctrlErr = 1
                             GoTo siguiente
                         End If
                         If nombres <> "" And ap1 = "" Then
-                            msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " requiere especificar el apellido o bien, quite el nombre y agregue la razon social"
+                            msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " requiere especificar el apellido o bien, quite el nombre y agregue la razon social"
                             ctrlErr = 1
                             GoTo siguiente
                         End If
                         If nombres <> "" And razon <> "" Then
-                            msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " si no está reportando una razon social dejela en blanco, en caso contrario deje en blanco el nombre y los apellidos"
+                            msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " si no está reportando una razon social dejela en blanco, en caso contrario deje en blanco el nombre y los apellidos"
                             ctrlErr = 1
                             GoTo siguiente
                         End If
@@ -1522,14 +1541,14 @@ siguiente2:
                             If razon = "" Then 'pf
                                 expresion = "^([A-Z\s]{4})\d{6}([A-Z\w]{0,3})$"
                                 If Len(rfc) < 10 Or Len(rfc) > 13 Then
-                                    msgErr = msgErr + ". " + "el renglon " + CStr(i) + " el tamaño de rfc debe ser 10-13 caracteres"
+                                    msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " el tamaño de rfc debe ser 10-13 caracteres"
                                     ctrlErr = 1
                                     GoTo siguiente
                                 End If
                             Else 'pm
                                 expresion = "^([A-Z\s]{3})\d{6}([A-Z\w]{0,3})$"
                                 If Len(rfc) < 9 Or Len(rfc) > 12 Then
-                                    msgErr = msgErr + ". " + "el renglon " + CStr(i) + " el tamaño de rfc debe ser 9-12 caracteres"
+                                    msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " el tamaño de rfc debe ser 9-12 caracteres"
                                     ctrlErr = 1
                                     GoTo siguiente
                                 ElseIf Len(rfc) = 9 Then
@@ -1540,7 +1559,7 @@ siguiente2:
                                     If dr("rfcComodinPm").Equals(True) Then 'usar comodin rfc sat
                                         rfc = "III991231AAA"    'comodin sat personas morales sin rfc
                                     Else
-                                        msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " indica un rfc de 9 caracteres para la razon social, completelo a 12 caracteres o bien en su cuenta indique usar el RFC comodin proporcionado por el SAT de 12 caracteres"
+                                        msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " indica un rfc de 9 caracteres para la razon social, completelo a 12 caracteres o bien en su cuenta indique usar el RFC comodin proporcionado por el SAT de 12 caracteres"
                                         ctrlErr = 1
                                         dr.Close()
                                         GoTo siguiente
@@ -1549,7 +1568,7 @@ siguiente2:
                                 End If
                             End If
                             If Not Regex.IsMatch(rfc, expresion) Then
-                                msgErr = msgErr + ". " + "Formato de rfc invalido en el renglon " + CStr(i)
+                                msgErr = msgErr + ". " + vbCr + "Formato de rfc invalido en el renglon " + CStr(i)
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
@@ -1558,87 +1577,105 @@ siguiente2:
                         End If
                         If Not IsNothing(array(i, 7)) Then
                             If Len(array(i, 7).ToString.ToUpper.Trim) > 150 Then
-                                msgErr = msgErr + ". " + "Truncando domicilio a 150 caracteres en el renglon " + CStr(i)
+                                msgErr = msgErr + ". " + vbCr + "Truncando domicilio a 150 caracteres en el renglon " + CStr(i)
                             End If
                             Dom = Left(array(i, 7).ToString.ToUpper.Trim, 150).Replace("'", "''")
                         Else
                             Dom = ""
                         End If
                         If Not IsNothing(array(i, 8)) Then
-                            If Len(array(i, 8).ToString.ToUpper.Trim) > 15 Then
-                                msgErr = msgErr + ". " + "Truncando telefono1 a 15 caracteres en el renglon " + CStr(i)
+                            If array(i, 8).ToString.ToUpper.Trim <> "" Then
+                                If Len(array(i, 8).ToString.ToUpper.Trim) > 15 Then
+                                    msgErr = msgErr + ". " + vbCr + "Truncando telefono1 a 15 caracteres en el renglon " + CStr(i)
+                                End If
+                                If Not IsNumeric(Regex.Replace(array(i, 8).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", ""), "[a-zA-Z\s]+", "")) Then
+                                    msgErr = msgErr + ". " + vbCr + "Telefono1 solo debe tener numeros en el renglon " + CStr(i)
+                                End If
+                                telefono1 = Regex.Replace(Left(array(i, 8).ToString.ToUpper.Trim.Replace("-", "").Replace(" ", "").Replace("(", "").Replace(")", "").Replace("'", ""), 15), "[a-zA-Z\s]+", "")
+                            Else
+                                telefono1 = ""
                             End If
-                            If Not IsNumeric(Regex.Replace(array(i, 8).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", ""), "[a-zA-Z\s]+", "")) Then
-                                msgErr = msgErr + ". " + vbCr + "Telefono1 solo debe tener numeros en el renglon " + CStr(i)
-                            End If
-                            telefono1 = Regex.Replace(Left(array(i, 8).ToString.ToUpper.Trim.Replace("-", "").Replace(" ", "").Replace("(", "").Replace(")", "").Replace("'", ""), 15), "[a-zA-Z\s]+", "")
                         Else
-                            telefono1 = ""
+                                telefono1 = ""
                         End If
                         If Not IsNothing(array(i, 9)) Then
-                            If Len(array(i, 9).ToString.ToUpper.Trim) > 40 Then
-                                msgErr = msgErr + ". " + "Truncando telefono2 a 15 caracteres en el renglon " + CStr(i)
+                            If array(i, 9).ToString.ToUpper.Trim <> "" Then
+                                If Len(array(i, 9).ToString.ToUpper.Trim) > 40 Then
+                                    msgErr = msgErr + ". " + vbCr + "Truncando telefono2 a 15 caracteres en el renglon " + CStr(i)
+                                End If
+                                If Not IsNumeric(Regex.Replace(array(i, 9).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", ""), "[a-zA-Z\s]+", "")) Then
+                                    msgErr = msgErr + ". " + vbCr + "Telefono2 solo debe tener numeros en el renglon " + CStr(i)
+                                End If
+                                telefono2 = Regex.Replace(Left(array(i, 9).ToString.ToUpper.Trim.Replace("-", "").Replace(" ", "").Replace("(", "").Replace(")", "").Replace("'", ""), 15), "[a-zA-Z\s]+", "")
+                            Else
+                                telefono2 = ""
                             End If
-                            If Not IsNumeric(Regex.Replace(array(i, 9).ToString.ToUpper.Trim.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("'", ""), "[a-zA-Z\s]+", "")) Then
-                                msgErr = msgErr + ". " + vbCr + "Telefono2 solo debe tener numeros en el renglon " + CStr(i)
-                            End If
-                            telefono2 = Regex.Replace(Left(array(i, 9).ToString.ToUpper.Trim.Replace("-", "").Replace(" ", "").Replace("(", "").Replace(")", "").Replace("'", ""), 15), "[a-zA-Z\s]+", "")
                         Else
-                            telefono2 = ""
+                                telefono2 = ""
                         End If
                         If Not IsNothing(array(i, 10)) Then
                             If Len(array(i, 10).ToString.ToUpper.Trim) > 20 Then
-                                msgErr = msgErr + ". " + "Truncando numero de socio a 20 caracteres en el renglon " + CStr(i)
+                                msgErr = msgErr + ". " + vbCr + "Truncando numero de socio a 20 caracteres en el renglon " + CStr(i)
                             End If
                             numSocioCliente = Left(array(i, 10).ToString.ToUpper.Trim, 20)
                         Else
                             numSocioCliente = ""
                         End If
                         If Not IsNothing(array(i, 11)) Then
-                            If Not IsNumeric(array(i, 11)) Then
-                                msgErr = msgErr + ". " + "la suma de efectivo debe ser tipo numerico o dejelo en blanco eliminando el contenido en el renglon " + CStr(i)
-                                ctrlErr = 1
-                                GoTo siguiente
+                            If array(i, 11).ToString.Trim <> "" Then
+                                If Not IsNumeric(array(i, 11)) Then
+                                    msgErr = msgErr + ". " + vbCr + "la suma de efectivo debe ser tipo numerico o dejelo en blanco eliminando el contenido en el renglon " + CStr(i)
+                                    ctrlErr = 1
+                                    GoTo siguiente
+                                End If
+                                If CDbl(array(i, 11)) <= 0 Then
+                                    msgErr = msgErr + ". " + vbCr + "la suma de efectivo " + array(i, 11).ToString + " debe ser > 0 en el renglon " + CStr(i)
+                                    ctrlErr = 1
+                                    GoTo siguiente
+                                End If
+                                sumaDeposEfe = array(i, 11).ToString
+                            Else
+                                sumaDeposEfe = ""
                             End If
-                            If CDbl(array(i, 11)) <= 0 Then
-                                msgErr = msgErr + ". " + "la suma de efectivo " + array(i, 11).ToString + " debe ser > 0 en el renglon " + CStr(i)
-                                ctrlErr = 1
-                                GoTo siguiente
-                            End If
-                            sumaDeposEfe = array(i, 11).ToString
                         Else
-                            sumaDeposEfe = ""
+                                sumaDeposEfe = ""
                         End If
                         If Not IsNothing(array(i, 12)) Then
-                            If Not IsNumeric(array(i, 12)) Then
-                                msgErr = msgErr + ". " + "El excedente debe ser tipo numerico o dejelo en blanco eliminando el contenido en el renglon " + CStr(i)
-                                ctrlErr = 1
-                                GoTo siguiente
+                            If array(i, 12).ToString.Trim <> "" Then
+                                If Not IsNumeric(array(i, 12)) Then
+                                    msgErr = msgErr + ". " + vbCr + "El excedente debe ser tipo numerico o dejelo en blanco eliminando el contenido en el renglon " + CStr(i)
+                                    ctrlErr = 1
+                                    GoTo siguiente
+                                End If
+                                If CDbl(array(i, 12)) <= 0 Then
+                                    msgErr = msgErr + ". " + vbCr + "el excedente debe ser > 0 en el renglon " + CStr(i)
+                                    ctrlErr = 1
+                                    GoTo siguiente
+                                End If
+                                exedente = array(i, 12).ToString
+                            Else
+                                exedente = ""
                             End If
-                            If CDbl(array(i, 12)) <= 0 Then
-                                msgErr = msgErr + ". " + "el excedente debe ser > 0 en el renglon " + CStr(i)
-                                ctrlErr = 1
-                                GoTo siguiente
-                            End If
-                            exedente = array(i, 12).ToString
                         Else
-                            exedente = ""
+                                exedente = ""
                         End If
                         If Not IsNothing(array(i, 13)) Then
                             If array(i, 13).ToString <> "-" Then
-                                If Not IsNumeric(array(i, 13)) Then
-                                    msgErr = msgErr + ". " + "El monto de cheque de caja debe ser tipo numerico o dejelo en blanco eliminando el contenido en el renglon " + CStr(i)
-                                    ctrlErr = 1
-                                    GoTo siguiente
+                                If esInstitCredito = 1 Then
+                                    If Not IsNumeric(array(i, 13)) Then
+                                        msgErr = msgErr + ". " + vbCr + "El monto de cheque de caja debe ser tipo numerico o dejelo en blanco eliminando el contenido en el renglon " + CStr(i)
+                                        ctrlErr = 1
+                                        GoTo siguiente
+                                    End If
+                                    If CDbl(array(i, 13)) <= 0 Then
+                                        msgErr = msgErr + ". " + vbCr + "el monto del cheque de caja debe ser > 0 en el renglon " + CStr(i)
+                                        ctrlErr = 1
+                                        GoTo siguiente
+                                    End If
+                                    chqCajaMonto = array(i, 13).ToString.Trim
                                 End If
-                                If CDbl(array(i, 13)) <= 0 Then
-                                    msgErr = msgErr + ". " + "el monto del cheque de caja debe ser > 0 en el renglon " + CStr(i)
-                                    ctrlErr = 1
-                                    GoTo siguiente
-                                End If
-                                chqCajaMonto = array(i, 13).ToString.Trim
                             Else
-                                chqCajaMonto = ""
+                                    chqCajaMonto = ""
                             End If
 
                         Else
@@ -1651,60 +1688,60 @@ siguiente2:
                         End If
 
                         If Dom = "" Then
-                            msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " requiere especificar domicilio"
+                            msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " requiere especificar domicilio"
                             ctrlErr = 1
                             GoTo siguiente
                         End If
 
                         If razon <> "" And rfc = "" Then 'oblig p pers morales, pero el sat lo toma como llave
-                            msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " requiere especificar rfc"
+                            msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " requiere especificar rfc"
                             ctrlErr = 1
                             GoTo siguiente
                         End If
 
                         If (CDbl(IIf(chqCajaMonto = "", 0, chqCajaMonto)) = 0 Or chqCajaMonto = "") And (CDbl(IIf(exedente = "", 0, exedente)) = 0 Or exedente = "") Then
-                            msgErr = msgErr + ". " + "el renglon " + CStr(i) + " no puede tener exedente ni cheques en cero o vacios a la vez, verifique o eliminelo"
+                            msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " no puede tener exedente ni cheques en cero o vacios a la vez, verifique o eliminelo"
                             ctrlErr = 1
                             GoTo siguiente
                         End If
 
                         If (esInstitCredito = 1 And ((chqCajaMonto = "") Or (exedente <> "" Or sumaDeposEfe <> ""))) Or esInstitCredito = 0 Then
                             If sumaDeposEfe = "" Then
-                                msgErr = msgErr + ". " + "el renglon " + CStr(i) + " no debe tener suma de depositos en efectivo vacio"
+                                msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " no debe tener suma de depositos en efectivo vacio"
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
                             If CDbl(Replace(sumaDeposEfe, ",", "")) > 0 And CDbl(Replace(sumaDeposEfe, ",", "")) < 15000 Then 'es el importe minimo que genera un ide de 1 peso
-                                msgErr = msgErr + ". " + "el renglon " + CStr(i) + " presenta un deposito en efectivo menor a $15,000, elimine el registro o bien corrija los montos "
+                                msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " presenta un deposito en efectivo menor a $15,000, elimine el registro o bien corrija los montos "
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
                             If exedente = "" Then
-                                msgErr = msgErr + ". " + "el renglon " + CStr(i) + " no debe tener importe excedente vacio"
+                                msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " no debe tener importe excedente vacio"
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
 
                             If IsNumeric(sumaDeposEfe) = False Then
-                                msgErr = msgErr + ". " + "el renglon " + CStr(i) + " no contiene suma de depositos en efectivo valido"
+                                msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " no contiene suma de depositos en efectivo valido"
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
                             If IsNumeric(exedente) = False Then
-                                msgErr = msgErr + ". " + "el renglon " + CStr(i) + " no contiene importe excedente valido"
+                                msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " no contiene importe excedente valido"
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
                         End If
                         If esInstitCredito = 1 And ((chqCajaMonto <> "") Or (exedente = "" And sumaDeposEfe = "")) Then
                             If chqCajaMonto = "" Then
-                                msgErr = msgErr + ". " + "el renglon " + CStr(i) + " no debe tener importe vacio en monto del cheque de caja"
+                                msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " no debe tener importe vacio en monto del cheque de caja"
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
 
                             If IsNumeric(chqCajaMonto) = False Then
-                                msgErr = msgErr + ". " + "el renglon " + CStr(i) + " no contiene importe valido en monto del cheque de caja"
+                                msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " no contiene importe valido en monto del cheque de caja"
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
@@ -1722,13 +1759,13 @@ siguiente2:
                         If Not IsNothing(array(i, 3)) Then
                             ctaCotit = array(i, 3).ToString.Trim
                             If IsNumeric(ctaCotit) = False Then
-                                msgErr = msgErr + ". " + "el renglon " + CStr(i) + " no contiene numero de cotitulares en formato numerico"
+                                msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " no contiene numero de cotitulares en formato numerico"
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
                         Else
                             ctaCotit = ""
-                            msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " requiere especificar el # de cotitulares"
+                            msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " requiere especificar el # de cotitulares"
                             ctrlErr = 1
                             GoTo siguiente
                         End If
@@ -1737,7 +1774,7 @@ siguiente2:
                             cotNom = array(i, 2).ToString.Trim.ToUpper.Replace("'", "''")
                         Else
                             cotNom = ""
-                            msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " requiere especificar nombre completo del cotitular"
+                            msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " requiere especificar nombre completo del cotitular"
                             ctrlErr = 1
                             GoTo siguiente
                         End If
@@ -1745,7 +1782,7 @@ siguiente2:
                         If Not IsNothing(array(i, 3)) Then
                             cotRfc = array(i, 3).ToString.ToUpper.Trim
                             If Len(cotRfc) < 9 Or Len(cotRfc) > 13 Then
-                                msgErr = msgErr + ". " + "el renglon " + CStr(i) + " el tamaño de rfc debe ser de 9 a 13 caracteres"
+                                msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " el tamaño de rfc debe ser de 9 a 13 caracteres"
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
@@ -1757,7 +1794,7 @@ siguiente2:
                                 If dr("rfcComodinPm").Equals(True) Then 'usar comodin rfc sat
                                     cotRfc = "III991231AAA"    'comodin sat personas morales sin rfc
                                 Else
-                                    msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " indica un rfc de 9 caracteres, completelo a 12 caracteres o bien en su cuenta indique usar el RFC comodin proporcionado por el SAT de 12 caracteres"
+                                    msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " indica un rfc de 9 caracteres, completelo a 12 caracteres o bien en su cuenta indique usar el RFC comodin proporcionado por el SAT de 12 caracteres"
                                     ctrlErr = 1
                                     dr.Close()
                                     GoTo siguiente
@@ -1769,7 +1806,7 @@ siguiente2:
                             expresion2 = "^([A-Z\s]{3})\d{6}([A-Z\w]{3})$"
                             If Not Regex.IsMatch(cotRfc, expresion1) Then
                                 If Not Regex.IsMatch(cotRfc, expresion2) Then
-                                    msgErr = msgErr + ". " + "Formato de rfc invalido en el renglon " + CStr(i)
+                                    msgErr = msgErr + ". " + vbCr + "Formato de rfc invalido en el renglon " + CStr(i)
                                     ctrlErr = 1
                                     GoTo siguiente
                                 End If
@@ -1779,24 +1816,24 @@ siguiente2:
                         If Not IsNothing(array(i, 4)) Then
                             cotProporcion = array(i, 4).ToString.ToUpper.Trim
                             If IsNumeric(cotProporcion) = False Then
-                                msgErr = msgErr + ". " + "el renglon " + CStr(i) + " no contiene una proporción en formato numérico"
+                                msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " no contiene una proporción en formato numérico"
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
                             If CDbl(Replace(cotProporcion, ",", "")) < 0 Or CDbl(Replace(cotProporcion, ",", "")) > 100 Then
-                                msgErr = msgErr + ". " + "en el renglon " + CStr(i) + "el porcentaje de proporción debe estar entre 0 y 100"
+                                msgErr = msgErr + ". " + vbCr + "en el renglon " + CStr(i) + "el porcentaje de proporción debe estar entre 0 y 100"
                                 ctrlErr = 1
                                 GoTo siguiente
                             End If
                         Else
                             cotProporcion = ""
-                            msgErr = msgErr + ". " + "En el renglon " + CStr(i) + " requiere especificar el % de proporción proporción"
+                            msgErr = msgErr + ". " + vbCr + "En el renglon " + CStr(i) + " requiere especificar el % de proporción proporción"
                             ctrlErr = 1
                             GoTo siguiente
                         End If
 
                     Else
-                        msgErr = msgErr + ". " + "el renglon " + CStr(i) + " contiene una descripción inválida en columna A"
+                        msgErr = msgErr + ". " + vbCr + "el renglon " + CStr(i) + " contiene una descripción inválida en columna A"
                         ctrlErr = 1
                         GoTo siguiente
                     End If
@@ -2086,7 +2123,7 @@ etqErr:
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -2121,15 +2158,20 @@ etqErr:
             Dim elcorreo As New System.Net.Mail.MailMessage
             Using elcorreo
                 elcorreo.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
-                elcorreo.To.Add(Session("curCorreo"))
-                elcorreo.Subject = "Declaración Mensual ejercicio " + ejercicio + " mes " + mes + ", constancia de envío"
+                If chkSinCorreo.Checked.Equals(True) Then
+                    elcorreo.To.Add("declaracioneside@gmail.com")
+                Else
+                    elcorreo.To.Add(Session("curCorreo"))
+                    elcorreo.Bcc.Add("declaracioneside@gmail.com")
+                End If
+                elcorreo.Subject = "Declaración Mensual ejercicio " + ejercicio + " mes " + mes + ", constancia de envío de " + Session("curCorreo")
                 elcorreo.Body = "<html><body>Evidencia de envío: <br /><br />" + resultado + "<br /><br />Favor de conservar este correo para rastreo de acuses en caso necesario; En cuanto el SAT deposite el acuse en nuestros servidores, podrá descargarlo de nuestra página o bien si después de 3 dias hábiles no lo puede bajar, solicítelo a este correo y le será enviado en caso de ya haberlo recibido del SAT, Saludos. <br><br>Atentamente,<br><br><a href='declaracioneside.com' target='_blank'>Declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet<br>Tel 01 443 690 3616<br>Correo declaracioneside@gmail.com<br><a href='https://twitter.com/declaracionesid' target='_blank'><img src='declaracioneside.com/twitter.jpg' alt='Clic aquí, siguenos en twitter' Height='30px' Width='30px' BorderWidth ='0px'></a>&nbsp;<a href='http://www.youtube.com/user/declaracioneside' target='_blank'> <img src='declaracioneside.com/iconoyoutube.png'  alt='Suscribete a nuestro canal declaraciones de depósitos en efectivo e IDE en youtube' Height='30px' Width='30px' BorderWidth ='0px'></a> &nbsp;<a href='http://www.facebook.com/depositosenefectivo' target='_blank'><img src='declaracioneside.com/facebook.jpg' alt='Clic aquí para seguirnos en facebook' Height='30px' Width='30px' BorderWidth ='0px'></a>&nbsp;&nbsp;<a href='https://mx.linkedin.com/in/declaraciones-depósitos-en-efectivo-1110125b' target='_blank'><img src='declaracioneside.com/linkedin.png' alt='Siguenos en linkedin' Height='30px' Width='30px' BorderWidth ='0px'></a>&nbsp;<a href='http://plus.google.com/107594546767340388428?prsrc=3'><img src='http://ssl.gstatic.com/images/icons/gplus-32.png' alt='Google+' Height='30px' Width='30px' BorderWidth ='0px'></a><br /></body></html>"
                 elcorreo.IsBodyHtml = True
                 elcorreo.Priority = System.Net.Mail.MailPriority.Normal
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -2371,8 +2413,8 @@ etqErr:
         statusImport.Text = ""
         lbldescrip.Text = ""
 
-        Dim qAcuseSolicitado, qFechaEnvio
-        Dim q = "SELECT id,estado,acuseSolicitado,fechaEnvio FROM ideMens WHERE idAnual=" + idAnual.Text + " and id='" + id.Text + "'"
+        Dim qAcuseSolicitado, qFechaEnvio, evidEnvio
+        Dim q = "SELECT id,estado,acuseSolicitado,fechaEnvio, evidEnvio FROM ideMens WHERE idAnual=" + idAnual.Text + " and id='" + id.Text + "'"
         myCommand = New SqlCommand(q, myConnection)
         dr = myCommand.ExecuteReader()
         If Not dr.Read() Then
@@ -2386,10 +2428,11 @@ etqErr:
         End If
         qAcuseSolicitado = dr("acuseSolicitado")
         qFechaEnvio = dr("fechaEnvio")
+        evidEnvio = dr("evidEnvio")
         dr.Close()
 
-        Dim loginSAT, directorioServidor, casfim, tipo, idArch, razonSoc
-        q = "SELECT loginSAT,directorioServidor,casfim,razonSoc FROM clientes WHERE id=" + Session("GidCliente").ToString
+        Dim loginSAT, directorioServidor, casfim, tipo, idArch, razonSoc, rfc
+        q = "SELECT loginSAT,directorioServidor,casfim,razonSoc,rfcDeclarante FROM clientes WHERE id=" + Session("GidCliente").ToString
         myCommand = New SqlCommand(q, myConnection)
         dr = myCommand.ExecuteReader()
         dr.Read()
@@ -2397,6 +2440,7 @@ etqErr:
         directorioServidor = "C:\SAT\" + dr("directorioServidor")
         casfim = dr("casfim")
         razonSoc = dr("razonSoc")
+        rfc = dr("rfcDeclarante")
         dr.Close()
         If normalComplementaria.Text = "NORMAL" Then
             tipo = "N"
@@ -2409,12 +2453,17 @@ etqErr:
         nomArchMensSinPath = casfim + "-" + "M-" + ejercicio.ToString + "-" + mes.ToString + tipo + idArch + ".XML"
         Dim fechaHoraFmt
         fechaHoraFmt = CDate(qFechaEnvio).ToString("yyyy-MM-dd HH:mm:ss").Replace(" ", "_").Replace(":", "-")
+        Dim acusesMayo2022 = False
         If CDate(qFechaEnvio).ToString("yyyy-MM-dd") >= "2017-03-15" And CDate(qFechaEnvio).ToString("yyyy-MM-dd") < "2020-04-01" Then  'cambio de nomenclatura de archivos
             nomArchMens = "C:\SAT\" + casfim + "\" + "M-" + ejercicio.ToString + "-" + mes.ToString + tipo + idArch + fechaHoraFmt + ".XML"
             nomArchMensSinPath = "M-" + ejercicio.ToString + "-" + mes.ToString + tipo + idArch + fechaHoraFmt + ".XML"
         ElseIf CDate(qFechaEnvio).ToString("yyyy-MM-dd") >= "2020-04-01" Then
             nomArchMens = "C:\SAT\" + casfim + "\" + casfim + "-" + "M-" + ejercicio.ToString + "-" + mes.ToString + tipo + idArch + fechaHoraFmt + ".XML"
             nomArchMensSinPath = casfim + "-" + "M-" + ejercicio.ToString + "-" + mes.ToString + tipo + idArch + fechaHoraFmt + ".XML"
+        End If
+
+        If CDate(qFechaEnvio).ToString("yyyy-MM-dd") >= "2022-04-05" Then  'cambio de nomenclatura de archivos
+            acusesMayo2022 = True
         End If
 
         'creando comprimido con acuses y enviandolo por correo
@@ -2428,7 +2477,11 @@ etqErr:
         Dim fName As String
         Dim allRead As String
         Dim regMatch As String 'string to search for inside of text file. It is case sensitive.
-        regMatch = nomArchMensSinPath  'buscando el nomArchMensSinPath como texto dentro del archivo
+        If acusesMayo2022 = False Then
+            regMatch = nomArchMensSinPath  'buscando el nomArchMensSinPath como texto dentro del archivo
+        Else
+            regMatch = rfc  'buscando el RFC como texto dentro del archivo
+        End If
         Try
             Using zip As ZipFile = New ZipFile
                 Dim c As Integer, archPdf As String, listaAcuses As New List(Of String)(), cont As Integer
@@ -2440,23 +2493,67 @@ etqErr:
                     allRead = testTxt.ReadToEnd() 'Reads the whole text file to the end
                     testTxt.Close() 'Closes the text file after it is fully read.
                     If (Regex.IsMatch(allRead, regMatch)) Then 'If match found in allRead
-                        zip.AddFile(fName, "")
-                        If Left(dra.Name, 2) = "AA" Then 'acuse aceptado, solo esos traen numOper y fechaPresentacion
-                            extraeNumoperDeAcuse(allRead)
-                            archPdf = acusePdf("A", dra.DirectoryName, dra.Name, casfim) 'aceptado, ruta, nombre
-                        Else 'solo trae fechaPresentacion y archivo
-                            archPdf = acusePdf("R", dra.DirectoryName, dra.Name, casfim) 'rechazado
-                        End If
-                        zip.AddFile(archPdf, "")
+                        If acusesMayo2022 = False Then
+                            zip.AddFile(fName, "")
+                            If Left(dra.Name, 2) = "AA" Then 'acuse aceptado, solo esos traen numOper y fechaPresentacion
+                                extraeNumoperDeAcuse(allRead)
+                                archPdf = acusePdf("A", dra.DirectoryName, dra.Name, casfim) 'aceptado, ruta, nombre
+                            Else 'solo trae fechaPresentacion y archivo
+                                archPdf = acusePdf("R", dra.DirectoryName, dra.Name, casfim) 'rechazado
+                            End If
+                            zip.AddFile(archPdf, "")
 
-                        c = 1
-                        listaAcuses.Add(archPdf)
-                        cont = cont + 1
+                            c = 1
+                            listaAcuses.Add(archPdf)
+                            cont = cont + 1
+                        Else 'desde mayo2022
+                            If (Regex.IsMatch(allRead, "AcuseRecepcionMensualIDE")) Then 'If match found in allRead
+                                Dim doc As XmlDocument
+                                Dim nodelist As XmlNodeList
+                                Dim nodo As System.Xml.XmlNode
+                                doc = New XmlDocument
+                                doc.Load(fName)
+                                nodelist = doc.SelectNodes("/AcuseRecepcionMensualIDE")
+                                For Each nodo In nodelist
+                                    Dim ejercicioXml = nodo.Attributes.GetNamedItem("ejercicio").Value
+                                    Dim denominacionXml = nodo.Attributes.GetNamedItem("denominacion").Value
+                                    Dim tipoXml = nodo.Attributes.GetNamedItem("tipo").Value
+                                    Dim selloXml = nodo.Attributes.GetNamedItem("sello").Value
+                                    Dim periodoXml = nodo.Attributes.GetNamedItem("periodo").Value
+                                    If ejercicioXml = ejercicio And periodoXml = mes Then
+                                        zip.AddFile(fName, "")
+                                        If Left(dra.Name, 2) = "AA" Then 'acuse aceptado, solo esos traen numOper y fechaPresentacion
+                                            'extraeNumoperDeAcuse(allRead)
+                                            Session("numOperAcuse") = ""
+                                            Session("fechaPresentacionAcuse") = ""
+                                            Session("rfcAcuse") = rfc
+                                            Session("denominacionAcuse") = denominacionXml
+                                            Session("recaudadoAcuse") = ""
+                                            Session("ejercicioAcuse") = ejercicioXml
+                                            Session("tipoAcuse") = tipoXml
+                                            Session("folioAcuse") = ""
+                                            Session("archivoAcuse") = ""
+                                            Session("selloAcuse") = selloXml
+
+                                            archPdf = acusePdf("A", dra.DirectoryName, dra.Name, casfim) 'aceptado, ruta, nombre
+                                        Else 'solo trae fechaPresentacion y archivo
+                                            archPdf = acusePdf("R", dra.DirectoryName, dra.Name, casfim) 'rechazado
+                                        End If
+                                        zip.AddFile(archPdf, "")
+
+                                        c = 1
+                                        listaAcuses.Add(archPdf)
+                                        cont = cont + 1
+                                    End If
+                                Next
+                            End If
+
+                        End If
                     End If
                 Next
                 If c = 0 Then
                     'Response.Write("<script language='javascript'>alert('No se encontraron acuses para este periodo');</script>")
-                    lbldescrip.Text = lbldescrip.Text + "No se encontraron aún acuses para este periodo"
+                    lbldescrip.Text = lbldescrip.Text + "No se encontraron aún acuses para este periodo. Si no le llegan durante el dia habil siguiente de haber enviado correctamente su declaracion, contactenos."
                     Dim nulo
                     If DBNull.Value.Equals(qAcuseSolicitado) Then
                         nulo = True
@@ -2468,17 +2565,17 @@ etqErr:
                         Dim elcorreo As New System.Net.Mail.MailMessage
                         Using elcorreo
                             elcorreo.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
-                            elcorreo.To.Add("armando.delatorre@sat.gob.mx")
-                            'elcorreo.CC.Add("miguel.chantes@sat.gob.mx")
+                            elcorreo.To.Add("guadalupe.hernandezr@sat.gob.mx")
+                            elcorreo.CC.Add("ana.arroyo@sat.gob.mx")
                             elcorreo.CC.Add("declaracioneside@gmail.com")
                             elcorreo.Subject = "Solicitud de acuses"
-                            elcorreo.Body = "<html><body>Buen dia<br><br>Nos podría proporcionar los acuses de la declaración mensual del año " + ejercicio.ToString + " mes " + mes.ToString + " de " + razonSoc + ", casfim " + casfim + ", Enviado en la fecha (año-mes-dia): " + CDate(qFechaEnvio).ToString("yyyy-MM-dd") + ", en el archivo " + nomArchMensSinPath + ".ZIP" + " <br><br>Atentamente, <a href='declaracioneside.com'>declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet </body></html>"
+                            elcorreo.Body = "<html><body>Buen dia<br><br>Nos podría proporcionar los acuses de la declaración mensual del año " + ejercicio.ToString + " mes " + mes.ToString + " de " + razonSoc + ", casfim " + casfim + ", Enviado en la fecha (año-mes-dia): " + CDate(qFechaEnvio).ToString("yyyy-MM-dd") + ", en el archivo " + nomArchMensSinPath + ".ZIP" + "<br><br> la información del envío exitoso es:<br><br> " + evidEnvio + " <br><br><br>Atentamente, <a href='declaracioneside.com'>declaracioneside.com</a><br>Tu solución en declaraciones de depósitos en efectivo por internet </body></html>"
                             elcorreo.IsBodyHtml = True
                             elcorreo.Priority = System.Net.Mail.MailPriority.Normal
                             Dim smpt As New System.Net.Mail.SmtpClient
                             smpt.Host = "smtp.gmail.com"
                             smpt.Port = "587"
-                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                             smpt.EnableSsl = True 'req p server gmail
                             Try
                                 smpt.Send(elcorreo)
@@ -2520,7 +2617,7 @@ etqErr:
                             Dim smpt As New System.Net.Mail.SmtpClient
                             smpt.Host = "smtp.gmail.com"
                             smpt.Port = "587"
-                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                             smpt.EnableSsl = True 'req p server gmail
                             Try
                                 smpt.Send(elcorreo)
@@ -2561,7 +2658,7 @@ etqErr:
                 Dim smpt As New System.Net.Mail.SmtpClient
                 smpt.Host = "smtp.gmail.com"
                 smpt.Port = "587"
-                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+                smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
                 smpt.EnableSsl = True 'req p server gmail
                 Try
                     smpt.Send(elcorreo)
@@ -2817,7 +2914,7 @@ etqErr:
             Dim smpt As New System.Net.Mail.SmtpClient
             smpt.Host = "smtp.gmail.com"
             smpt.Port = "587"
-            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+            smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
             smpt.EnableSsl = True 'req p server gmail
             Try
                 smpt.Send(elcorreo)

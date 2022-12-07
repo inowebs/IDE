@@ -116,6 +116,7 @@
                     <asp:MenuItem Text="PLANES" Value="2" NavigateUrl="admon.aspx?v=2" />
                     <asp:MenuItem Text="DESCUENTOS" Value="3" NavigateUrl="admon.aspx?v=3" />
                     <asp:MenuItem Text="Prospectos y Asesorias" Value="4" NavigateUrl="admon.aspx?v=4" />
+                    <asp:MenuItem Text="Declas" Value="7" NavigateUrl="admon.aspx?v=7" />
                     
                 </Items>
             </asp:Menu>
@@ -806,11 +807,11 @@
                             <asp:FileUpload ID="FileUpload1" runat="server"
                                 Width="273px" />
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <asp:Button ID="crearCot" runat="server" Text="Tx Cotizaciones" />
+                            <asp:Button ID="crearCot" runat="server" Text="Tx Cot Pers Clientes" />
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <asp:Button ID="generico" runat="server" Text="Tx Mailing" />
+                            <asp:Button ID="generico" runat="server" Text="Tx Cot Machote NO clientes" />
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <asp:Button ID="campos" runat="server" Text="ListaCampos" />
+                            <asp:Button ID="campos" runat="server" Text="ListaCampos NA" />
                             <br />
                         </td>
                     </tr>
@@ -860,6 +861,7 @@
                         </table>
 
                     </asp:View>
+                
         </asp:MultiView>
     </div>
 

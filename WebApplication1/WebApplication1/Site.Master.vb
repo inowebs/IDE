@@ -18,10 +18,8 @@ Public Class Site
             '    Exit Sub
             'End If
             nombreServidor = "tcp:."
-            myConnection = New SqlConnection("server=tcp:.;database=ide;User ID=usuario;Password='SmN+v-XzFy2N;91E170o';")
-            myConnection.Open()
-            myCommand = New SqlCommand("set dateformat ymd", myConnection)
-            myCommand.ExecuteNonQuery()
+            myCommand = New SqlCommand("set dateformat ymd")
+            ExecuteNonQueryFunction(myCommand)
 
             'If Not Request.QueryString("runAsAdmin") Is Nothing Then 'implementando hopads de administrador
             '    myCommand = New SqlCommand("SELECT id FROM admin WHERE namebre='" + Request.QueryString("runAsAdmin").ToString + "'", myConnection)
@@ -75,13 +73,12 @@ Public Class Site
     Private Function validaDuplSite() As Integer
         Dim q
         q = "SELECT id FROM prospeccion WHERE correo='" + Trim(email.Text.ToUpper) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             'Response.Write("<script language='javascript'>alert('Ya se había anotado');</script>")
             Return 0
         End If
-        dr.Close()
         Return 1
     End Function
     Sub subSubmitForm()
@@ -135,19 +132,16 @@ Public Class Site
             Exit Sub
         End If
 
-        myConnection = New SqlConnection("Data Source=.;User ID=usuario;Password='SmN+v-XzFy2N;91E170o'; Initial Catalog=ide;Integrated Security=True;MultipleActiveResultSets=True;")
-        myConnection.Open()
-        myCommand = New SqlCommand("set dateformat ymd", myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand("set dateformat ymd")
+        ExecuteNonQueryFunction(myCommand)
 
         If validaDuplSite() > 0 Then
             Dim q = "INSERT INTO prospeccion(cliente, idDistribuidor, estatusActual, fecha, notas, correo) VALUES('" + Trim(name.Text.ToUpper) + "',1,'VA','" + Format(Now, "yyyy-MM-dd") + "','BAJO BONO, " + tele.Text + "','" + Trim(email.Text.ToUpper) + "')"
-            myCommand = New SqlCommand(q, myConnection)
-            myCommand.ExecuteNonQuery()
+            myCommand = New SqlCommand(q)
+            ExecuteNonQueryFunction(myCommand)
         End If
 
         myCommand.Dispose()
-        myConnection.Close()
         'Response.Write("<script>alert('Validado');</script>")
         Dim elcorreo As New System.Net.Mail.MailMessage
         If depto.SelectedValue.Equals("Ventas") Then
@@ -164,7 +158,7 @@ Public Class Site
         Dim smpt As New System.Net.Mail.SmtpClient
         smpt.Host = "smtp.gmail.com"
         smpt.Port = "587"
-        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
         smpt.EnableSsl = True 'req p server gmail
         Try
             smpt.Send(elcorreo)
@@ -228,14 +222,12 @@ Public Class Site
         End If
 
         If validaDupl() > 0 Then
-            myConnection = New SqlConnection("Data Source=.;User ID=usuario;Password='SmN+v-XzFy2N;91E170o'; Initial Catalog=ide;Integrated Security=True;MultipleActiveResultSets=True;")
-            myConnection.Open()
-            myCommand = New SqlCommand("set dateformat ymd", myConnection)
-            myCommand.ExecuteNonQuery()
+            myCommand = New SqlCommand("set dateformat ymd")
+            ExecuteNonQueryFunction(myCommand)
             Dim q = "INSERT INTO prospeccion(cliente, idDistribuidor, estatusActual, fecha, notas, correo) VALUES('" + Trim(amigoNom.Text.ToUpper) + "',1,'VA','" + Format(Now, "yyyy-MM-dd") + "','RECOMENDADO EN LINEA, " + amigoTel.Text.Trim + "','" + Trim(amigoCorr.Text.ToUpper) + "')"
-            myCommand = New SqlCommand(q, myConnection)
-            myCommand.ExecuteNonQuery()
-            myConnection.Close()
+            myCommand = New SqlCommand(q)
+            ExecuteNonQueryFunction(myCommand)
+
         End If
         myCommand.Dispose()
 
@@ -252,7 +244,7 @@ Public Class Site
         smpt.Host = "mail.inowebs.com"
         smpt.Port = "26"
         smpt.Credentials = New System.Net.NetworkCredential("soporte@inowebs.com", "sinowebs")
-        smpt.EnableSsl = False 'req p server gmail
+        smpt.EnableSsl = True 'req p server gmail
         Try
             smpt.Send(elcorreo)
             Response.Write("<script language='javascript'>alert('Invitación enviada');</script>")
@@ -285,17 +277,14 @@ Public Class Site
 
     Private Function validaDupl() As Integer
         Dim q
-        myConnection = New SqlConnection("Data Source=.;User ID=usuario;Password='SmN+v-XzFy2N;91E170o'; Initial Catalog=ide;Integrated Security=True;MultipleActiveResultSets=True;")
-        q = "SELECT * FROM prospectos WHERE correo='" + Trim(correo.Text.ToUpper) + "'"
-        myCommand = New SqlCommand(q, myConnection)
-        myConnection.Open()
-        dr = myCommand.ExecuteReader()
-        If dr.Read() Then
+        'myConnection = New SqlConnection("Data Source=.;User ID=usuario;Password='SmN+v-XzFy2N;91E170o'; Initial Catalog=ide;Integrated Security=True;MultipleActiveResultSets=True;")
+        q = "SELECT id FROM prospectos WHERE correo='" + Trim(correo.Text.ToUpper) + "'"
+        myCommand = New SqlCommand(q)
+        Dim v = ExecuteScalarFunction(myCommand)
+        If Not IsNothing(v) Then
             Response.Write("<script language='javascript'>alert('Ya se había anotado');</script>")
             Return 0
         End If
-        dr.Close()
-        myConnection.Close()
         Return 1
     End Function
     Private Sub btnOptin_Click(sender As Object, e As EventArgs) Handles btnOptin.Click
@@ -313,14 +302,12 @@ Public Class Site
         Else
             lostels = tel.Text
         End If
-        myConnection = New SqlConnection("Data Source=.;User ID=usuario;Password='SmN+v-XzFy2N;91E170o'; Initial Catalog=ide;Integrated Security=True;MultipleActiveResultSets=True;")
-        myConnection.Open()
-        myCommand = New SqlCommand("set dateformat ymd", myConnection)
-        myCommand.ExecuteNonQuery()
+        myCommand = New SqlCommand("set dateformat ymd")
+        ExecuteNonQueryFunction(myCommand)
         Dim q = "INSERT INTO prospeccion(cliente, idDistribuidor, estatusActual, fecha, notas, correo) VALUES('" + Trim(nombre.Text.ToUpper) + "',1,'VA','" + Format(Now, "yyyy-MM-dd") + "','BAJO BONO, " + lostels + "','" + Trim(correo.Text.ToUpper) + "')"
-        myCommand = New SqlCommand(q, myConnection)
-        myCommand.ExecuteNonQuery()
-        myConnection.Close()
+        myCommand = New SqlCommand(q)
+        ExecuteNonQueryFunction(myCommand)
+
         Dim elcorreo As New System.Net.Mail.MailMessage
         elcorreo.From = New System.Net.Mail.MailAddress("declaracioneside@gmail.com")
         elcorreo.To.Add(correo.Text.Trim.ToUpper)
@@ -332,7 +319,7 @@ Public Class Site
         Dim smpt As New System.Net.Mail.SmtpClient
         smpt.Host = "smtp.gmail.com"
         smpt.Port = "587"
-        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside", "declaracioneside2a.")
+        smpt.Credentials = New System.Net.NetworkCredential("declaracioneside@gmail.com", "ywuxdaffpyskcsuv")
         smpt.EnableSsl = True 'req p server gmail
         Try
             smpt.Send(elcorreo)
