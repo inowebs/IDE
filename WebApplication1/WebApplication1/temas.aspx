@@ -48,13 +48,346 @@
             display: block;
         }
     </style>
+	
+
+<script type='application/ld+json'> 
+{
+  "@context": "http://www.schema.org",
+  "@type": "LocalBusiness",
+  "name": "Declaraciones IDE",
+  "url": "https://www.declaracioneside.com",
+  "logo": "https://www.declaracioneside.com/images/icons/logo1.png",
+  "image": "https://www.declaracioneside.com/images/icons/logo1.png",
+  "description": "Declaraciones informativas de Depósitos en Efectivo e IDE!",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "LACAS DE URUAPAN 737",
+    "postOfficeBoxNumber": "58230",
+    "addressLocality": "MORELIA",
+    "addressRegion": "MICHOACAN",
+    "postalCode": "58230",
+    "addressCountry": "MEXICO"
+  },
+  "hasMap": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3756.190320729726!2d-101.17398378605891!3d19.70451973703742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842d0e056b7c3f63%3A0xb2ad435d1a1deb25!2sFacturacion+Electronica+Inowebs!5e0!3m2!1ses!2smx!4v1537647535916",
+  "openingHours": "Mo, Tu, We, Th, Fr 09:00-18:30",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+524436903616",
+    "contactType": "sales"
+  },
+        "telephone": "+524436903616"
+}
+    </script>
+
+    <script type='application/ld+json'> 
+        {
+  "@context": "http://schema.org",
+  "@type": "ItemList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "url": "https://www.declaracioneside.com/Default.aspx"
+ 	},
+	{
+      "@type": "ListItem",
+      "position": 2,
+      "url": "https://www.declaracioneside.com/temas.aspx"
+ 	}
+    ]
+  }
+        </script>
+
+            <script type='application/ld+json'> 
+{
+  "@context": "http://www.schema.org",
+  "@type": "product",
+  "brand": "DECLARACIONES IDE",
+  "name": "DECLARACIONES IDE, depositos en efectivo, declaracion ide, informativa ide, anual ide, ide anual, mensual ide, ide mensual",
+  "image": "declaracioneside.com/images/icons/logo1.png",
+  "description": "Son muy profesionales, gran orientación y a la vanguardia en sistemas y conocimiento",
+  "aggregateRating": {
+    "@type": "aggregateRating",
+    "ratingValue": "5",
+    "ratingCount" : "1000",
+		"reviewCount" : "190"
+  },
+	"review": [
+		{
+			"@type": "Review",
+			"name" : "Depositos en efectivo",
+			"author": {
+				"@type": "Person",
+				"name": "Huber Contreras"
+			},
+			"datePublished": "2023-11-02",
+			"reviewBody" : "Exelente servicio para presentar las declaraciones de depositos en efectivo de mi caja de ahorros",
+			"reviewRating": {
+				"@type": "Rating",
+				"ratingValue" : "5"
+			}
+		}
+	]
+}
+    </script>
+
+    <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "NewsArticle",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://google.com/article"
+  },
+  "headline": "declaraciones informativas de depositos en efectivo e IDE al SAT por internet",
+  "image": [
+    "declaracioneside.com/images/icons/logo1.png"
+   ],
+  "datePublished": "2018-10-24T08:00:00+08:00",
+  "dateModified": "2018-10-24T09:20:00+08:00",
+  "author": {
+    "@type": "Person",
+    "name": "DECLARACIONES IDE"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "DECLARACIONES IDE",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "declaracioneside.com/images/icons/logo1.png"
+    }
+  },
+  "description": "Declaraciones IDE, Solución para declaraciones informativas de Depósitos en Efectivo, presentalas y envialas en linea al SAT desde www.declaracioneside.com"
+}
+</script>
+
+    <script type='application/ld+json'> 
+        {
+  "@context": "http://schema.org",
+  "@type": "Person",
+  "name": "DECLARACIONES IDE",
+  "url": "declaracioneside.com",
+  "sameAs": [
+    "https://www.facebook.com/depositosenefectivo/",
+    "https://twitter.com/inowebs",
+    "https://www.linkedin.com/in/facturaci%C3%B3n-inowebs-1110125b/",
+    "https://plus.google.com/+DeclaracionesDepositosEnEfectivo?prsrc=3",
+    "https://www.youtube.com/user/declaracioneside"
+  ]
+}
+        </script>
+
+    <script type='application/ld+json'> 
+        {
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "url": "declaracioneside.com/Default.aspx",
+  "logo": "declaracioneside.com/images/icons/logo1.png"
+}
+        </script>
+
+   <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "declaracioneside.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "declaracioneside.com?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+    <script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Review",
+  "itemReviewed": {
+    "@type": "Product",
+    "aggregateRating": {
+    "@type": "aggregateRating",
+    "ratingValue": "5",
+    "ratingCount" : "1000",
+		"reviewCount" : "190"
+    },
+    "image": "https://www.declaracioneside.com/images/icons/logo1.png",
+    "name": "Declaracion depositos en efectivo e IDE"
+  },
+  "reviewRating": {
+    "@type": "Rating",
+    "ratingValue": "5"
+  },
+  "name": "Son muy profesionales, gran orientación y a la vanguardia en sistemas y conocimiento",
+  "author": {
+    "@type": "Person",
+    "name": "Javier J Villegas"
+  },
+  "reviewBody": "Son muy profesionales, gran orientación y a la vanguardia en sistemas y conocimiento"
+}
+</script>
+
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "BreadcrumbList",
+"itemListElement": [
+{
+"@type": "ListItem",
+"position": 1,
+"item": {
+"@id": "https://www.declaracioneside.com/Default.aspx",
+"name": "Inicio"
+}
+},
+{
+"@type": "ListItem",
+"position": 2,
+"item": {
+"@id": "https://www.declaracioneside.com/temas.aspx",
+"name": "Interesante"
+}
+}
+]
+}</script>
+
+
+<script type="application/ld+json">
+{
+	"@context": "http://schema.org/",
+	"@type": "FAQPage",
+	"mainEntity": [
+		{
+			"@type": "Question",
+			"name": "Obligación a cumplir",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Declarar los depósitos en  efectivo que se realicen en las cuentas abiertas a nombre de los contribuyentes en las Instituciones del Sistema..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Objetivo ",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Cumplir con la obligación establecida en la Ley del Impuesto sobre la Renta de informar sobre los depósitos en efectivo que se realicen en todas..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Fundamento legal Declaración Mensual 2022 y posteriores",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Ley del Impuesto sobre la Renta para 2023: Artículo 55, fracción IV...."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Fundamento legal Declaraciones Mensuales y Anuales 2021 y anteriores",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Ley del Impuesto sobre la Renta para 2021: Artículo 55, fracción IV...."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Requisitos declaracion depositos en efectivo",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Contar con contraseña o e.firma..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Periodicidad",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Mensual, desde 2022..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Solicitud para ratificar y/o solicitar la "Clave de Institución Financiera" para presentar declaraciones de depósitos en efectivo",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Lo presentan Instituciones del Sistema Financiero, cuando Tratándose de la ratificación de la clave, en el momento que los contribuyentes lo requieran...."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Porcentaje IDE",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Los porcentaje de impuesto IDE que se aplica sobre el excedente a los depósitos en efectivo acumulados en cada mes son..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Inicio del IDE",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "1o de Julio del 2008..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Redondeos, decimales y ajustes de la declaración del IDE",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "El Código Fiscal de la Federación (CFF) en su artículo 20, décimo párrafo, establece..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Abrogación del IDE",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "En virtud del “Decreto por el que se reforman, adicionan y derogan diversas disposiciones de la Ley del Impuesto al Valor Agregado; de la Ley del Impuesto Especial..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Calcular el IDE",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Cuando se hagan depósitos a plazo cuyo monto individual exceda de 15,000 pesos, el impuesto se recaudará en el momento en que se realicen tales depósitos...."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Clave de Institución Financiera",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Es la referencia del número o clave que identifique a la institución financiera, conforme al listado de instituciones financieras recaudadoras del impuesto a los depósitos..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Clave CASFIM",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Clave del Catálogo del Sistema Financiero Mexicano. Medios de identificación clave numérica que permite identificar ..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "Información requerida para enviar las declaraciones de IDE",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Ya sea que su institución haya o no recaudado el IDE y haya dado de alta la obligación de retener IDE, debe notificarlo ya sea mediante..."
+			}
+		}
+	]
+}
+</script>
+
+	
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <section class="page-wrapper section pt-0">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h4>Temas interesantes</h4>
+                    <h1>Temas interesantes</h1>
                     <p>Bienvenido a ésta sección donde encontrarás temas de interés sobre el depósitos en efectivo e IDE, puedes presentar y enviar aquí tu declaración informativa de depósitos en efectivo e IDE</p>
                 </div>
             </div>
@@ -74,7 +407,7 @@
                             <div id="collapseCero1" class="collapse show fade" aria-labelledby="headingCero1" data-parent="#accordionExample">
                                 <div class="card-body">
                                     <p>
-                                        Declarar los depósitos en  efectivo que se realicen en las cuentas abiertas a nombre de los contribuyentes en las Instituciones del Sistema Financiero.
+                                        Declarar los depósitos en  efectivo que se realicen en las cuentas abiertas a nombre de los contribuyentes en las Instituciones del Sistema Financiero; así como las adquisiciones en efectivo de cheques de caja.
                                     </p>
                                 </div>
                             </div>
@@ -97,12 +430,11 @@
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="card">
                             <div class="card-header" id="headingCero">
                                 <h5 class="mb-0">
                                     <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseCero" aria-expanded="true" aria-controls="collapseCero">
-                                        <i class="fa fa-user"></i>&nbsp;<i class="fa fa-angle-double-right mr-3"></i>Fundamento legal vigente 2021 
+                                        <i class="fa fa-user"></i>&nbsp;<i class="fa fa-angle-double-right mr-3"></i>Fundamento legal Declaración Mensual 2022 y posteriores 
 						
                                     </button>
                                 </h5>
@@ -110,16 +442,69 @@
 
                             <div id="collapseCero" class="collapse show fade" aria-labelledby="headingCero" data-parent="#accordionExample">
                                 <div class="card-body">
-                                    <p>
-                                        Ley del Impuesto sobre la Renta para 2021: Articulo 55, fracción IV, establece una obligación a las instituciones del sistema financiero, consistente en proporcionar anualmente a más tardar el 15 de febrero la información de depósitos en efectivo que se realicen en las cuentas abiertas a nombre de los contribuyentes en dichas instituciones, cuando el monto mensual acumulado por los depósitos en efectivo que se realicen en todas las cuentas de las que el contribuyente sea titular en una misma institución del sistema financiero exceda de $15,000.00, así como respecto de todas las adquisiciones en efectivo de cheques de caja.
-                                        <br/>Resolución Miscelánea Fiscal para 2021: Reglas 3.5.11 y 3.5.14, Anexo 1, rubro A, numeral 2 y Anexo 1-A Trámite 74/ISR.
-                                        <br/>Resolución Miscelánea Fiscal para 2021: Reglas 3.5.12 y 3.5.14, Anexo 1, rubro A, numeral 2 y Anexo 1-A Trámite 75/ISR.
-                                        <br/>Reglamento de la  Ley del Impuesto sobre la Renta para 2021: Artículo 94.
-                                        <br/>Resolución Miscelánea Fiscal para 2021: Regla 3.5.13.
+                                    <p>    
+										Ley del Impuesto sobre la Renta para 2023: Artículo 55, fracción IV. 
+                                        <br/>Resolución Miscelánea Fiscal para 2023: Regla 3.5.21.
                                     </p>
                                 </div>
                             </div>
                         </div>
+                        <div class="card">
+                            <div class="card-header" id="headingCero">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseCero" aria-expanded="true" aria-controls="collapseCero">
+                                        <i class="fa fa-user"></i>&nbsp;<i class="fa fa-angle-double-right mr-3"></i>Fundamento legal Declaraciones Mensuales y Anuales 2021 y anteriores 
+						
+                                    </button>
+                                </h5>
+                            </div>
+
+                            <div id="collapseCero" class="collapse show fade" aria-labelledby="headingCero" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <p>    
+										Ley del Impuesto sobre la Renta para 2021: Artículo 55, fracción IV.
+                                        <br/>Resolución Miscelánea Fiscal para 2022: Artículo TRIGÉSIMO TERCERO transitorio y Artículo Cuarto Transitorio de la Novena Resolución de Modificaciones a la Resolución Miscelánea Fiscal para 2022.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+						<div class="card">
+                            <div class="card-header" id="headingCero">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseCero" aria-expanded="true" aria-controls="collapseCero">
+                                        <i class="fa fa-user"></i>&nbsp;<i class="fa fa-angle-double-right mr-3"></i>Requisitos declaracion depositos en efectivo 
+						
+                                    </button>
+                                </h5>
+                            </div>
+
+                            <div id="collapseCero" class="collapse show fade" aria-labelledby="headingCero" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <p>    
+										Contar con contraseña o e.firma.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+						<div class="card">
+                            <div class="card-header" id="headingCero">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseCero" aria-expanded="true" aria-controls="collapseCero">
+                                        <i class="fa fa-user"></i>&nbsp;<i class="fa fa-angle-double-right mr-3"></i>Periodicidad
+						
+                                    </button>
+                                </h5>
+                            </div>
+
+                            <div id="collapseCero" class="collapse show fade" aria-labelledby="headingCero" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <p>    
+										Mensual, desde 2022
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+						
                         <div class="card">
                             <div class="card-header" id="headingOne1">
                                 <h5 class="mb-0">
@@ -585,21 +970,21 @@ Informar mensualmente al SAT el importe del IDE recaudado y pendiente de recauda
                                         <li>- telefonos, </li>
                                         <li>- #de socio o cliente, </li>
                                         <li>- suma de depósitos en efectivo, </li>
-                                        <li>- cantidad gravada,</li>
+                                        <li>- cantidad gravada (derogado),</li>
                                         <li>- monto determinado, </li>
-                                        <li>- monto recaudado,</li>
-                                        <li>- monto pendiente de recaudar, </li>
-                                        <li>- monto remanente, </li>
+                                        <li>- monto recaudado (derogado),</li>
+                                        <li>- monto pendiente de recaudar (derogado), </li>
+                                        <li>- monto remanente (derogado), </li>
                                         <li>- monto de cheques de caja, </li>
-                                        <li>- monto recaudado de cheques de caja</li>
-                                        <li>- saldo pendiente de recaudar </li>
+                                        <li>- monto recaudado de cheques de caja (derogado)</li>
+                                        <li>- saldo pendiente de recaudar (derogado)</li>
                                     </ul>
                                     Si su cliente o socio maneja varias cuentas o contratos en su institución, la información proporcionada arriba corresponde a la suma del total de sus cuentas o contratos en el mismo periodo. Por cada cuenta/contrato deberá especificarse:
                                     <ul style="list-style: none">
                                         - # de cuenta, 
                                         <li>- #cotitulares, </li>
                                         <li>- % proporción que corresponde a este cliente/socio, </li>
-                                        <li>- impuesto recaudado.</li>
+                                        <li>- impuesto recaudado (derogado).</li>
                                         <li>- tipo de cuenta,</li>
                                         <li>- tipo de moneda. </li>
                                     </ul>

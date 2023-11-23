@@ -19,6 +19,35 @@
 </script>
 
 <script type='application/ld+json'> 
+{
+  "@context": "http://www.schema.org",
+  "@type": "LocalBusiness",
+  "name": "Declaraciones IDE",
+  "url": "https://www.declaracioneside.com",
+  "logo": "https://www.declaracioneside.com/images/icons/logo1.png",
+  "image": "https://www.declaracioneside.com/images/icons/logo1.png",
+  "description": "Declaraciones informativas de Depósitos en Efectivo e IDE!",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "LACAS DE URUAPAN 737",
+    "postOfficeBoxNumber": "58230",
+    "addressLocality": "MORELIA",
+    "addressRegion": "MICHOACAN",
+    "postalCode": "58230",
+    "addressCountry": "MEXICO"
+  },
+  "hasMap": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3756.190320729726!2d-101.17398378605891!3d19.70451973703742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842d0e056b7c3f63%3A0xb2ad435d1a1deb25!2sFacturacion+Electronica+Inowebs!5e0!3m2!1ses!2smx!4v1537647535916",
+  "openingHours": "Mo, Tu, We, Th, Fr 09:00-18:30",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+524436903616",
+    "contactType": "sales"
+  },
+        "telephone": "+524436903616"
+}
+    </script>
+
+<script type='application/ld+json'> 
           {
   "@context": "http://schema.org",
   "@type": "VideoObject",
@@ -142,8 +171,25 @@
   "aggregateRating": {
     "@type": "aggregateRating",
     "ratingValue": "5",
-    "reviewCount": "12"
-  }
+    "ratingCount" : "1000",
+		"reviewCount" : "190"
+  },
+	"review": [
+		{
+			"@type": "Review",
+			"name" : "Depositos en efectivo",
+			"author": {
+				"@type": "Person",
+				"name": "Huber Contreras"
+			},
+			"datePublished": "2023-11-02",
+			"reviewBody" : "Exelente servicio para presentar las declaraciones de depositos en efectivo de mi caja de ahorros",
+			"reviewRating": {
+				"@type": "Rating",
+				"ratingValue" : "5"
+			}
+		}
+	]
 }
     </script>
 
@@ -224,7 +270,8 @@
     "aggregateRating": {
     "@type": "aggregateRating",
     "ratingValue": "5",
-    "reviewCount": "12"
+    "ratingCount" : "1000",
+		"reviewCount" : "190"
     },
     "image": "https://www.declaracioneside.com/images/icons/logo1.png",
     "name": "Declaracion depositos en efectivo e IDE"
@@ -242,7 +289,45 @@
 }
 </script>
 
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "BreadcrumbList",
+"itemListElement": [
+{
+"@type": "ListItem",
+"position": 1,
+"item": {
+"@id": "https://www.declaracioneside.com/Default.aspx",
+"name": "Inicio"
+}
+}]
+}</script>
 
+
+<script type="application/ld+json">
+{
+	"@context": "http://schema.org/",
+	"@type": "FAQPage",
+	"mainEntity": [
+		{
+			"@type": "Question",
+			"name": "Cual es el fundamento legal para Depósitos en efectivo por parte de las instituciones del sistema financiero",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Ley del Impuesto sobre la Renta para 2022: Artículo 55. fracción IV..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Que Necesito Para Presentar Mis Declaraciones de depositos en efectivo?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "1. Registro Registra tu institución en nuestra página..."
+			}
+		}
+	]
+}
+</script>
 
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="ContentPlaceHolder1">
@@ -259,9 +344,9 @@
                 </div>
                 <div class="col-md-6">
                     <div class="block">
-                        <h3>Declaraciones informativas de Depósitos en Efectivo e IDE</h3>
-                        <p>Ya puedes presentar al SAT las declaraciones mensuales de depositos en efectivo de tu institucion financiera del 2022 y posteriores </p>
-                        <p>Llámanos al Tel. (443) 690 3616, 443 218 0237</p>
+                        <h3>Declaraciones informativas de Depósitos en Efectivo</h3>
+                        <p>Servicio de validación y presentación de declaraciones de depositos en efectivo de tu institucion financiera </p>
+                        <p>Contáctanos al Tel / Whats: (443) 690 3616, 443 218 0237</p>
                         <ul class="list-inline">
                             <li class="list-inline-item">
                                 <a data-scroll href="#services" class="btn btn-main">Ver Como</a>
@@ -269,7 +354,7 @@
                             </li>
                         </ul>
                         <br/>
-                        Actualizado a la <strong>Reforma</strong> ISR Art. 55 Fracc IV 2022, RMF 2022 <strong>MENSUALES obligatorias 2022</strong>  
+                        Actualizado a la <strong>Reforma</strong> ISR Art. 55 Fracc IV 2023, RMF 2023  
                     </div>
                 </div>
             </div>
@@ -280,10 +365,7 @@
             <div class="row">
                 <div class="col-md-12">
                         <p>                        
-                            Anual 2021  y anteriores: A más tardar el 15 de febrero de 2022.<br/>
-                            Mensuales de enero a octubre de 2022: A partir del 01 de diciembre de 2022, y hasta el 31 de dicho mes y año<br/>
-                            A partir de 2022 la periodicidad es mensual.<br/>
-                            Mensuales de noviembre 2022 y posteriores: A partir del 01 de diciembre de 2022, y hasta el último día del mes de calendario inmediato siguiente al que corresponda<br/>
+                            A partir de 2022 la periodicidad es mensual, presentación del dia 01 del mes y hasta el último día del mes de calendario inmediato siguiente al que corresponda<br/>
                         </p>
                     <div class="counters-item">
                             <asp:Label ID="nAcuses" runat="server" Text="Label"></asp:Label>
@@ -296,13 +378,13 @@
                     <table class="table table-responsive-sm table-responsive-md">
                         <tbody>
                             <tr>
-                                <td>✔	Declara tu mismo, a tiempo, evíta múltas del SAT, Podemos presentar tu declaración si nos lo indicas.  </td>
+                                <td>✔	Podemos presentar tu declaración si nos lo indicas.  </td>
                             </tr>
                             <tr>
                                 <td>✔	Actualizaciones gratis, al día con la ultima versión del SAT.</td>
                             </tr>
                             <tr>
-                                <td>✔	Seguiridad, sitio https, configuramos un socket de transmisión exclusivo por cada Institución, encriptamos datos sensibles </td>
+                                <td>✔	Seguiridad, sitio https, encriptamos datos sensibles </td>
                             </tr>
                             <tr>
                                 <td>✔	Soporte gratis por correo y teléfono.   </td>
@@ -313,8 +395,8 @@
                             <tr>
                                 <td>✔	Validador de datos. Al subir tu declaración, serás avisado de posibles errores de tu archivo, se podrá enviar hasta ser válido.  </td>
                             </tr>
-                            <tr>
-                                <td>✔	Nuevo: Estadísticas por mes en tus declaraciones anuales, para facil cotejo de datos.</td>
+							<tr>
+                                <td>✔	Conexion remota por anydesk / teamviewer para declarar </td>
                             </tr>
                         </tbody>
                     </table>
@@ -330,7 +412,7 @@
                                     <div class="video-player bg-white rounded ">
                                         <%--<a href="#" onclick="videoman_onClick('https://www.youtube.com/embed/eppVvWIBcF8', 'Fundamento legal vigente de depositos en efectivo')" data-toggle="modal" data-target="#modalvideo">Fundamento legal VIGENTE 2022 para declarar IDE: Ley ISR : Art. 55, Fracc. IV
                                         </a>--%>
-                                        <a href="https://www.dof.gob.mx/nota_detalle.php?codigo=5635286&fecha=12/11/2021" target="_blank">Fundamento legal VIGENTE 2022 para declarar IDE: Ley ISR : Art. 55, Fracc. IV
+                                        <a href="https://www.dof.gob.mx/nota_detalle.php?codigo=5635286&fecha=12/11/2021" target="_blank">Fundamento legal VIGENTE 2023 para declarar IDE: Ley ISR : Art. 55, Fracc. IV
                                         </a>
 
                                     </div>
@@ -340,9 +422,6 @@
                                 <td>✔	
                                     Asesoría especializada sin costo para instituciones que se registren. 
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>✔	Comisiones para distribuidores.   </td>
                             </tr>
                             <tr>
                                 <td>✔	La plataforma web más completa y sencilla para la declaración e información de depósitos en efectivo.  </td>
@@ -389,20 +468,16 @@ Start About Section
             <div class="row">
                 <div class="col-12 col-md-6 align-self-center">
                     <div class="align-self-center">
-                        <h2>Depósitos en efectivo por parte de las instituciones del sistema financiero</h2>
+                        <h1>Depósitos en efectivo por parte de las instituciones del sistema financiero</h1>
                         <p><strong>Fundamento legal</strong>: <br/>
-                            Declaración Mensual 2022 y posteriores:<br/>
-                            Ley del Impuesto sobre la Renta para 2022: Artículo 55. fracción IV <br/>
-                            Resolución Miscelánea Fiscal para 2022: Reglas 3.5.19., 3.5.21., Artículo TRIGÉSIMO SEGUNDO transitorio y Artículo CUARTO transitorio de la Novena Resolución de Modificaciones a la Resolución Miscelánea Fiscal para 2022.<br/><br/>
-                            Declaraciones Mensuales y Anuales 2021 y anteriores:<br/>
-                            Ley del Impuesto sobre la Renta para 2021: Artículo 55, fracción IV.<br/>
-                            Resolución Miscelánea Fiscal para 2022: Artículo TRIGÉSIMO TERCERO transitorio
+                            Ley del Impuesto sobre la Renta para 2023: Artículo 55, fracción IV.  <br/>
+                            Resolución Miscelánea Fiscal para 2023: Regla 3.5.21.<br/><br/>
                         </p>
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
                     <div>
-                        <img src="images/blog/declaracion-post.jpg" class="img-fluid" />
+                        <img src="images/blog/declaracion-post.jpg" class="img-fluid" alt="Declaracion de depositos en efectivo IDE"/>
                     </div>
                 </div>
                 <!-- End row -->
@@ -492,7 +567,7 @@ Start About Section
                         <div class="service-icon text-center">
                             <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                         </div>
-                        <h3>Descarga acuses del SAT</h3>
+                        <h3>Recibe acuses del SAT</h3>
                     </div>
                 </div>
                 <!-- End Single Service Item -->
@@ -515,9 +590,9 @@ Start About Section
             <div class="row">
                 <div class="col">
                     <div class="title text-center">
-                        <h2>¿Que necesito para presentar mis declaraciones?</h2>
+                        <h2>Pasos para declarar</h2>
                         <span class="border"></span>
-                        <p>Solo sigue estos pasos:</p>
+                        <p>Sigue estos pasos:</p>
                     </div>
                 </div>
             </div>
@@ -564,7 +639,7 @@ Start About Section
                 <div class="col">
                     <div class="title text-center">
                         <h2>Precios</h2>
-                        <h5>Te mejoramos cualquier cotización en un 15% ¡Garantizado! Contáctanos para precios</h5>                        
+                        <h5>Contáctanos para precios. Mejoramos cualquier cotización 15% ¡Garantizado! </h5>                        
                     </div>
                 </div>
             </div>
@@ -573,13 +648,13 @@ Start About Section
                 <div class="col-md-3 p-0">
                     <div class="service-item text-center">
                         <span class="count"><i class="fa fa-laptop fa-2x" aria-hidden="true"></i></span>
-                        <h4>Declaración anual o mensual en Ceros</h4>
+                        <h4>Declaración en Ceros</h4>
                     </div>
                 </div>
                 <div class="col-md-3 p-0">
                     <div class="service-item text-center">
                         <span class="count"><i class="fa fa-address-card-o fa-2x" aria-hidden="true"></i></span>
-                        <h4>Declaración anual o mensual con Datos</h4>
+                        <h4>Declaración con Datos</h4>
                     </div>
                 </div>
                 <div class="col-md-3 p-0">
@@ -646,7 +721,7 @@ Start About Section
             <div class="row">
                 <div class="col-md-12">
                     <div class="custom-pricing text-center mt-30">
-                        <p>Descuentos a grupos y tambien descuentos en regularizaciones</p>
+                        <p>Descuentos a grupos y por volumen</p>
                     </div>
                 </div>
             </div>
@@ -661,7 +736,7 @@ Start About Section
             <div class="title text-center">
                 <h2>Testimonios</h2>
                 <span class="border"></span>
-                <p>Le presentamos las opiniones de algunos de nuestros clientes.</p>
+                <p>Opiniones de algunos clientes: </p>
             </div>
         </div>
     </div>

@@ -5,8 +5,8 @@
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="robots" content="INDEX, FOLLOW, NOODP" />
-    <meta name="description" content="Solución web para generar y presentar declaraciones de Depósitos en Efectivo al SAT. Envía declaraciones mensuales y anuales aquí" />
-    <meta name="keywords" content="depositos en efectivo, depositos en efectivo 2022, depositos en efectivo 2023, ide 2022, ide 2023, depositos en efectivo sat, depositos en efectivo sat, depositos en efectivo 2022 sat, declarar depositos en efectivo, declaraciones de depositos en efectivo, declaraciones por depositos en efectivo, declaracion de depositos en efectivo, declaracion por depositos en efectivo, informativa de depositos en efectivo, declaracion mensual de depositos en efectivo, declaracion depositos en efectivo, clave CASFIM, matriz de conexion segura sat, socket de conexion ide, Art. 55 Fracc. IV de la Ley del ISR, Regla 3.5.11, Regla 3.5.12, depositos en efectivo sat, depositos efectivo, deposito efectivo, deposito en efectivo, depositos en efectivo, ide declaracion, acuse depositos en efectivo, socket ide, matriz de conexion segura, deposito en efectivo, informacion de depósitos en efectivo, Instituciones del Sistema Financiero" />
+    <meta name="description" content="Solución web para generar y presentar declaraciones de Depósitos en Efectivo al SAT" />
+    <meta name="keywords" content="depositos en efectivo, depositos en efectivo 2024, depositos en efectivo 2023, ide 2024, ide 2023, depositos en efectivo sat, declarar depositos en efectivo, declaraciones de depositos en efectivo, declaraciones por depositos en efectivo, declaracion de depositos en efectivo, declaracion por depositos en efectivo, informativa de depositos en efectivo, declaracion mensual de depositos en efectivo, declaracion depositos en efectivo, ide declaracion, informacion de depósitos en efectivo, Instituciones del Sistema Financiero" />
     <%--<meta name="title" content="Declaraciones IDE, Solución para declaraciones informativas de Depósitos en Efectivo" />--%>
     <meta name="copyright" content="©2022 declaracioneside.com" />
     <meta name="author" content="©2022 declaracioneside.com Job Josué Constantino Prado" />
@@ -46,7 +46,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
 
-    <title>Declaraciones IDE, Solución para declaraciones informativas de Depósitos en Efectivo</title>
+    <title>Declaraciones IDE, Declaraciones informativas de Depósitos en Efectivo</title>
 
         <script type='application/ld+json'> 
           {
@@ -282,7 +282,7 @@
             <div class="row p-0">
                 <div class="col-sm-2">
                     <a class="navbar-brand" href="default.aspx">
-                        <img src="images/icons/logo1.png" alt="" style="width: 100%">
+                        <img src="images/icons/logo1.png" alt="" style="width: 100%" alt="depositos en efectivo IDE">
                     </a>
                     <h3>
                         <a class="navbar-brand" href="default.aspx">Declaraciones IDE

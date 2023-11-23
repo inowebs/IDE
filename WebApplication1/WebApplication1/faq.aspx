@@ -49,13 +49,362 @@
             display: block;
         }
     </style>
+
+<script type='application/ld+json'> 
+{
+  "@context": "http://www.schema.org",
+  "@type": "LocalBusiness",
+  "name": "Declaraciones IDE",
+  "url": "https://www.declaracioneside.com",
+  "logo": "https://www.declaracioneside.com/images/icons/logo1.png",
+  "image": "https://www.declaracioneside.com/images/icons/logo1.png",
+  "description": "Declaraciones informativas de Depósitos en Efectivo e IDE!",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "LACAS DE URUAPAN 737",
+    "postOfficeBoxNumber": "58230",
+    "addressLocality": "MORELIA",
+    "addressRegion": "MICHOACAN",
+    "postalCode": "58230",
+    "addressCountry": "MEXICO"
+  },
+  "hasMap": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3756.190320729726!2d-101.17398378605891!3d19.70451973703742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842d0e056b7c3f63%3A0xb2ad435d1a1deb25!2sFacturacion+Electronica+Inowebs!5e0!3m2!1ses!2smx!4v1537647535916",
+  "openingHours": "Mo, Tu, We, Th, Fr 09:00-18:30",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+524436903616",
+    "contactType": "sales"
+  },
+        "telephone": "+524436903616"
+}
+    </script>
+
+
+    <script type='application/ld+json'> 
+        {
+  "@context": "http://schema.org",
+  "@type": "ItemList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "url": "https://www.declaracioneside.com/Default.aspx"
+ 	},
+	{
+      "@type": "ListItem",
+      "position": 2,
+      "url": "https://www.declaracioneside.com/faq.aspx"
+ 	}
+    ]
+  }
+        </script>
+
+            <script type='application/ld+json'> 
+{
+  "@context": "http://www.schema.org",
+  "@type": "product",
+  "brand": "DECLARACIONES IDE",
+  "name": "DECLARACIONES IDE, depositos en efectivo, declaracion ide, informativa ide, anual ide, ide anual, mensual ide, ide mensual",
+  "image": "declaracioneside.com/images/icons/logo1.png",
+  "description": "Son muy profesionales, gran orientación y a la vanguardia en sistemas y conocimiento",
+  "aggregateRating": {
+    "@type": "aggregateRating",
+    "ratingValue": "5",
+    "ratingCount" : "1000",
+		"reviewCount" : "190"
+  },
+	"review": [
+		{
+			"@type": "Review",
+			"name" : "Depositos en efectivo",
+			"author": {
+				"@type": "Person",
+				"name": "Huber Contreras"
+			},
+			"datePublished": "2023-11-02",
+			"reviewBody" : "Exelente servicio para presentar las declaraciones de depositos en efectivo de mi caja de ahorros",
+			"reviewRating": {
+				"@type": "Rating",
+				"ratingValue" : "5"
+			}
+		}
+	]
+}
+    </script>
+
+    <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "NewsArticle",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://google.com/article"
+  },
+  "headline": "declaraciones informativas de depositos en efectivo e IDE al SAT por internet",
+  "image": [
+    "declaracioneside.com/images/icons/logo1.png"
+   ],
+  "datePublished": "2022-10-24T08:00:00+08:00",
+  "dateModified": "2022-10-24T09:20:00+08:00",
+  "author": {
+    "@type": "Person",
+    "name": "DECLARACIONES IDE"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "DECLARACIONES IDE",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "declaracioneside.com/images/icons/logo1.png"
+    }
+  },
+  "description": "Declaraciones IDE, Solución para declaraciones informativas de Depósitos en Efectivo, presentalas y envialas en linea al SAT desde www.declaracioneside.com"
+}
+</script>
+
+    <script type='application/ld+json'> 
+        {
+  "@context": "http://schema.org",
+  "@type": "Person",
+  "name": "DECLARACIONES IDE",
+  "url": "declaracioneside.com",
+  "sameAs": [
+    "https://www.facebook.com/depositosenefectivo/",
+    "https://twitter.com/inowebs",
+    "https://www.linkedin.com/in/facturaci%C3%B3n-inowebs-1110125b/",
+    "https://plus.google.com/+DeclaracionesDepositosEnEfectivo?prsrc=3",
+    "https://www.youtube.com/user/declaracioneside"
+  ]
+}
+        </script>
+
+    <script type='application/ld+json'> 
+        {
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "url": "declaracioneside.com/faq.aspx",
+  "logo": "declaracioneside.com/images/icons/logo1.png"
+}
+        </script>
+
+   <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "declaracioneside.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "declaracioneside.com?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+    <script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Review",
+  "itemReviewed": {
+    "@type": "Product",
+    "aggregateRating": {
+    "@type": "aggregateRating",
+    "ratingValue": "5",
+    "ratingCount" : "1000",
+		"reviewCount" : "190"
+    },
+    "image": "https://www.declaracioneside.com/images/icons/logo1.png",
+    "name": "Declaracion depositos en efectivo e IDE"
+  },
+  "reviewRating": {
+    "@type": "Rating",
+    "ratingValue": "5"
+  },
+  "name": "Son muy profesionales, gran orientación y a la vanguardia en sistemas y conocimiento",
+  "author": {
+    "@type": "Person",
+    "name": "Javier J Villegas"
+  },
+  "reviewBody": "Son muy profesionales, gran orientación y a la vanguardia en sistemas y conocimiento"
+}
+</script>
+
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "BreadcrumbList",
+"itemListElement": [
+{
+"@type": "ListItem",
+"position": 1,
+"item": {
+"@id": "https://www.declaracioneside.com/Default.aspx",
+"name": "Inicio"
+}
+},
+{
+"@type": "ListItem",
+"position": 2,
+"item": {
+"@id": "https://www.declaracioneside.com/faq.aspx",
+"name": "Preguntas"
+}
+}
+]
+}</script>
+
+
+<script type="application/ld+json">
+{
+	"@context": "http://schema.org/",
+	"@type": "FAQPage",
+	"mainEntity": [
+		{
+			"@type": "Question",
+			"name": "¿Qué servicios y recursos me ofrecen?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Esencialmente es un servicio en línea para que las instituciones financieras que reciben depósitos en efectivo puedan realizar sus declaraciones informativas de depósitos en efectivo..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Quienes pueden usar este servicio?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Todas aquellas instituciones del sistema financiero que por decreto del SAT tengan obligación de informar depósitos en efectivo o bien de recaudar el impuesto ..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Qué tipo de declaraciones puedo presentar en declaracioneside.com?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Declaraciones informativas mensuales y anuales de depósitos en efectivo y de IDE ..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Puedo enviar declaraciones anteriores a través de este sistema?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Sí, esto les permite poner al día su situación fiscal y evitarse..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Es necesario que tenga contratada una IP fija para declarar depósitos en efectivo y/o IDE?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "En declaracioneside.com te ofrecemos el servicio en línea, no requires invertir en infraestructura ni ..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Requiero elaborar el archivo XML para la declaración de depósitos en efectivo?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Declaracioneside.com se encarga de generar la información hacia un formato XML válido por el SAT ya sea que tu declaración sea en..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Cuál es el fundamento legal?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Artículo 55, fracción IV de la Ley del Impuesto sobre la Renta..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿El pago referenciado sustituye a la declaración informativa de IDE?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Nó, el pago referenciado y su pago son solo parte del proceso fiscal, éste debe completarse con el envío ..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Si se vence mi contrato, puedo acceder a las declaraciones de ese periodo?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Definitivamente, pero no podrán enviar declaraciones sino solo operaciones de ..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Qué formas de pago hay disponibles?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Transferencia, depósito bancario, cheque, efectivo, tarjeta de crédito, débito,  cuyas instrucciones..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Qué tipos de declaraciones puedo incluir en los contratos?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Un contrato es para un tipo de declaracion (plan) en específico, puedes tener contrato(s) para enviar en ceros, otro(s) contrato(s) con plan básico para enviar con datos,..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿En qué formatos debo generar la información de las declaraciones  para que sean aceptadas en este sistema?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Los archivos los generas tu mismo en excel con la información que va a declarar tu institución o empresa, se maneja un formato para la declaración mensual y otro..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "La Ley del IDE se abrogó pero ¿ El IDE Aún se declarara ?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Sí, varias instituciones financieras se confundieron y dejaron de declarar debido a la derogación del impuesto IDE y han recibido multas por..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Puedo dar de baja la obligación del IDE?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Existen instituciones financieras que al darse de alta en el SAT en automático tienen la obligación de declarar el IDE, pero como muchas..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Cuales son los formatos para informativas de IDE, informativas de depósitos en efectivo?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "El SAT maneja layouts que deben presentarse en formato XML. Tenemos para ti plantillas (layouts) con ejemplos en formato excel para declaraciones con datos faciles..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Qué no se considera depósito en efectivo?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "No se considerarán depósitos en efectivo, los que se efectúen a favor de personas físicas o morales mediante transferencias electrónicas, ..."
+			}
+		},
+		{
+			"@type": "Question",
+			"name": "¿Qué se entiende por depósitos en efectivo?",
+			"acceptedAnswer": {
+				"@type": "Answer",
+				"text": "Los depósitos en moneda nacional o extranjera que se realicen en cualquier tipo de cuenta que las personas físicas o morales tengan a su nombre en las Instituciones..."
+			}
+		}
+	]
+}
+</script>
+
+
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <section class="page-wrapper section pt-0">
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <h4>Preguntas Frecuentes</h4>
+                    <h1>Preguntas Frecuentes</h1>
                     <p>Bienvenido a las preguntas frecuentes de declaraciones de depósitos en efectivo e IDE, donde aclaramos dudas para presentar aquí tu declaración informativa de depósitos en efectivo. </p>
                     <p>Puedes enviarnos un correo con tu pregunta o solicitud haciendo clic <a href="#" data-toggle="modal" data-target="#contactanosModal">Aqui</a></p>
                 </div>
